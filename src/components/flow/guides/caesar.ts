@@ -1,6 +1,6 @@
 import { Edge, Node } from 'reactflow'
 import { nanoid } from 'nanoid'
-import { Guide } from '@/components/flow/guides/index'
+import { Guide } from '@/components/flow/guides/types'
 
 const DECRYPTER_OFFSET = 300
 

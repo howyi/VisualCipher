@@ -10,7 +10,6 @@ import {
 } from 'reactflow'
 import type { ClassValue } from 'clsx'
 import { cn } from '@/lib/utils'
-import { ModuleData } from '@/components/flow/components/module-node'
 import {
   Tooltip,
   TooltipContent,
@@ -42,7 +41,7 @@ export function InputHandle({
   const handleId = id ?? 'input'
 
   const isHandleConnectable = useMemo(() => {
-    const node = nodes.find((node) => node.id === nodeId) as Node<ModuleData>
+    const node = nodes.find((node) => node.id === nodeId) as Node
     const connectedEdges = getConnectedEdges([node], edges)
     return (
       connectedEdges.filter(
