@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { Flow } from '@/components/flow/modules/components/flow'
+import { Flow } from '@/components/organisms/flow'
 import { Edge, Node, ReactFlowProvider } from 'reactflow'
 import { Button } from '@/components/ui/button'
 import {
