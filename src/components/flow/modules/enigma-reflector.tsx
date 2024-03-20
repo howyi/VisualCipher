@@ -2,11 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { NodeProps } from 'reactflow'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  getOutput,
-  ModuleProps,
-  NodeProcess,
-} from '@/components/flow/node-types'
+import { Module, ModuleProcess } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 import { Button } from '@/components/ui/button'
@@ -20,8 +16,8 @@ import {
 import { ReaderIcon } from '@radix-ui/react-icons'
 import { StringConnector } from '@/components/flow/components/string-connector'
 import { ALPHABETS } from '@/components/flow/utils/const'
-import { getIncomersWithHandle } from '@/components/flow/utils/get-incomers-with-handle'
 import { Highlight } from '@/components/flow/components/highlight'
+import { EnigmaPlugBoardModule } from '@/components/flow/modules/enigma-plugboard'
 
 export type ReflectorData = {
   wiring?: string
@@ -53,7 +49,7 @@ const EnigmaReflectorTemplates: EnigmaReflectorTemplate[] = [
     wiring: 'FVPJIAOYEDRZXWGCTKUQSBNMHL',
   },
 ]
-export const EnigmaReflectorProcess: NodeProcess<ReflectorData> = (
+export const EnigmaReflectorProcess: ModuleProcess<ReflectorData> = (
   node,
   params,
   inputs
@@ -61,7 +57,7 @@ export const EnigmaReflectorProcess: NodeProcess<ReflectorData> = (
   return EnigmaReflectorEncrypt(inputs.input ?? '', node.data.wiring ?? '').encrypted
 }
 
-export const EnigmaReflectorModule: ModuleProps<ReflectorData> = {
+export const EnigmaReflectorModule: Module<ReflectorData> = {
   type: 'enigma_reflector',
   node: EnigmaReflector,
   process: EnigmaReflectorProcess,
@@ -144,7 +140,7 @@ export function EnigmaReflector({
 
   // https://en.wikipedia.org/wiki/Reflector_(cipher_machine)
   return (
-    <ModuleNode label="Enigma Reflector" className={'w-[300px]'}>
+    <ModuleNode module={EnigmaPlugBoardModule} className={'w-[300px]'}>
       <div className={'flex flex-col gap-1'}>
         <div className={'flex flex-row m-auto w-full gap-1 whitespace-pre'}>
           <Label className={'flex-0 my-auto pl-1'}>Wiring: </Label>

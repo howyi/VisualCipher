@@ -22,11 +22,8 @@ import { Link } from 'gatsby'
 
 import 'reactflow/dist/base.css'
 import {
-  getAllTerminalNodes,
-  ModuleProps,
-  startNodeProcess,
   useModules,
-} from '@/components/flow/node-types'
+} from '@/components/hooks/use-modules'
 import { nanoid } from 'nanoid'
 import { useBoolean, useDebounceCallback, useLocalStorage } from 'usehooks-ts'
 import { Button } from '@/components/ui/button'
@@ -55,11 +52,10 @@ import {
 } from '@/components/ui/table'
 import { RegisteredGuides } from '@/components/flow/guides'
 import { ButtonWithTooltip } from '@/components/organisms/button-with-tooltip'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { ImportButton } from '@/components/organisms/import-button'
 import { toast } from 'sonner'
+import { Module } from '@/components/flow/modules/types'
+import { process } from '@/components/flow/resolvers/process'
 
 type Props = {
   title: string
@@ -103,28 +99,24 @@ export function Flow({
   }, [])
 
   React.useEffect(() => {
-    const terminalNodes = getAllTerminalNodes(nodes, edges)
-    console.debug('resolve:', nanoid())
-    for (let node of Object.values(terminalNodes)) {
-      startNodeProcess(node, {
-        nodes,
-        edges,
-        updateNodeData: (nd, newData) => {
-          for (let key of Object.keys(newData)) {
-            if (JSON.stringify(nd.data?.[key]) != JSON.stringify(newData[key])) {
-              setNodes((nds) =>
-                nds.map((node) =>
-                  node.id === nd.id
-                    ? { ...node, data: { ...node.data, ...newData } }
-                    : node
-                )
+    process({
+      nodes,
+      edges,
+      updateNodeData: (nd, newData) => {
+        for (let key of Object.keys(newData)) {
+          if (JSON.stringify(nd.data?.[key]) != JSON.stringify(newData[key])) {
+            setNodes((nds) =>
+              nds.map((node) =>
+                node.id === nd.id
+                  ? { ...node, data: { ...node.data, ...newData } }
+                  : node
               )
-              return
-            }
+            )
+            return
           }
-        },
-      })
-    }
+        }
+      },
+    })
     if (storageKey && reactFlowInstance) {
       debouncedSave(reactFlowInstance)
     }
@@ -346,7 +338,7 @@ function ModuleSelector({
   module,
   onDragStart,
 }: {
-  module: ModuleProps
+  module: Module
   onDragStart: (event: React.DragEvent, nodeType: string) => void
 }) {
   const expand = useBoolean(false)

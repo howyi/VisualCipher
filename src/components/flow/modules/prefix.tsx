@@ -1,20 +1,15 @@
 import React from 'react'
 import { NodeProps } from 'reactflow'
-import {
-  getOutput,
-  ModuleProps,
-  NodeProcess,
-} from '@/components/flow/node-types'
+import { Module, ModuleProcess } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
-import { getIncomersWithHandle } from '@/components/flow/utils/get-incomers-with-handle'
 
 type PrefixData = {}
 
-const PrefixProcess: NodeProcess<PrefixData> = (node, params, inputs) => {
+const PrefixProcess: ModuleProcess<PrefixData> = (node, params, inputs) => {
   return (inputs.prefix ?? '') + (inputs.input ?? '')
 }
 
-export const PrefixModule: ModuleProps<PrefixData> = {
+export const PrefixModule: Module<PrefixData> = {
   type: 'prefix',
   node: Prefix,
   process: PrefixProcess,
@@ -36,6 +31,6 @@ export const PrefixModule: ModuleProps<PrefixData> = {
 
 function Prefix({ id, data: initialData }: NodeProps<PrefixData>) {
   return (
-    <ModuleNode label="Prefix" className={'w-64'} />
+    <ModuleNode module={PrefixModule} className={'w-64'} />
   )
 }

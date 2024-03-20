@@ -1,22 +1,17 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { NodeProps } from 'reactflow'
-import {
-  getOutput,
-  ModuleProps,
-  NodeProcess,
-} from '@/components/flow/node-types'
+import { Module, ModuleProcess } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
-import { getIncomersWithHandle } from '@/components/flow/utils/get-incomers-with-handle'
 
 type WordCounterData = {
 }
 
-const WordCounterProcess: NodeProcess<WordCounterData> = (node, params) => {
+const WordCounterProcess: ModuleProcess<WordCounterData> = (node, params) => {
   return ''
 }
 
-export const WordCounterModule: ModuleProps<WordCounterData> = {
+export const WordCounterModule: Module<WordCounterData> = {
   type: 'word_counter',
   node: WordCounter,
   process: WordCounterProcess,
@@ -73,7 +68,7 @@ function WordCounter({ id, data: initialData }: NodeProps<WordCounterData>) {
   }, [data])
 
   return (
-    <ModuleNode label={'Word counter (Top 10)'}>
+    <ModuleNode module={WordCounterModule}>
       <div
         className={
           'flex flex-col justify-center m-auto gap-2 font-mono whitespace-pre'

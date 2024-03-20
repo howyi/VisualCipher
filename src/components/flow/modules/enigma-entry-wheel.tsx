@@ -1,16 +1,11 @@
 import React from 'react'
 import { NodeProps } from 'reactflow'
-import {
-  getOutput,
-  ModuleProps,
-  NodeProcess,
-} from '@/components/flow/node-types'
+import { Module, ModuleProcess } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
-import { getIncomersWithHandle } from '@/components/flow/utils/get-incomers-with-handle'
 
 export type EnigmaEntryWheelData = {}
 
-export const EnigmaEntryWheelProcess: NodeProcess<EnigmaEntryWheelData> = (
+export const EnigmaEntryWheelProcess: ModuleProcess<EnigmaEntryWheelData> = (
   node,
   params,
   inputs
@@ -18,7 +13,7 @@ export const EnigmaEntryWheelProcess: NodeProcess<EnigmaEntryWheelData> = (
   return inputs.input?.split('').map(() => '1').join('') ?? ''
 }
 
-export const EnigmaEntryWheelModule: ModuleProps<EnigmaEntryWheelData> = {
+export const EnigmaEntryWheelModule: Module<EnigmaEntryWheelData> = {
   type: 'enigma_entry_wheel',
   node: EnigmaEntryWheel,
   process: EnigmaEntryWheelProcess,
@@ -39,5 +34,5 @@ Outputs a rotation with each text entry`,
 }
 
 export function EnigmaEntryWheel({}: NodeProps<EnigmaEntryWheelData>) {
-  return <ModuleNode label="Enigma Entry Wheel"></ModuleNode>
+  return <ModuleNode module={EnigmaEntryWheelModule}></ModuleNode>
 }

@@ -1,17 +1,12 @@
 import React, { useMemo } from 'react'
 import { NodeProps } from 'reactflow'
 import { Label } from '@/components/ui/label'
-import {
-  getOutput,
-  ModuleProps,
-  NodeProcess,
-} from '@/components/flow/node-types'
+import { Module, ModuleProcess } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 import { Checkbox } from '@/components/ui/checkbox'
 import { StringConnector } from '@/components/flow/components/string-connector'
 import { StringShift } from '@/components/flow/utils/string-shift'
-import { getIncomersWithHandle } from '@/components/flow/utils/get-incomers-with-handle'
 import { ALPHABETS } from '@/components/flow/utils/const'
 import { Highlight } from '@/components/flow/components/highlight'
 
@@ -19,7 +14,7 @@ type EnigmaScramblerInterfaceData = {
   reverse?: boolean
 }
 
-const EnigmaScramblerInterfaceProcess: NodeProcess<
+const EnigmaScramblerInterfaceProcess: ModuleProcess<
   EnigmaScramblerInterfaceData
 > = (node, params, inputs) => {
   if (!inputs.scrambler) {
@@ -44,7 +39,7 @@ const EnigmaScramblerInterfaceProcess: NodeProcess<
   return ''
 }
 
-export const EnigmaScramblerInterfaceModule: ModuleProps<EnigmaScramblerInterfaceData> =
+export const EnigmaScramblerInterfaceModule: Module<EnigmaScramblerInterfaceData> =
   {
     type: 'enigma_scrambler_interface',
     node: EnigmaScramblerInterface,
@@ -162,7 +157,7 @@ function EnigmaScramblerInterface({
   }, [data])
 
   return (
-    <ModuleNode label="Enigma Scrambler Interface">
+    <ModuleNode module={EnigmaScramblerInterfaceModule}>
       <div className={'flex flex-col m-auto gap-2 pt-2 w-[340px]'}>
         <div className={'flex flex-row gap-2'}>
           <div className="flex items-center mx-auto space-x-2">

@@ -1,21 +1,16 @@
 import React from 'react'
 import { NodeProps } from 'reactflow'
-import {
-  getOutput,
-  ModuleProps,
-  NodeProcess,
-} from '@/components/flow/node-types'
+import { Module, ModuleProcess } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
-import { getIncomersWithHandle } from '@/components/flow/utils/get-incomers-with-handle'
 
 export type CompareOutputData = {}
 
-const CompareOutputProcess: NodeProcess<CompareOutputData> = (node, params) => {
+const CompareOutputProcess: ModuleProcess<CompareOutputData> = (node, params) => {
   return ''
 }
 
-export const CompareOutputModule: ModuleProps<CompareOutputData> = {
+export const CompareOutputModule: Module<CompareOutputData> = {
   type: 'compare_output',
   node: CompareOutput,
   process: CompareOutputProcess,
@@ -42,7 +37,7 @@ function CompareOutput({
   const [data, setData] = useNodeDataState<CompareOutputData>(id, initialData)
 
   return (
-    <ModuleNode label={'Compare Output'}>
+    <ModuleNode module={CompareOutputModule}>
       <div className={'text-sm whitespace-pre'}>
         {data.inputs?.input_A?.split(/\n/).map((s, k) => {
           return (

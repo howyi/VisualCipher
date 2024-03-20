@@ -2,49 +2,32 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { NodeProps } from 'reactflow'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  getOutput,
-  ModuleProps,
-  NodeProcess,
-} from '@/components/flow/node-types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 import { Separator } from '@/components/ui/separator'
 import { StringConnector } from '@/components/flow/components/string-connector'
-import { getIncomersWithHandle } from '@/components/flow/utils/get-incomers-with-handle'
 import { ALPHABETS, UNKNOWN_CHARACTER } from '@/components/flow/utils/const'
 import { Highlight } from '@/components/flow/components/highlight'
+import { Module, ModuleProcess } from '@/components/flow/modules/types'
 
 export type SimpleSubstitutionData = {
   source?: string
   target?: string
 }
 
-export const SimpleSubstitutionProcess: NodeProcess<SimpleSubstitutionData> = (
+export const SimpleSubstitutionProcess: ModuleProcess<SimpleSubstitutionData> = (
   node,
-  params
+  params,
+  inputs
 ) => {
-  const incomers = getIncomersWithHandle(
-    node,
-    params.nodes,
-    params.edges,
-    'input'
-  )
-  if (incomers[0]) {
-    const text = getOutput(incomers[0], params)
-    params.updateNodeData(node, {
-      input: text,
-    })
-    return SimpleSubstitutionEncrypt(
-      text,
-      node.data.source ?? '',
-      node.data.target ?? ''
-    ).encrypted
-  }
-  return ''
+  return SimpleSubstitutionEncrypt(
+    inputs?.input ?? '',
+    node.data.source ?? '',
+    node.data.target ?? ''
+  ).encrypted
 }
 
-export const SimpleSubstitutionModule: ModuleProps<SimpleSubstitutionData> = {
+export const SimpleSubstitutionModule: Module<SimpleSubstitutionData> = {
   type: 'simple_substitution',
   node: SimpleSubstitution,
   process: SimpleSubstitutionProcess,
@@ -111,7 +94,7 @@ export function SimpleSubstitution({
   }, [source, target])
 
   return (
-    <ModuleNode label="Simple Substitution">
+    <ModuleNode module={SimpleSubstitutionModule}>
       <div className={'flex flex-col gap-4 m-auto w-60 whitespace-pre'}>
         <div
           className={

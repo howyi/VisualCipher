@@ -1,17 +1,12 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { NodeProps } from 'reactflow'
-import {
-  getOutput,
-  ModuleProps,
-  NodeProcess,
-} from '@/components/flow/node-types'
+import { Module, ModuleProcess } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
-import { getIncomersWithHandle } from '@/components/flow/utils/get-incomers-with-handle'
 
 export type CharacterCounterData = {}
 
-const CharacterCounterProcess: NodeProcess<CharacterCounterData> = (
+const CharacterCounterProcess: ModuleProcess<CharacterCounterData> = (
   node,
   params,
   inputs,
@@ -19,7 +14,7 @@ const CharacterCounterProcess: NodeProcess<CharacterCounterData> = (
   return ''
 }
 
-export const CharacterCounterModule: ModuleProps<CharacterCounterData> = {
+export const CharacterCounterModule: Module<CharacterCounterData> = {
   type: 'character_counter',
   node: CharacterCounter,
   process: CharacterCounterProcess,
@@ -82,7 +77,7 @@ function CharacterCounter({
   }, [data])
 
   return (
-    <ModuleNode label={'Character counter (Top 10)'}>
+    <ModuleNode module={CharacterCounterModule}>
       <div
         className={
           'flex flex-col justify-center m-auto gap-2 font-mono whitespace-pre'

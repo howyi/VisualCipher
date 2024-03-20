@@ -2,11 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { NodeProps, Position } from 'reactflow'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  getOutput,
-  ModuleProps,
-  NodeProcess,
-} from '@/components/flow/node-types'
+import { Module, ModuleProcess } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 import { Button } from '@/components/ui/button'
@@ -19,7 +15,6 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { HeightIcon, ReaderIcon } from '@radix-ui/react-icons'
 import { StringShift } from '@/components/flow/utils/string-shift'
-import { getIncomersWithHandle } from '@/components/flow/utils/get-incomers-with-handle'
 import { ALPHABETS } from '@/components/flow/utils/const'
 import { Highlight } from '@/components/flow/components/highlight'
 
@@ -109,7 +104,7 @@ const ScramblerTemplates: EnigmaScramblerTemplate[] = [
   },
 ]
 
-const EnigmaScramblerProcess: NodeProcess<EnigmaScramblerData> = (
+const EnigmaScramblerProcess: ModuleProcess<EnigmaScramblerData> = (
   node,
   params,
   inputs
@@ -158,7 +153,7 @@ const EnigmaScramblerProcess: NodeProcess<EnigmaScramblerData> = (
   return ''
 }
 
-export const EnigmaScramblerModule: ModuleProps<EnigmaScramblerData> = {
+export const EnigmaScramblerModule: Module<EnigmaScramblerData> = {
   type: 'enigma_scrambler',
   node: EnigmaScrambler,
   process: EnigmaScramblerProcess,
@@ -266,7 +261,7 @@ function EnigmaScrambler({
   }, [wiring, notch, ring, initialPosition, mapType])
 
   return (
-    <ModuleNode label="Enigma Scrambler" className={'w-[300px]'}>
+    <ModuleNode module={EnigmaScramblerModule} className={'w-[300px]'}>
       <div className={'flex flex-col gap-4 m-auto'}>
         <div className={'flex flex-row m-auto w-full gap-1 whitespace-pre'}>
           <Label className={'flex-0 my-auto pl-1'}>Wiring: </Label>

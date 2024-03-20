@@ -17,8 +17,8 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card'
-import { Inputs, useModules } from '@/components/flow/node-types'
 import { InputHandle, OutputHandle } from '@/components/flow/components/handle'
+import { Inputs, Module } from '@/components/flow/modules/types'
 
 export type ModuleData = {
   error?: string
@@ -26,25 +26,23 @@ export type ModuleData = {
 }
 
 export function ModuleNode({
+  module,
   label,
   className,
   informationMarkdown,
   children,
 }: {
-  label: ReactNode
+  module: Module
+  label?: ReactNode
   className?: ClassValue
   informationMarkdown?: string
 } & PropsWithChildren) {
   const nodes = useNodes()
   const reactFlow = useReactFlow()
   const nodeId = useNodeId()
-  const [modules] = useModules()
   const node = useMemo(() => {
     return nodes.find((node) => node.id === nodeId) as Node<ModuleData>
   }, [nodes, nodeId])
-  const module = useMemo(() => {
-    return modules?.[node?.type ?? ''] ?? undefined
-  }, [node.type, modules])
 
   function deleteNode() {
     reactFlow.setNodes((nds) => nds.filter((node) => node.id !== nodeId))
@@ -67,11 +65,11 @@ export function ModuleNode({
           >
             <div className={'text-muted-foreground flex flex-row gap-2 pb-2'}>
               <div className={'flex-1'}>
-                <div className={'w-full'}>{label}</div>
+                <div className={'w-full'}>{label ?? module.name}</div>
               </div>
               <div className={'my-auto'}>
-                {informationMarkdown && (
-                  <InformationIcon information={informationMarkdown} />
+                {module.description && (
+                  <InformationIcon information={module.description} />
                 )}
               </div>
             </div>

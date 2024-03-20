@@ -1,17 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { NodeProps } from 'reactflow'
 import { Input } from '@/components/ui/input'
-import {
-  getOutput,
-  ModuleProps,
-  NodeProcess,
-} from '@/components/flow/node-types'
+import { Module, ModuleProcess } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 import { Checkbox } from '@/components/ui/checkbox'
 import { StringShift } from '@/components/flow/utils/string-shift'
 import { ALPHABETS, UNKNOWN_CHARACTER } from '@/components/flow/utils/const'
-import { getIncomersWithHandle } from '@/components/flow/utils/get-incomers-with-handle'
 import { Highlight } from '@/components/flow/components/highlight'
 
 type VigenereData = {
@@ -43,32 +38,15 @@ const VigenereSquare = (): VSquare => {
   return vs
 }
 
-const VigenereProcess: NodeProcess<VigenereData> = (node, params) => {
-  const incomers = getIncomersWithHandle(
-    node,
-    params.nodes,
-    params.edges,
-    'input'
-  )
-  if (incomers[0]) {
-    const text = getOutput(incomers[0], params)
-    params.updateNodeData(node, {
-      input: text,
-    })
-    const result = VigenereEncrypt(
-      text,
-      node.data.key ?? '',
-      node.data.decryptMode ?? false
-    )
-    return result.encrypted
-  }
-  params.updateNodeData(node, {
-    input: '',
-  })
-  return ''
+const VigenereProcess: ModuleProcess<VigenereData> = (node, params, inputs) => {
+  return VigenereEncrypt(
+    inputs.input ?? '',
+    node.data.key ?? '',
+    node.data.decryptMode ?? false
+  ).encrypted
 }
 
-export const VigenereModule: ModuleProps<VigenereData> = {
+export const VigenereModule: Module<VigenereData> = {
   type: 'vigenere',
   node: Vigenere,
   process: VigenereProcess,
@@ -177,7 +155,7 @@ export function Vigenere({ id, data: initialData }: NodeProps<VigenereData>) {
   }, [key, decryptMode])
 
   return (
-    <ModuleNode label="Vigenere cipher">
+    <ModuleNode module={VigenereModule}>
       <div className={'flex flex-col m-auto gap-2'}>
         <div className={'flex flex-col gap-2'}>
           <div className="flex items-center mx-auto space-x-2">

@@ -15,8 +15,8 @@ import { SimpleSubstitutionModule } from '@/components/flow/modules/simple-subst
 import { CompareOutputModule } from '@/components/flow/modules/compare-output'
 import { ToUpperCaseModule } from '@/components/flow/modules/to-upper-case'
 import { ReplaceModule } from '@/components/flow/modules/replace'
-import { ModuleProps } from '@/components/flow/node-types'
 import { RailFenceCipherModule } from '@/components/flow/modules/rail-fence-cipher'
+import { Module } from '@/components/flow/modules/types'
 
 export const RegisteredModules = [
   InputModule,
@@ -45,5 +45,5 @@ export const RegisteredModules = [
     acc[m.type] = m
     return acc
   },
-  {} as { [type in string]: ModuleProps }
+  {} as { [type in string]: Module }
 )

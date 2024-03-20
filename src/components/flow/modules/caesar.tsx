@@ -1,29 +1,23 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { NodeProps } from 'reactflow'
 import { Label } from '@/components/ui/label'
-import {
-  getOutput,
-  ModuleProps,
-  NodeProcess,
-} from '@/components/flow/node-types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { Button } from '@/components/ui/button'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 import { StringShift } from '@/components/flow/utils/string-shift'
-import { getIncomersWithHandle } from '@/components/flow/utils/get-incomers-with-handle'
 import { ALPHABETS, UNKNOWN_CHARACTER } from '@/components/flow/utils/const'
 import { Highlight } from '@/components/flow/components/highlight'
-import { getInputs } from '@/components/flow/utils/get-inputs'
+import { Module, ModuleProcess } from '@/components/flow/modules/types'
 
 export type CaesarData = {
   shift?: number
 }
 
-const CaesarProcess: NodeProcess<CaesarData> = (node, params, inputs) => {
+const CaesarProcess: ModuleProcess<CaesarData> = (node, params, inputs) => {
   return inputs.input ? CaesarEncrypt(inputs.input, node.data.shift ?? 0).encrypted : ''
 }
 
-export const CaesarModule: ModuleProps<CaesarData> = {
+export const CaesarModule: Module<CaesarData> = {
   type: 'caesar',
   node: Caesar,
   process: CaesarProcess,
@@ -96,7 +90,7 @@ function Caesar({ id, data: initialData }: NodeProps<CaesarData>) {
   }
 
   return (
-    <ModuleNode label="Caesar cipher">
+    <ModuleNode module={CaesarModule}>
       <div className={'flex flex-col m-auto gap-2'}>
         <div className={'flex flex-row gap-2'}>
           <Button

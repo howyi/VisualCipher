@@ -2,38 +2,24 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { NodeProps } from 'reactflow'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  getOutput,
-  ModuleProps,
-  NodeProcess,
-} from '@/components/flow/node-types'
+import { Module, ModuleProcess } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 import { Button } from '@/components/ui/button'
-import { getIncomersWithHandle } from '@/components/flow/utils/get-incomers-with-handle'
 
 export type ReplaceData = {
   search?: string
   replace?: string
 }
 
-export const ReplaceProcess: NodeProcess<ReplaceData> = (node, params) => {
-  const incomers = getIncomersWithHandle(
-    node,
-    params.nodes,
-    params.edges,
-    'input'
-  )
-  if (incomers[0]) {
-    return getOutput(incomers[0], params).replaceAll(
-      node.data.search ?? '',
-      node.data.replace ?? ''
-    )
-  }
-  return ''
+export const ReplaceProcess: ModuleProcess<ReplaceData> = (node, params, inputs) => {
+  return inputs.input?.replaceAll(
+    node.data.search ?? '',
+    node.data.replace ?? ''
+  ) ?? ''
 }
 
-export const ReplaceModule: ModuleProps<ReplaceData> = {
+export const ReplaceModule: Module<ReplaceData> = {
   type: 'replace',
   node: Replace,
   process: ReplaceProcess,
@@ -67,7 +53,7 @@ export function Replace({ id, data: initialData }: NodeProps<ReplaceData>) {
   }, [search, replace])
 
   return (
-    <ModuleNode label="Replace">
+    <ModuleNode module={ReplaceModule}>
       <div className={'flex flex-col gap-2'}>
         <div className={'flex flex-row gap-2'}>
           <Label htmlFor="text" className={'flex-0 my-auto'}>

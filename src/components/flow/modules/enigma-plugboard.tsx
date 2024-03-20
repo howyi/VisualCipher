@@ -1,15 +1,10 @@
 import React, { useMemo } from 'react'
 import { NodeProps } from 'reactflow'
 import { Label } from '@/components/ui/label'
-import {
-  getOutput,
-  ModuleProps,
-  NodeProcess,
-} from '@/components/flow/node-types'
+import { Module, ModuleProcess } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 import { StringConnector } from '@/components/flow/components/string-connector'
-import { getIncomersWithHandle } from '@/components/flow/utils/get-incomers-with-handle'
 import { Highlight } from '@/components/flow/components/highlight'
 
 type EnigmaPlugBoardData = {
@@ -17,7 +12,7 @@ type EnigmaPlugBoardData = {
   input?: string
 }
 
-const EnigmaPlugBoardProcess: NodeProcess<EnigmaPlugBoardData> = (
+const EnigmaPlugBoardProcess: ModuleProcess<EnigmaPlugBoardData> = (
   node,
   params,
   inputs
@@ -25,7 +20,7 @@ const EnigmaPlugBoardProcess: NodeProcess<EnigmaPlugBoardData> = (
   return EnigmaPlugBoardEncrypt(inputs.input ?? '', inputs.plugs ?? '').encrypted
 }
 
-export const EnigmaPlugBoardModule: ModuleProps<EnigmaPlugBoardData> = {
+export const EnigmaPlugBoardModule: Module<EnigmaPlugBoardData> = {
   type: 'enigma_plug_board',
   node: EnigmaPlugBoard,
   process: EnigmaPlugBoardProcess,
@@ -117,7 +112,7 @@ function EnigmaPlugBoard({
   }, [data.inputs])
 
   return (
-    <ModuleNode label="Enigma PlugBoard">
+    <ModuleNode module={EnigmaPlugBoardModule}>
       <div className={'flex flex-col gap-1 m-auto w-60'}>
         <Label className={'my-auto'}>
           <Highlight

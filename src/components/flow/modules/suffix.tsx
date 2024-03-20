@@ -1,25 +1,20 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NodeProps } from 'reactflow'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  getOutput,
-  ModuleProps,
-  NodeProcess,
-} from '@/components/flow/node-types'
+import { Module, ModuleProcess } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
-import { getIncomersWithHandle } from '@/components/flow/utils/get-incomers-with-handle'
 
 type Data = {
   suffix?: string
 }
 
-const process: NodeProcess<Data> = (node, params, inputs) => {
+const process: ModuleProcess<Data> = (node, params, inputs) => {
   return (inputs.input) + (node.data.suffix ?? '')
 }
 
-export const SuffixModule: ModuleProps<Data> = {
+export const SuffixModule: Module<Data> = {
   type: 'suffix',
   node: node,
   process,
@@ -49,7 +44,7 @@ function node({ id, data: initialData }: NodeProps<Data>) {
   }, [suffix])
 
   return (
-    <ModuleNode label="Suffix">
+    <ModuleNode module={SuffixModule}>
       <div className={'flex m-auto gap-2'}>
         <Label htmlFor="text" className={'my-auto'}>
           +

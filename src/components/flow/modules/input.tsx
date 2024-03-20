@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { NodeProps, NodeResizer } from 'reactflow'
-import { ModuleProps, NodeProcess } from '@/components/flow/node-types'
+import { Module, ModuleProcess } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 import { Textarea } from '@/components/ui/textarea'
@@ -14,14 +14,14 @@ type InputData = {
   isPlaying?: boolean
 }
 
-const InputProcess: NodeProcess<InputData> = (node, params) => {
+const InputProcess: ModuleProcess<InputData> = (node, params) => {
   if (node.data.isPlaying) {
     return node.data.currentValue ?? ''
   }
   return node.data.value ?? ''
 }
 
-export const InputModule: ModuleProps<InputData> = {
+export const InputModule: Module<InputData> = {
   type: 'input',
   node: Input,
   process: InputProcess,
@@ -71,6 +71,7 @@ function Input({ id, data: initialData, selected }: NodeProps<InputData>) {
 
   return (
     <ModuleNode
+      module={InputModule}
       label={
         <>
           <div className={'flex flex-row gap-2'}>
