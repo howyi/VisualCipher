@@ -24,7 +24,7 @@ export const SuffixModule: ModuleProps<Data> = {
   node: node,
   process,
   defaultData: {
-    suffix: '.png2',
+    suffix: '.png',
   },
   name: 'Suffix',
   description: '',
