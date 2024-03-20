@@ -12,11 +12,15 @@ export type ReplaceData = {
   replace?: string
 }
 
-export const ReplaceProcess: ModuleProcess<ReplaceData> = (node, params, inputs) => {
-  return inputs.input?.replaceAll(
-    node.data.search ?? '',
-    node.data.replace ?? ''
-  ) ?? ''
+export const ReplaceProcess: ModuleProcess<ReplaceData> = (
+  node,
+  params,
+  inputs
+) => {
+  return (
+    inputs.input?.replaceAll(node.data.search ?? '', node.data.replace ?? '') ??
+    ''
+  )
 }
 
 export const ReplaceModule: Module<ReplaceData> = {
@@ -29,10 +33,10 @@ export const ReplaceModule: Module<ReplaceData> = {
 add a new line code at the end by pressing the [\\n] button`,
   ports: {
     in: {
-      input: {}
+      input: {},
     },
     out: {
-      output: {}
+      output: {},
     },
   },
 }

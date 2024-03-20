@@ -17,7 +17,8 @@ const EnigmaPlugBoardProcess: ModuleProcess<EnigmaPlugBoardData> = (
   params,
   inputs
 ) => {
-  return EnigmaPlugBoardEncrypt(inputs.input ?? '', inputs.plugs ?? '').encrypted
+  return EnigmaPlugBoardEncrypt(inputs.input ?? '', inputs.plugs ?? '')
+    .encrypted
 }
 
 export const EnigmaPlugBoardModule: Module<EnigmaPlugBoardData> = {
@@ -44,7 +45,7 @@ Passing a space-separated set of two characters to {plugs} replaces the correspo
       },
     },
     out: {
-      output: {}
+      output: {},
     },
   },
 }
@@ -104,7 +105,9 @@ function EnigmaPlugBoard({
     if (!data.inputs.input || data.inputs.input?.charAt(-1)) {
       return undefined
     }
-    const index = source.indexOf(data.inputs.input.charAt(data.inputs.input.length - 1))
+    const index = source.indexOf(
+      data.inputs.input.charAt(data.inputs.input.length - 1)
+    )
     if (index == -1) {
       return undefined
     }

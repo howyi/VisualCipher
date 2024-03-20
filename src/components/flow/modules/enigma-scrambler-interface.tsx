@@ -57,10 +57,10 @@ Set reverse to true if you want to perform the process in reverse order.`,
           className: '-ml-28',
           description: 'from Scrambler Port',
         },
-        input: {}
+        input: {},
       },
       out: {
-        output: {}
+        output: {},
       },
     },
   }
@@ -96,7 +96,7 @@ function EnigmaScramblerInterfaceEncrypt(
   let currentBottomIndex = undefined
   let [currentTop, currentBottom] = [top, bottom]
   if (reverse) {
-    [currentTop, currentBottom] = [currentBottom, currentTop]
+    ;[currentTop, currentBottom] = [currentBottom, currentTop]
   }
   if (!text.match(/^[A-Z]*$/)) {
     return {

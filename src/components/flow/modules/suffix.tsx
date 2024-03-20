@@ -11,7 +11,7 @@ type Data = {
 }
 
 const process: ModuleProcess<Data> = (node, params, inputs) => {
-  return (inputs.input) + (node.data.suffix ?? '')
+  return inputs.input + (node.data.suffix ?? '')
 }
 
 export const SuffixModule: Module<Data> = {
@@ -25,11 +25,11 @@ export const SuffixModule: Module<Data> = {
   description: '',
   ports: {
     in: {
-      input: {}
+      input: {},
     },
     out: {
-      output: {}
-    }
+      output: {},
+    },
   },
 }
 

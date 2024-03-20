@@ -58,10 +58,10 @@ export const VigenereModule: Module<VigenereData> = {
   description: `The Vigenere cipher encrypts text using keywords in the form of a combination of multiple Caesar ciphers. The user can enter any text and keywords and get an encrypted message based on the combination. Because this cipher does not rely on a single shift quantity, it is more difficult to decipher than a simple substitution cipher.`,
   ports: {
     in: {
-      input: {}
+      input: {},
     },
     out: {
-      output: {}
+      output: {},
     },
   },
 }

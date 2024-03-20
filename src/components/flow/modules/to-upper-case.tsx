@@ -5,7 +5,11 @@ import { ModuleNode } from '@/components/flow/components/module-node'
 
 export type Data = {}
 
-export const ToUpperCaseProcess: ModuleProcess<Data> = (node, params, inputs) => {
+export const ToUpperCaseProcess: ModuleProcess<Data> = (
+  node,
+  params,
+  inputs
+) => {
   return inputs.input?.toUpperCase() ?? ''
 }
 
@@ -18,10 +22,10 @@ export const ToUpperCaseModule: Module<Data> = {
   description: '',
   ports: {
     in: {
-      input: {}
+      input: {},
     },
     out: {
-      output: {}
+      output: {},
     },
   },
 }

@@ -125,18 +125,18 @@ const EnigmaScramblerProcess: ModuleProcess<EnigmaScramblerData> = (
       -(node.data.initialPosition ?? 0) + (node.data.ring ?? 0)
     )
     if (node.data.mapType === 'BOTTOM') {
-      [top, bottom] = [bottom, top]
+      ;[top, bottom] = [bottom, top]
     }
     return JSON.stringify({ top, bottom, rotate: inputs.rotate })
   }
-  if ( inputs.rotate && node.sourceHandleId === 'rotate') {
+  if (inputs.rotate && node.sourceHandleId === 'rotate') {
     let currentAlphabets = StringShift(
       ALPHABETS ?? '',
       -(node.data.initialPosition ?? 0) + (node.data.ring ?? 0)
     )
     let out = ''
     const notches = node.data.notch?.split('') ?? []
-    for (let w of  inputs.rotate.split('')) {
+    for (let w of inputs.rotate.split('')) {
       const firstCharacter = currentAlphabets.charAt(0)
       if (w === '1' && notches.includes(firstCharacter)) {
         out += '1'
@@ -171,18 +171,18 @@ To actually perform conversions using the scrambler, it is necessary to use the 
       rotate: {
         className: 'ml-16',
         description: 'from Previous Scrambler or Entry Wheel Port',
-      }
+      },
     },
     out: {
       scrambler: {
-        description: 'to Scrambler Interface Port'
+        description: 'to Scrambler Interface Port',
       },
       rotate: {
         position: Position.Top,
         className: '-ml-16',
         description: 'to Next Scrambler Port',
-      }
-    }
+      },
+    },
   },
 }
 

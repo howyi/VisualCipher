@@ -82,28 +82,32 @@ export function ModuleNode({
         >
           {node?.data?.error}
         </HoverCardContent>
-        {module &&
+        {module && (
           <>
             {Object.keys(module.ports.in).map((id) => {
-              return <InputHandle
-                id={id}
-                key={id}
-                position={module.ports.in[id].position ?? Position.Top}
-                className={module.ports.in[id].className}
-                description={module.ports.in[id].description}
-              />
+              return (
+                <InputHandle
+                  id={id}
+                  key={id}
+                  position={module.ports.in[id].position ?? Position.Top}
+                  className={module.ports.in[id].className}
+                  description={module.ports.in[id].description}
+                />
+              )
             })}
             {Object.keys(module.ports.out).map((id) => {
-              return <OutputHandle
-                id={id}
-                key={id}
-                position={module.ports.out[id].position ?? Position.Bottom}
-                className={module.ports.out[id].className}
-                description={module.ports.out[id].description}
-              />
+              return (
+                <OutputHandle
+                  id={id}
+                  key={id}
+                  position={module.ports.out[id].position ?? Position.Bottom}
+                  className={module.ports.out[id].className}
+                  description={module.ports.out[id].description}
+                />
+              )
             })}
           </>
-        }
+        )}
       </HoverCard>
     </>
   )

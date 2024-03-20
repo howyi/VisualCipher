@@ -1,26 +1,29 @@
 import { Edge, getOutgoers, Node } from 'reactflow'
-import { Inputs, NodeWithSourceHandle, ResolveBaseParams } from '@/components/flow/modules/types'
+import {
+  Inputs,
+  NodeWithSourceHandle,
+  ResolveBaseParams,
+} from '@/components/flow/modules/types'
 import { RegisteredModules } from '@/components/flow/modules'
 
-export const process = (
-  params: ResolveBaseParams
-): void => {
+export const process = (params: ResolveBaseParams): void => {
   const terminalNodes = getAllTerminalNodes(params.nodes, params.edges)
   for (let node of Object.values(terminalNodes)) {
     startNodeProcess(node, params)
   }
 }
 
-const startNodeProcess = (
-  node: Node,
-  params: ResolveBaseParams
-): string => {
+const startNodeProcess = (node: Node, params: ResolveBaseParams): string => {
   if (node.type && RegisteredModules[node.type]) {
     const inputs = getInputs(node, params)
     params.updateNodeData(node, {
       inputs,
     })
-    return RegisteredModules[node.type].process({ ...node, sourceHandleId: '' }, params, inputs)
+    return RegisteredModules[node.type].process(
+      { ...node, sourceHandleId: '' },
+      params,
+      inputs
+    )
   }
   return ''
 }
@@ -40,11 +43,7 @@ const getAllTerminalNodes = (
   return result
 }
 
-const getTerminalNodes = (
-  node: Node,
-  nodes: Node[],
-  edges: Edge[]
-): Node[] => {
+const getTerminalNodes = (node: Node, nodes: Node[], edges: Edge[]): Node[] => {
   const ougoers = getOutgoers(node, nodes, edges)
   if (ougoers.length == 0) {
     return [node]
@@ -56,10 +55,7 @@ const getTerminalNodes = (
   return terminalNodes
 }
 
-function getInputs(
-  node: Node,
-  params: ResolveBaseParams,
-): Inputs {
+function getInputs(node: Node, params: ResolveBaseParams): Inputs {
   const allInputNodes: { [handleId in string]: NodeWithSourceHandle<any> } = {}
   for (let edge of params.edges) {
     if (edge.target !== node.id || !edge.targetHandle || !edge.sourceHandle) {
@@ -67,7 +63,10 @@ function getInputs(
     }
     const foundNode = params.nodes.find((n) => n.id === edge.source)
     if (!foundNode) continue
-    allInputNodes[edge.targetHandle] = { ...foundNode, sourceHandleId: edge.sourceHandle }
+    allInputNodes[edge.targetHandle] = {
+      ...foundNode,
+      sourceHandleId: edge.sourceHandle,
+    }
   }
 
   const inputs: Inputs = {}
@@ -76,7 +75,6 @@ function getInputs(
   }
   return inputs
 }
-
 
 const getOutput = (
   node: NodeWithSourceHandle<any>,

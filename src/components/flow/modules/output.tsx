@@ -21,7 +21,7 @@ export const OutputModule: Module<OutputData> = {
   description: `Basic text output field`,
   ports: {
     in: {
-      input: {}
+      input: {},
     },
     out: {},
   },
@@ -32,7 +32,9 @@ function Output({ id, data: initialData }: NodeProps<OutputData>) {
 
   return (
     <ModuleNode module={OutputModule} className={'border-module-output'}>
-      <pre className={'nodrag select-text cursor-text'}>{data.inputs?.input}</pre>
+      <pre className={'nodrag select-text cursor-text'}>
+        {data.inputs?.input}
+      </pre>
     </ModuleNode>
   )
 }

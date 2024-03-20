@@ -103,10 +103,14 @@ function PositionToSide(position: Position): (typeof SIDE_OPTIONS)[number] {
 
 function PositionToIcon(type: 'in' | 'out', position: Position): ReactNode {
   const isIn = type == 'in'
-  if (position == Position.Top) return isIn ? <DoubleArrowDownIcon /> : <DoubleArrowUpIcon />
-  if (position == Position.Bottom) return  isIn ? <DoubleArrowUpIcon /> : <DoubleArrowDownIcon />
-  if (position == Position.Left) return  isIn ? <DoubleArrowRightIcon /> : <DoubleArrowLeftIcon />
-  if (position == Position.Right) return  isIn ? <DoubleArrowLeftIcon /> : <DoubleArrowRightIcon />
+  if (position == Position.Top)
+    return isIn ? <DoubleArrowDownIcon /> : <DoubleArrowUpIcon />
+  if (position == Position.Bottom)
+    return isIn ? <DoubleArrowUpIcon /> : <DoubleArrowDownIcon />
+  if (position == Position.Left)
+    return isIn ? <DoubleArrowRightIcon /> : <DoubleArrowLeftIcon />
+  if (position == Position.Right)
+    return isIn ? <DoubleArrowLeftIcon /> : <DoubleArrowRightIcon />
   throw Error('side not found')
 }
 

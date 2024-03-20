@@ -15,11 +15,9 @@ export type SimpleSubstitutionData = {
   target?: string
 }
 
-export const SimpleSubstitutionProcess: ModuleProcess<SimpleSubstitutionData> = (
-  node,
-  params,
-  inputs
-) => {
+export const SimpleSubstitutionProcess: ModuleProcess<
+  SimpleSubstitutionData
+> = (node, params, inputs) => {
   return SimpleSubstitutionEncrypt(
     inputs?.input ?? '',
     node.data.source ?? '',
@@ -41,10 +39,10 @@ export const SimpleSubstitutionModule: Module<SimpleSubstitutionData> = {
   description: 'simple string substitution',
   ports: {
     in: {
-      input: {}
+      input: {},
     },
     out: {
-      output: {}
+      output: {},
     },
   },
 }

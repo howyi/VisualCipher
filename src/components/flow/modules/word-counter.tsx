@@ -4,8 +4,7 @@ import { Module, ModuleProcess } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 
-type WordCounterData = {
-}
+type WordCounterData = {}
 
 const WordCounterProcess: ModuleProcess<WordCounterData> = (node, params) => {
   return ''
@@ -21,7 +20,7 @@ export const WordCounterModule: Module<WordCounterData> = {
     'Count the number of space-separated strings and display them in order of frequency',
   ports: {
     in: {
-      input: {}
+      input: {},
     },
     out: {},
   },

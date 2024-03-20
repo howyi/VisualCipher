@@ -36,7 +36,7 @@ Pressing the playback button will enter a mode that loops the process of process
   ports: {
     in: {},
     out: {
-      output: {}
+      output: {},
     },
   },
 }

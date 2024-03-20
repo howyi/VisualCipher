@@ -20,17 +20,15 @@ export const PrefixModule: Module<PrefixData> = {
     in: {
       input: {},
       prefix: {
-        className: '-ml-20'
-      }
+        className: '-ml-20',
+      },
     },
     out: {
-      output: {}
-    }
+      output: {},
+    },
   },
 }
 
 function Prefix({ id, data: initialData }: NodeProps<PrefixData>) {
-  return (
-    <ModuleNode module={PrefixModule} className={'w-64'} />
-  )
+  return <ModuleNode module={PrefixModule} className={'w-64'} />
 }

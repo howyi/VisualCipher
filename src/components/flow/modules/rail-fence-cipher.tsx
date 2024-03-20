@@ -10,7 +10,8 @@ type Data = {
 }
 
 const Process: ModuleProcess<Data> = (node, params, inputs) => {
-  return RailFenceCipherEncrypt(inputs.input ?? '', node.data.rails ?? 3).encrypted
+  return RailFenceCipherEncrypt(inputs.input ?? '', node.data.rails ?? 3)
+    .encrypted
 }
 
 export const RailFenceCipherModule: Module<Data> = {
@@ -24,10 +25,10 @@ export const RailFenceCipherModule: Module<Data> = {
   description: ``,
   ports: {
     in: {
-      input: {}
+      input: {},
     },
     out: {
-      output: {}
+      output: {},
     },
   },
 }
@@ -38,7 +39,6 @@ export function RailFenceCipherEncrypt(
 ): {
   encrypted: string
 } {
-
   return {
     encrypted: '',
   }
@@ -59,7 +59,7 @@ function Node({ id, data: initialData }: NodeProps<Data>) {
   }
 
   return (
-    <ModuleNode module={RailFenceCipherModule} >
+    <ModuleNode module={RailFenceCipherModule}>
       <div className={'flex flex-col m-auto gap-2'}>
         <div className={'flex flex-row gap-2'}>
           <Button

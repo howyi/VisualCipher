@@ -54,7 +54,8 @@ export const EnigmaReflectorProcess: ModuleProcess<ReflectorData> = (
   params,
   inputs
 ) => {
-  return EnigmaReflectorEncrypt(inputs.input ?? '', node.data.wiring ?? '').encrypted
+  return EnigmaReflectorEncrypt(inputs.input ?? '', node.data.wiring ?? '')
+    .encrypted
 }
 
 export const EnigmaReflectorModule: Module<ReflectorData> = {
@@ -69,10 +70,10 @@ export const EnigmaReflectorModule: Module<ReflectorData> = {
 Wiring settings are made, and when text is input, reflector processing is output according to the wiring.`,
   ports: {
     in: {
-      input: {}
+      input: {},
     },
     out: {
-      output: {}
+      output: {},
     },
   },
 }
@@ -128,7 +129,10 @@ export function EnigmaReflector({
     return found ? found.name : 'Custom'
   }, [wiring])
   const encryptResult = useMemo(() => {
-    return EnigmaReflectorEncrypt(nodeData.inputs?.input ?? '', nodeData.wiring ?? '')
+    return EnigmaReflectorEncrypt(
+      nodeData.inputs?.input ?? '',
+      nodeData.wiring ?? ''
+    )
   }, [nodeData])
 
   useEffect(() => {

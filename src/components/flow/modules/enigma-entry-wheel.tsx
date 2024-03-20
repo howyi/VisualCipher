@@ -10,7 +10,12 @@ export const EnigmaEntryWheelProcess: ModuleProcess<EnigmaEntryWheelData> = (
   params,
   inputs
 ) => {
-  return inputs.input?.split('').map(() => '1').join('') ?? ''
+  return (
+    inputs.input
+      ?.split('')
+      .map(() => '1')
+      .join('') ?? ''
+  )
 }
 
 export const EnigmaEntryWheelModule: Module<EnigmaEntryWheelData> = {
@@ -23,13 +28,13 @@ export const EnigmaEntryWheelModule: Module<EnigmaEntryWheelData> = {
 Outputs a rotation with each text entry`,
   ports: {
     in: {
-      input: {}
+      input: {},
     },
-    out : {
+    out: {
       rotate: {
         description: "A string of '1's equal to the number of input characters",
-      }
-    }
+      },
+    },
   },
 }
 

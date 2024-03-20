@@ -21,9 +21,7 @@ import { useCallback, useState } from 'react'
 import { Link } from 'gatsby'
 
 import 'reactflow/dist/base.css'
-import {
-  useModules,
-} from '@/components/hooks/use-modules'
+import { useModules } from '@/components/hooks/use-modules'
 import { nanoid } from 'nanoid'
 import { useBoolean, useDebounceCallback, useLocalStorage } from 'usehooks-ts'
 import { Button } from '@/components/ui/button'
@@ -32,7 +30,7 @@ import {
   GitHubLogoIcon,
   InfoCircledIcon,
   PlusIcon,
-  TrashIcon, UploadIcon,
+  TrashIcon,
 } from '@radix-ui/react-icons'
 import { DarkModeSwitch } from '@/components/organisms/dark-mode-switch'
 import {
@@ -256,33 +254,50 @@ export function Flow({
       <Panel position="bottom-right">
         <Palette />
       </Panel>
-      <Panel position="top-right" className={'flex flex-row gap-2 font-mono text-muted-foreground'}>
-        {storageKey && (<ButtonWithTooltip
-          onClick={(e) => {
-            setSaved('')
-            window.location.reload()
-          }}
-          variant={'outline'} tooltip={'reset storage'} size={'sm'}>
-          <TrashIcon />
-        </ButtonWithTooltip>)}
-        {storageKey && <ImportButton onUpload={(file) => {
-          setNodes(file.nodes)
-          setEdges(file.edges)
-          toast("Import succeeded!🎉")
-        }} />}
-        <ButtonWithTooltip variant={'outline'} tooltip={'export'} size={'sm'} onClick={() => {
-          if (!reactFlowInstance) {
-            return
-          }
-          const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-            JSON.stringify(reactFlowInstance.toObject())
-          )}`;
-          const link = document.createElement("a");
-          link.href = jsonString;
-          link.download = "visualcipher.json";
+      <Panel
+        position="top-right"
+        className={'flex flex-row gap-2 font-mono text-muted-foreground'}
+      >
+        {storageKey && (
+          <ButtonWithTooltip
+            onClick={(e) => {
+              setSaved('')
+              window.location.reload()
+            }}
+            variant={'outline'}
+            tooltip={'reset storage'}
+            size={'sm'}
+          >
+            <TrashIcon />
+          </ButtonWithTooltip>
+        )}
+        {storageKey && (
+          <ImportButton
+            onUpload={(file) => {
+              setNodes(file.nodes)
+              setEdges(file.edges)
+              toast('Import succeeded!🎉')
+            }}
+          />
+        )}
+        <ButtonWithTooltip
+          variant={'outline'}
+          tooltip={'export'}
+          size={'sm'}
+          onClick={() => {
+            if (!reactFlowInstance) {
+              return
+            }
+            const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
+              JSON.stringify(reactFlowInstance.toObject())
+            )}`
+            const link = document.createElement('a')
+            link.href = jsonString
+            link.download = 'visualcipher.json'
 
-          link.click();
-        }}>
+            link.click()
+          }}
+        >
           <DownloadIcon />
         </ButtonWithTooltip>
         <Button size={'sm'} onClick={onClickInfo}>
@@ -392,7 +407,9 @@ function ModuleSelector({
                         <TableCell className={'text-module-output'}>
                           out
                         </TableCell>
-                        <TableCell>{module.ports.out[id].description}</TableCell>
+                        <TableCell>
+                          {module.ports.out[id].description}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

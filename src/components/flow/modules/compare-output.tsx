@@ -6,7 +6,10 @@ import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 
 export type CompareOutputData = {}
 
-const CompareOutputProcess: ModuleProcess<CompareOutputData> = (node, params) => {
+const CompareOutputProcess: ModuleProcess<CompareOutputData> = (
+  node,
+  params
+) => {
   return ''
 }
 
@@ -20,11 +23,11 @@ export const CompareOutputModule: Module<CompareOutputData> = {
   ports: {
     in: {
       input_A: {
-        className: '-ml-16'
+        className: '-ml-16',
       },
       input_B: {
-        className: 'ml-16'
-      }
+        className: 'ml-16',
+      },
     },
     out: {},
   },

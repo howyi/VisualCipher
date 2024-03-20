@@ -14,7 +14,9 @@ export type CaesarData = {
 }
 
 const CaesarProcess: ModuleProcess<CaesarData> = (node, params, inputs) => {
-  return inputs.input ? CaesarEncrypt(inputs.input, node.data.shift ?? 0).encrypted : ''
+  return inputs.input
+    ? CaesarEncrypt(inputs.input, node.data.shift ?? 0).encrypted
+    : ''
 }
 
 export const CaesarModule: Module<CaesarData> = {
@@ -32,10 +34,10 @@ The user can enter any text and specify the number of letters to be shifted to e
 `,
   ports: {
     in: {
-      input: {}
+      input: {},
     },
     out: {
-      output: {}
+      output: {},
     },
   },
 }

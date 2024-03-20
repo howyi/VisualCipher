@@ -9,7 +9,7 @@ export type CharacterCounterData = {}
 const CharacterCounterProcess: ModuleProcess<CharacterCounterData> = (
   node,
   params,
-  inputs,
+  inputs
 ) => {
   return ''
 }
@@ -24,7 +24,7 @@ export const CharacterCounterModule: Module<CharacterCounterData> = {
     'Counts the characters in the string inputted from {in} and displays them in order of frequency.',
   ports: {
     in: {
-      input: {}
+      input: {},
     },
     out: {},
   },
