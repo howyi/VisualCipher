@@ -1,4 +1,5 @@
 import { StringShift } from '@/components/flow/utils/string-shift'
+import { expect, test } from 'vitest'
 
 test('No Shift', () => {
   // 4,0 -> 0

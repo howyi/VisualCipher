@@ -1,4 +1,5 @@
 import { RailFenceCipherEncrypt } from '@/components/flow/modules/rail-fence-cipher'
+import { expect, test } from 'vitest'
 
 test('Encrypt', () => {
   // R   F   E   H
