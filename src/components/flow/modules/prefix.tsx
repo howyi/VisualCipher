@@ -9,7 +9,7 @@ const PrefixProcess: ModuleProcess<PrefixData> = (node, params, inputs) => {
   return (inputs.prefix ?? '') + (inputs.input ?? '')
 }
 
-export const PrefixModule: Module<PrefixData> = {
+export const PrefixModule = {
   type: 'prefix',
   node: Prefix,
   process: PrefixProcess,
@@ -27,7 +27,12 @@ export const PrefixModule: Module<PrefixData> = {
       output: {},
     },
   },
-}
+} as const satisfies Module<PrefixData>
+
+type W = typeof PrefixModule.defaultData
+
+type Q = keyof typeof PrefixModule.ports.in
+const t: Q = 'aa'
 
 function Prefix({ id, data: initialData }: NodeProps<PrefixData>) {
   return <ModuleNode module={PrefixModule} className={'w-64'} />

@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { useNodes, useReactFlow } from 'reactflow'
 import { ModuleData } from '@/components/flow/components/module-node'
 
-export function useNodeDataState<T>(
+export function useNodeDataState<T, K extends string = string>(
   id: string,
-  initialData: T & ModuleData
-): [T & ModuleData, React.Dispatch<T>] {
+  initialData: T & ModuleData<K>
+): [T & ModuleData<K>, React.Dispatch<T>] {
   const [data, setRawData] = useState(initialData)
 
   const nodes = useNodes()

@@ -18,6 +18,15 @@ export type Inputs<T extends string | number | symbol = string> = {
 
 export type ModuleNode = (node: NodeProps<any>) => React.JSX.Element
 
+export type ModuleProcessProps<
+  T,
+  K extends string | number | symbol = string,
+> = {
+  node: NodeWithSourceHandle<T>
+  params: ResolveBaseParams
+  inputs: Inputs<K>
+}
+
 export type ModuleProcess<T, K extends string | number | symbol = string> = (
   node: NodeWithSourceHandle<T>,
   params: ResolveBaseParams,

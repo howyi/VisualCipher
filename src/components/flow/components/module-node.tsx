@@ -20,9 +20,9 @@ import {
 import { InputHandle, OutputHandle } from '@/components/flow/components/handle'
 import { Inputs, Module } from '@/components/flow/modules/types'
 
-export type ModuleData = {
+export type ModuleData<T extends string = string> = {
   error?: string
-  inputs?: Inputs
+  inputs?: Inputs<T>
 }
 
 export function ModuleNode({
