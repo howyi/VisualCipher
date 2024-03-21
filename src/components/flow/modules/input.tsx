@@ -28,7 +28,7 @@ const ports = {
 export const InputModule: Module<Data, typeof ports> = {
   type: 'input',
   node,
-  process,
+  calculate,
   defaultData: {
     value: '',
     currentValue: '',
@@ -40,7 +40,7 @@ Pressing the playback button will enter a mode that loops the process of process
   ports,
 }
 
-function process({ node }: ModuleProcessProps<Data, typeof ports>) {
+function calculate({ node }: ModuleProcessProps<Data, typeof ports>) {
   if (node.data.isPlaying) {
     return node.data.currentValue ?? ''
   }

@@ -21,7 +21,7 @@ const ports = {
 export const CompareOutputModule: Module<Data, typeof ports> = {
   type: 'compare_output',
   node,
-  process: () => '',
+  calculate: () => '',
   defaultData: {},
   name: 'Compare Output',
   description: `Display two text inputs (input_A and input_B) in parallel so that users can easily compare their contents.`,

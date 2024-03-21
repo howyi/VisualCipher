@@ -25,7 +25,7 @@ const ports = {
 export const RailFenceCipherModule: Module<Data, typeof ports> = {
   type: 'rail_fence_cipher',
   node,
-  process,
+  calculate,
   defaultData: {
     rails: 3,
   },
@@ -34,7 +34,7 @@ export const RailFenceCipherModule: Module<Data, typeof ports> = {
   ports,
 }
 
-function process({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
+function calculate({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
   return RailFenceCipherEncrypt(inputs.input ?? '', node.data.rails ?? 3)
     .encrypted
 }

@@ -16,7 +16,7 @@ const ports = {
 export const OutputModule: Module<Data, typeof ports> = {
   type: 'output',
   node,
-  process: () => '',
+  calculate: () => '',
   defaultData: {
     value: '',
   },

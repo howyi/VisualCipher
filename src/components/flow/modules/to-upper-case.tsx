@@ -17,7 +17,7 @@ const ports = {
 export const ToUpperCaseModule: Module<Data, typeof ports> = {
   type: 'to_upper_case',
   node,
-  process: ({ inputs }) => inputs.input?.toUpperCase() ?? '',
+  calculate: ({ inputs }) => inputs.input?.toUpperCase() ?? '',
   defaultData: {},
   name: 'TO UPPER CASE',
   description: '',

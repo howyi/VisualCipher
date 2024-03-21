@@ -16,7 +16,7 @@ const ports = {
 export const WordCounterModule: Module<Data, typeof ports> = {
   type: 'word_counter',
   node,
-  process: () => '',
+  calculate: () => '',
   defaultData: {},
   name: 'Word Counter',
   description:

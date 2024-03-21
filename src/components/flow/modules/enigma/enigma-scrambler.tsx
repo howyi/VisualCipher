@@ -54,7 +54,7 @@ const ports = {
 export const EnigmaScramblerModule: Module<Data, typeof ports> = {
   type: 'enigma_scrambler',
   node,
-  process,
+  calculate,
   defaultData: {
     wiring: 'EKMFLGDQVZNTOWYHXUSPAIBRCJ',
     notch: 'Q',
@@ -66,7 +66,7 @@ Wiring settings are made, and the current scrambler state is output from {scramb
 To actually perform conversions using the scrambler, it is necessary to use the Enigma Scrambler Interface.`,
   ports,
 }
-function process({
+function calculate({
   portId,
   node,
   inputs,

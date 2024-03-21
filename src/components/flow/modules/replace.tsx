@@ -25,7 +25,7 @@ const ports = {
   },
 } as const satisfies Ports
 
-function process({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
+function calculate({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
   return (
     inputs.input?.replaceAll(node.data.search ?? '', node.data.replace ?? '') ??
     ''
@@ -35,7 +35,7 @@ function process({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
 export const ReplaceModule: Module<Data, typeof ports> = {
   type: 'replace',
   node,
-  process,
+  calculate,
   defaultData: {},
   name: 'Replace',
   description: `Replace specific string with specific string

@@ -26,7 +26,7 @@ const ports = {
 export const SuffixModule: Module<Data, typeof ports> = {
   type: 'suffix',
   node,
-  process,
+  calculate,
   defaultData: {
     suffix: '.png',
   },
@@ -35,7 +35,7 @@ export const SuffixModule: Module<Data, typeof ports> = {
   ports,
 }
 
-function process({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
+function calculate({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
   return inputs.input + (node.data.suffix ?? '')
 }
 

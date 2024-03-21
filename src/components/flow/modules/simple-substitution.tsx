@@ -30,7 +30,7 @@ const ports = {
 export const SimpleSubstitutionModule: Module<Data, typeof ports> = {
   type: 'simple_substitution',
   node,
-  process,
+  calculate,
   defaultData: {
     source: ALPHABETS,
     target: ALPHABETS.split('')
@@ -42,7 +42,7 @@ export const SimpleSubstitutionModule: Module<Data, typeof ports> = {
   ports,
 }
 
-function process({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
+function calculate({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
   return SimpleSubstitutionEncrypt(
     inputs?.input ?? '',
     node.data.source ?? '',

@@ -34,7 +34,7 @@ const ports = {
 export const EnigmaScramblerInterfaceModule: Module<Data, typeof ports> = {
   type: 'enigma_scrambler_interface',
   node,
-  process,
+  calculate,
   defaultData: {
     reverse: false,
   },
@@ -45,7 +45,7 @@ Set reverse to true if you want to perform the process in reverse order.`,
   ports,
 }
 
-function process({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
+function calculate({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
   if (!inputs.scrambler) {
     return ''
   }

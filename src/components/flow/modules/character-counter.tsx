@@ -16,7 +16,7 @@ const ports = {
 export const CharacterCounterModule: Module<Data, typeof ports> = {
   type: 'character_counter',
   node,
-  process: () => '',
+  calculate: () => '',
   defaultData: {},
   name: 'Character Counter',
   description:

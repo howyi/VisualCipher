@@ -20,7 +20,7 @@ const ports = {
 export const PrefixModule: Module<Data, typeof ports> = {
   type: 'prefix',
   node,
-  process: ({ inputs }) => (inputs.prefix ?? '') + (inputs.input ?? ''),
+  calculate: ({ inputs }) => (inputs.prefix ?? '') + (inputs.input ?? ''),
   defaultData: {},
   name: 'Prefix',
   description: '{prefix}{input} → {output}',

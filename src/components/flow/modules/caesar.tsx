@@ -29,7 +29,7 @@ const ports = {
 export const CaesarModule: Module<Data, typeof ports> = {
   type: 'caesar',
   node,
-  process,
+  calculate,
   defaultData: {
     shift: 3,
   },
@@ -42,7 +42,7 @@ The user can enter any text and specify the number of letters to be shifted to e
   ports,
 }
 
-function process({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
+function calculate({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
   return inputs.input
     ? CaesarEncrypt(inputs.input, node.data.shift ?? 0).encrypted
     : ''

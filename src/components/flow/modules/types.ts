@@ -24,7 +24,7 @@ export type ModuleProcessProps<T, K extends Ports> = {
   inputs: Inputs<keyof K['in']>
 }
 
-type ModuleProcess<T, K extends Ports> = (
+type ModuleCalculate<T, K extends Ports> = (
   props: ModuleProcessProps<T, K>
 ) => string
 
@@ -42,7 +42,7 @@ export type Ports = {
 export type Module<T, K extends Ports> = {
   type: string
   node: (node: NodeProps<T>) => React.JSX.Element
-  process: ModuleProcess<T, K>
+  calculate: ModuleCalculate<T, K>
   defaultData: T
   name: string
   description: string

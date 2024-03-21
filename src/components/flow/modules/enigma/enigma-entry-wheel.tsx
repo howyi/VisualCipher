@@ -23,7 +23,7 @@ const ports = {
 export const EnigmaEntryWheelModule: Module<Data, typeof ports> = {
   type: 'enigma_entry_wheel',
   node,
-  process,
+  calculate,
   defaultData: {},
   name: 'Enigma Entry Wheel (ETW, Eintrittwalze)',
   description: `Disk to be placed in front of the Enigma cipher machine scrambler
@@ -31,7 +31,7 @@ Outputs a rotation with each text entry`,
   ports,
 }
 
-function process({
+function calculate({
   node,
   inputs,
 }: ModuleProcessProps<Data, typeof ports>): string {

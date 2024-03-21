@@ -35,7 +35,7 @@ const ports = {
 export const EnigmaPlugBoardModule: Module<Data, typeof ports> = {
   type: 'enigma_plug_board',
   node,
-  process,
+  calculate,
   defaultData: {},
   name: 'Enigma Plug Board (Steckerbrett)',
   description: `plugs[AB CD] input[ABCX] → output[BADX]
@@ -44,7 +44,7 @@ Passing a space-separated set of two characters to {plugs} replaces the correspo
   ports,
 }
 
-function process({
+function calculate({
   node,
   inputs,
 }: ModuleProcessProps<Data, typeof ports>): string {

@@ -51,7 +51,7 @@ const VigenereSquare = (): VSquare => {
   return vs
 }
 
-function process({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
+function calculate({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
   return VigenereEncrypt(
     inputs.input ?? '',
     node.data.key ?? '',
@@ -62,7 +62,7 @@ function process({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
 export const VigenereModule: Module<Data, typeof ports> = {
   type: 'vigenere',
   node: node,
-  process,
+  calculate,
   defaultData: {
     key: 'LEMON',
     decryptMode: false,

@@ -39,7 +39,7 @@ const ports = {
 export const EnigmaReflectorModule: Module<Data, typeof ports> = {
   type: 'enigma_reflector',
   node,
-  process,
+  calculate,
   defaultData: {
     wiring: 'EJMZALYXVBWFCRQUONTSPIKHGD',
   },
@@ -49,7 +49,7 @@ Wiring settings are made, and when text is input, reflector processing is output
   ports,
 }
 
-function process({
+function calculate({
   node,
   inputs,
 }: ModuleProcessProps<Data, typeof ports>): string {
