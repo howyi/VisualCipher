@@ -26,7 +26,7 @@ export function FlowTemplate({
   storageKey,
   information,
 }: Props) {
-  const [infoOpen, setInfoOpen] = useState(true)
+  const [infoOpen, setInfoOpen] = useState(false)
   return (
     <main className={'flex flex-row'}>
       <Toaster position={'bottom-left'} />
