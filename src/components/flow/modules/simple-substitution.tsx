@@ -8,27 +8,29 @@ import { Separator } from '@/components/ui/separator'
 import { StringConnector } from '@/components/flow/components/string-connector'
 import { ALPHABETS, UNKNOWN_CHARACTER } from '@/components/flow/utils/const'
 import { Highlight } from '@/components/flow/components/highlight'
-import { Module, ModuleProcess } from '@/components/flow/modules/types'
+import {
+  Module,
+  ModuleProcessProps,
+  Ports,
+} from '@/components/flow/modules/types'
 
-export type SimpleSubstitutionData = {
+type Data = {
   source?: string
   target?: string
 }
 
-export const SimpleSubstitutionProcess: ModuleProcess<
-  SimpleSubstitutionData
-> = (node, params, inputs) => {
-  return SimpleSubstitutionEncrypt(
-    inputs?.input ?? '',
-    node.data.source ?? '',
-    node.data.target ?? ''
-  ).encrypted
-}
-
-export const SimpleSubstitutionModule: Module<SimpleSubstitutionData> = {
+const ports = {
+  in: {
+    input: {},
+  },
+  out: {
+    output: {},
+  },
+} as const satisfies Ports
+export const SimpleSubstitutionModule: Module<Data, typeof ports> = {
   type: 'simple_substitution',
-  node: SimpleSubstitution,
-  process: SimpleSubstitutionProcess,
+  node,
+  process,
   defaultData: {
     source: ALPHABETS,
     target: ALPHABETS.split('')
@@ -37,17 +39,18 @@ export const SimpleSubstitutionModule: Module<SimpleSubstitutionData> = {
   },
   name: 'Simple Substitution',
   description: 'simple string substitution',
-  ports: {
-    in: {
-      input: {},
-    },
-    out: {
-      output: {},
-    },
-  },
+  ports,
 }
 
-export function SimpleSubstitutionEncrypt(
+function process({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
+  return SimpleSubstitutionEncrypt(
+    inputs?.input ?? '',
+    node.data.source ?? '',
+    node.data.target ?? ''
+  ).encrypted
+}
+
+function SimpleSubstitutionEncrypt(
   text: string,
   source: string,
   target: string
@@ -66,14 +69,8 @@ export function SimpleSubstitutionEncrypt(
   }
 }
 
-export function SimpleSubstitution({
-  id,
-  data: initialData,
-}: NodeProps<SimpleSubstitutionData>) {
-  const [data, setData] = useNodeDataState<SimpleSubstitutionData>(
-    id,
-    initialData
-  )
+function node({ id, data: initialData }: NodeProps<Data>) {
+  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
   const [source, setSource] = useState(initialData.source ?? '')
   const [target, setTarget] = useState(initialData.target ?? '')
   const highLightIndex = useMemo(() => {

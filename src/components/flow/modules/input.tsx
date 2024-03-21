@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { NodeProps, NodeResizer } from 'reactflow'
-import { Module, ModuleProcess } from '@/components/flow/modules/types'
+import {
+  Module,
+  ModuleProcessProps,
+  Ports,
+} from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 import { Textarea } from '@/components/ui/textarea'
@@ -8,23 +12,23 @@ import { PauseIcon, PlayIcon, TrackPreviousIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import { useBoolean, useInterval } from 'usehooks-ts'
 
-type InputData = {
+type Data = {
   value?: string
   currentValue?: string
   isPlaying?: boolean
 }
 
-const InputProcess: ModuleProcess<InputData> = (node, params) => {
-  if (node.data.isPlaying) {
-    return node.data.currentValue ?? ''
-  }
-  return node.data.value ?? ''
-}
+const ports = {
+  in: {},
+  out: {
+    output: {},
+  },
+} as const satisfies Ports
 
-export const InputModule: Module<InputData> = {
+export const InputModule: Module<Data, typeof ports> = {
   type: 'input',
-  node: Input,
-  process: InputProcess,
+  node,
+  process,
   defaultData: {
     value: '',
     currentValue: '',
@@ -33,16 +37,21 @@ export const InputModule: Module<InputData> = {
   name: 'Input',
   description: `Basic input field.
 Pressing the playback button will enter a mode that loops the process of processing one character at a time`,
-  ports: {
-    in: {},
-    out: {
-      output: {},
-    },
-  },
+  ports,
 }
 
-function Input({ id, data: initialData, selected }: NodeProps<InputData>) {
-  const [nodeData, setNodeData] = useNodeDataState<InputData>(id, initialData)
+function process({ node }: ModuleProcessProps<Data, typeof ports>) {
+  if (node.data.isPlaying) {
+    return node.data.currentValue ?? ''
+  }
+  return node.data.value ?? ''
+}
+
+function node({ id, data: initialData, selected }: NodeProps<Data>) {
+  const [nodeData, setNodeData] = useNodeDataState<Data, typeof ports>(
+    id,
+    initialData
+  )
   const [text, setText] = useState(initialData.value ?? '')
   const isPlaying = useBoolean(!!initialData.isPlaying)
   const [playCurrentPosition, setPlayCurrentPosition] = useState(0)

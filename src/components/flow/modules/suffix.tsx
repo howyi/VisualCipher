@@ -2,42 +2,45 @@ import React, { useEffect, useState } from 'react'
 import { NodeProps } from 'reactflow'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Module, ModuleProcess } from '@/components/flow/modules/types'
+import {
+  Module,
+  ModuleProcessProps,
+  Ports,
+} from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
-import { PrefixModule } from '@/components/flow/modules/prefix'
 
 type Data = {
   suffix?: string
 }
 
-type Inputs = keyof typeof PrefixModule.ports.in
+const ports = {
+  in: {
+    input: {},
+  },
+  out: {
+    output: {},
+  },
+} as const satisfies Ports
 
-const process: ModuleProcess<Data, Inputs> = (node, params, inputs) => {
-  return inputs.input + (node.data.suffix ?? '')
-}
-
-export const SuffixModule = {
+export const SuffixModule: Module<Data, typeof ports> = {
   type: 'suffix',
-  node: node,
+  node,
   process,
   defaultData: {
     suffix: '.png',
   },
   name: 'Suffix',
   description: '',
-  ports: {
-    in: {
-      input: {},
-    },
-    out: {
-      output: {},
-    },
-  },
-} as const satisfies Module<Data>
+  ports,
+}
+
+function process({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
+  return inputs.input + (node.data.suffix ?? '')
+}
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeDataState<Data, Inputs>(id, initialData)
+  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
 
   const [suffix, setSuffix] = useState(initialData.suffix)
   useEffect(() => {

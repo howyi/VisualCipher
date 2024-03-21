@@ -2,47 +2,49 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { NodeProps } from 'reactflow'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Module, ModuleProcess } from '@/components/flow/modules/types'
+import {
+  Module,
+  ModuleProcessProps,
+  Ports,
+} from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 import { Button } from '@/components/ui/button'
 
-export type ReplaceData = {
+type Data = {
   search?: string
   replace?: string
 }
 
-export const ReplaceProcess: ModuleProcess<ReplaceData> = (
-  node,
-  params,
-  inputs
-) => {
+const ports = {
+  in: {
+    input: {},
+  },
+  out: {
+    output: {},
+  },
+} as const satisfies Ports
+
+function process({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
   return (
     inputs.input?.replaceAll(node.data.search ?? '', node.data.replace ?? '') ??
     ''
   )
 }
 
-export const ReplaceModule: Module<ReplaceData> = {
+export const ReplaceModule: Module<Data, typeof ports> = {
   type: 'replace',
-  node: Replace,
-  process: ReplaceProcess,
+  node,
+  process,
   defaultData: {},
   name: 'Replace',
   description: `Replace specific string with specific string
 add a new line code at the end by pressing the [\\n] button`,
-  ports: {
-    in: {
-      input: {},
-    },
-    out: {
-      output: {},
-    },
-  },
+  ports,
 }
 
-export function Replace({ id, data: initialData }: NodeProps<ReplaceData>) {
-  const [data, setData] = useNodeDataState<ReplaceData>(id, initialData)
+function node({ id, data: initialData }: NodeProps<Data>) {
+  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
   const [search, setSearch] = useState(initialData.search)
   const searchLineBreak = useMemo(() => {
     return search?.slice(search?.length - 1, search?.length) === '\n'

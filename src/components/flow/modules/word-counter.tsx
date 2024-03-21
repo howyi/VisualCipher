@@ -1,29 +1,27 @@
 import React, { useMemo } from 'react'
 import { NodeProps } from 'reactflow'
-import { Module, ModuleProcess } from '@/components/flow/modules/types'
+import { Module, Ports } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 
-type WordCounterData = {}
+type Data = {}
 
-const WordCounterProcess: ModuleProcess<WordCounterData> = (node, params) => {
-  return ''
-}
+const ports = {
+  in: {
+    input: {},
+  },
+  out: {},
+} as const satisfies Ports
 
-export const WordCounterModule: Module<WordCounterData> = {
+export const WordCounterModule: Module<Data, typeof ports> = {
   type: 'word_counter',
-  node: WordCounter,
-  process: WordCounterProcess,
+  node,
+  process: () => '',
   defaultData: {},
   name: 'Word Counter',
   description:
     'Count the number of space-separated strings and display them in order of frequency',
-  ports: {
-    in: {
-      input: {},
-    },
-    out: {},
-  },
+  ports,
 }
 
 type Counts = {
@@ -32,8 +30,8 @@ type Counts = {
   percentage: string
 }[]
 
-function WordCounter({ id, data: initialData }: NodeProps<WordCounterData>) {
-  const [data, setData] = useNodeDataState<WordCounterData>(id, initialData)
+function node({ id, data: initialData }: NodeProps<Data>) {
+  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
   const counts = useMemo(() => {
     if (!data.inputs?.input) {
       return []

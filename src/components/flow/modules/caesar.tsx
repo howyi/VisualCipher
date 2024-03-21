@@ -7,22 +7,29 @@ import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 import { StringShift } from '@/components/flow/utils/string-shift'
 import { ALPHABETS, UNKNOWN_CHARACTER } from '@/components/flow/utils/const'
 import { Highlight } from '@/components/flow/components/highlight'
-import { Module, ModuleProcess } from '@/components/flow/modules/types'
+import {
+  Module,
+  ModuleProcessProps,
+  Ports,
+} from '@/components/flow/modules/types'
 
-export type CaesarData = {
+type Data = {
   shift?: number
 }
 
-const CaesarProcess: ModuleProcess<CaesarData> = (node, params, inputs) => {
-  return inputs.input
-    ? CaesarEncrypt(inputs.input, node.data.shift ?? 0).encrypted
-    : ''
-}
+const ports = {
+  in: {
+    input: {},
+  },
+  out: {
+    output: {},
+  },
+} as const satisfies Ports
 
-export const CaesarModule: Module<CaesarData> = {
+export const CaesarModule: Module<Data, typeof ports> = {
   type: 'caesar',
-  node: Caesar,
-  process: CaesarProcess,
+  node,
+  process,
   defaultData: {
     shift: 3,
   },
@@ -32,14 +39,13 @@ Provides the ability to encrypt input text with the Caesar cipher.
 The Caesar cipher is a classic cryptographic technique that encrypts a string of text by shifting a certain number of letters of the alphabet.
 The user can enter any text and specify the number of letters to be shifted to encrypt that text. For example, if the number of shifts is 3, "ABC" is converted to "DEG" and "HELLO" is converted to "KHOOR".
 `,
-  ports: {
-    in: {
-      input: {},
-    },
-    out: {
-      output: {},
-    },
-  },
+  ports,
+}
+
+function process({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
+  return inputs.input
+    ? CaesarEncrypt(inputs.input, node.data.shift ?? 0).encrypted
+    : ''
 }
 
 function CaesarEncrypt(
@@ -66,8 +72,8 @@ function CaesarEncrypt(
   }
 }
 
-function Caesar({ id, data: initialData }: NodeProps<CaesarData>) {
-  const [data, setData] = useNodeDataState<CaesarData>(id, initialData)
+function node({ id, data: initialData }: NodeProps<Data>) {
+  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
   const shiftedAlphabetsText = useMemo(() => {
     return StringShift(ALPHABETS, data.shift ?? 0)
   }, [data.shift])

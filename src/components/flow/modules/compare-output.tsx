@@ -1,43 +1,35 @@
 import React from 'react'
 import { NodeProps } from 'reactflow'
-import { Module, ModuleProcess } from '@/components/flow/modules/types'
+import { Module, Ports } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 
-export type CompareOutputData = {}
+type Data = {}
 
-const CompareOutputProcess: ModuleProcess<CompareOutputData> = (
-  node,
-  params
-) => {
-  return ''
-}
+const ports = {
+  in: {
+    input_A: {
+      className: '-ml-16',
+    },
+    input_B: {
+      className: 'ml-16',
+    },
+  },
+  out: {},
+} as const satisfies Ports
 
-export const CompareOutputModule: Module<CompareOutputData> = {
+export const CompareOutputModule: Module<Data, typeof ports> = {
   type: 'compare_output',
-  node: CompareOutput,
-  process: CompareOutputProcess,
+  node,
+  process: () => '',
   defaultData: {},
   name: 'Compare Output',
   description: `Display two text inputs (input_A and input_B) in parallel so that users can easily compare their contents.`,
-  ports: {
-    in: {
-      input_A: {
-        className: '-ml-16',
-      },
-      input_B: {
-        className: 'ml-16',
-      },
-    },
-    out: {},
-  },
+  ports,
 }
 
-function CompareOutput({
-  id,
-  data: initialData,
-}: NodeProps<CompareOutputData>) {
-  const [data, setData] = useNodeDataState<CompareOutputData>(id, initialData)
+function node({ id, data: initialData }: NodeProps<Data>) {
+  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
 
   return (
     <ModuleNode module={CompareOutputModule}>

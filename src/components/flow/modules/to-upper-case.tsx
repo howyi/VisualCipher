@@ -1,36 +1,30 @@
 import React from 'react'
 import { NodeProps } from 'reactflow'
-import { Module, ModuleProcess } from '@/components/flow/modules/types'
+import { Module, Ports } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 
-export type Data = {}
+type Data = {}
 
-export const ToUpperCaseProcess: ModuleProcess<Data> = (
-  node,
-  params,
-  inputs
-) => {
-  return inputs.input?.toUpperCase() ?? ''
-}
+const ports = {
+  in: {
+    input: {},
+  },
+  out: {
+    output: {},
+  },
+} as const satisfies Ports
 
-export const ToUpperCaseModule: Module<Data> = {
+export const ToUpperCaseModule: Module<Data, typeof ports> = {
   type: 'to_upper_case',
-  node: ToUpperCase,
-  process: ToUpperCaseProcess,
+  node,
+  process: ({ inputs }) => inputs.input?.toUpperCase() ?? '',
   defaultData: {},
   name: 'TO UPPER CASE',
   description: '',
-  ports: {
-    in: {
-      input: {},
-    },
-    out: {
-      output: {},
-    },
-  },
+  ports,
 }
 
-export function ToUpperCase({ id, data: initialData }: NodeProps<Data>) {
+function node({ id, data: initialData }: NodeProps<Data>) {
   return (
     <ModuleNode module={ToUpperCaseModule}>
       <div className={'w-40'}></div>

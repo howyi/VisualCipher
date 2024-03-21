@@ -1,33 +1,27 @@
 import React, { useMemo } from 'react'
 import { NodeProps } from 'reactflow'
-import { Module, ModuleProcess } from '@/components/flow/modules/types'
+import { Module, Ports } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 
-export type CharacterCounterData = {}
+type Data = {}
 
-const CharacterCounterProcess: ModuleProcess<CharacterCounterData> = (
-  node,
-  params,
-  inputs
-) => {
-  return ''
-}
+const ports = {
+  in: {
+    input: {},
+  },
+  out: {},
+} as const satisfies Ports
 
-export const CharacterCounterModule: Module<CharacterCounterData> = {
+export const CharacterCounterModule: Module<Data, typeof ports> = {
   type: 'character_counter',
-  node: CharacterCounter,
-  process: CharacterCounterProcess,
+  node,
+  process: () => '',
   defaultData: {},
   name: 'Character Counter',
   description:
     'Counts the characters in the string inputted from {in} and displays them in order of frequency.',
-  ports: {
-    in: {
-      input: {},
-    },
-    out: {},
-  },
+  ports,
 }
 
 type Counts = {
@@ -36,14 +30,8 @@ type Counts = {
   percentage: string
 }[]
 
-function CharacterCounter({
-  id,
-  data: initialData,
-}: NodeProps<CharacterCounterData>) {
-  const [data, setData] = useNodeDataState<CharacterCounterData>(
-    id,
-    initialData
-  )
+function node({ id, data: initialData }: NodeProps<Data>) {
+  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
   const counts = useMemo(() => {
     if (!data.inputs?.input) {
       return []

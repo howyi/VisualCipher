@@ -1,56 +1,58 @@
 import React, { useMemo } from 'react'
 import { NodeProps } from 'reactflow'
 import { Label } from '@/components/ui/label'
-import { Module, ModuleProcess } from '@/components/flow/modules/types'
+import {
+  Module,
+  ModuleProcessProps,
+  Ports,
+} from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 import { StringConnector } from '@/components/flow/components/string-connector'
 import { Highlight } from '@/components/flow/components/highlight'
 
-type EnigmaPlugBoardData = {
-  plugs?: string
-  input?: string
-}
+type Data = {}
 
-const EnigmaPlugBoardProcess: ModuleProcess<EnigmaPlugBoardData> = (
-  node,
-  params,
-  inputs
-) => {
-  return EnigmaPlugBoardEncrypt(inputs.input ?? '', inputs.plugs ?? '')
-    .encrypted
-}
+const ports = {
+  in: {
+    input: {},
+    plugs: {
+      className: '-ml-24',
+      description: (
+        <>
+          eg: [AB CD]
+          <br />
+          Set of space-separated replacement strings
+        </>
+      ),
+    },
+  },
+  out: {
+    output: {},
+  },
+} as const satisfies Ports
 
-export const EnigmaPlugBoardModule: Module<EnigmaPlugBoardData> = {
+export const EnigmaPlugBoardModule: Module<Data, typeof ports> = {
   type: 'enigma_plug_board',
-  node: EnigmaPlugBoard,
-  process: EnigmaPlugBoardProcess,
+  node,
+  process,
   defaultData: {},
   name: 'Enigma Plug Board (Steckerbrett)',
   description: `plugs[AB CD] input[ABCX] → output[BADX]
 Plugboard Emulator for Enigma Crypto Machines
 Passing a space-separated set of two characters to {plugs} replaces the corresponding part of the string entered with {input}.`,
-  ports: {
-    in: {
-      input: {},
-      plugs: {
-        className: '-ml-24',
-        description: (
-          <>
-            eg: [AB CD]
-            <br />
-            Set of space-separated replacement strings
-          </>
-        ),
-      },
-    },
-    out: {
-      output: {},
-    },
-  },
+  ports,
 }
 
-export function EnigmaPlugBoardEncrypt(
+function process({
+  node,
+  inputs,
+}: ModuleProcessProps<Data, typeof ports>): string {
+  return EnigmaPlugBoardEncrypt(inputs.input ?? '', inputs.plugs ?? '')
+    .encrypted
+}
+
+function EnigmaPlugBoardEncrypt(
   text: string,
   plugs: string
 ): {
@@ -75,11 +77,8 @@ export function EnigmaPlugBoardEncrypt(
   }
 }
 
-function EnigmaPlugBoard({
-  id,
-  data: initialData,
-}: NodeProps<EnigmaPlugBoardData>) {
-  const [data, setData] = useNodeDataState<EnigmaPlugBoardData>(id, initialData)
+function node({ id, data: initialData }: NodeProps<Data>) {
+  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
   const source = useMemo(() => {
     return (
       data.inputs?.plugs

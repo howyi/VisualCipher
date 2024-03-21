@@ -1,18 +1,26 @@
 import React from 'react'
 import { NodeProps } from 'reactflow'
-import { Module, ModuleProcess } from '@/components/flow/modules/types'
+import { Module, Ports } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 
-type PrefixData = {}
+type Data = {}
 
-const PrefixProcess: ModuleProcess<PrefixData> = (node, params, inputs) => {
-  return (inputs.prefix ?? '') + (inputs.input ?? '')
-}
+const ports = {
+  in: {
+    input: {},
+    prefix: {
+      className: '-ml-20',
+    },
+  },
+  out: {
+    output: {},
+  },
+} as const satisfies Ports
 
-export const PrefixModule = {
+export const PrefixModule: Module<Data, typeof ports> = {
   type: 'prefix',
-  node: Prefix,
-  process: PrefixProcess,
+  node,
+  process: ({ inputs }) => (inputs.prefix ?? '') + (inputs.input ?? ''),
   defaultData: {},
   name: 'Prefix',
   description: '{prefix}{input} → {output}',
@@ -27,13 +35,8 @@ export const PrefixModule = {
       output: {},
     },
   },
-} as const satisfies Module<PrefixData>
+}
 
-type W = typeof PrefixModule.defaultData
-
-type Q = keyof typeof PrefixModule.ports.in
-const t: Q = 'aa'
-
-function Prefix({ id, data: initialData }: NodeProps<PrefixData>) {
+function node({}: NodeProps<Data>) {
   return <ModuleNode module={PrefixModule} className={'w-64'} />
 }

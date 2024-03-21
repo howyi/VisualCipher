@@ -19,11 +19,11 @@ const startNodeProcess = (node: Node, params: ResolveBaseParams): string => {
     params.updateNodeData(node, {
       inputs,
     })
-    return RegisteredModules[node.type].process(
-      { ...node, sourceHandleId: '' },
-      params,
-      inputs
-    )
+    return RegisteredModules[node.type].process({
+      node,
+      portId: '',
+      inputs,
+    })
   }
   return ''
 }
@@ -86,7 +86,11 @@ const getOutput = (
       params.updateNodeData(node, {
         inputs,
       })
-      const out = RegisteredModules[node.type].process(node, params, inputs)
+      const out = RegisteredModules[node.type].process({
+        node,
+        portId: node.sourceHandleId,
+        inputs,
+      })
       params.updateNodeData(node, {
         error: '',
       })

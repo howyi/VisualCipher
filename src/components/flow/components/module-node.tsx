@@ -18,30 +18,30 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/hover-card'
 import { InputHandle, OutputHandle } from '@/components/flow/components/handle'
-import { Inputs, Module } from '@/components/flow/modules/types'
+import { Inputs, Module, Ports } from '@/components/flow/modules/types'
 
-export type ModuleData<T extends string = string> = {
+export type ModuleData<T extends Ports> = {
   error?: string
-  inputs?: Inputs<T>
+  inputs?: Inputs<keyof T['in']>
 }
 
 export function ModuleNode({
   module,
   label,
   className,
-  informationMarkdown,
   children,
 }: {
-  module: Module
+  module: Module<any, any>
   label?: ReactNode
   className?: ClassValue
-  informationMarkdown?: string
 } & PropsWithChildren) {
   const nodes = useNodes()
   const reactFlow = useReactFlow()
   const nodeId = useNodeId()
   const node = useMemo(() => {
-    return nodes.find((node) => node.id === nodeId) as Node<ModuleData>
+    return nodes.find((node) => node.id === nodeId) as Node<
+      ModuleData<{ in: {}; out: {} }>
+    >
   }, [nodes, nodeId])
 
   function deleteNode() {

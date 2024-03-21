@@ -1,6 +1,10 @@
 import React from 'react'
 import { NodeProps } from 'reactflow'
-import { Module, ModuleProcess } from '@/components/flow/modules/types'
+import {
+  Module,
+  ModuleProcessProps,
+  Ports,
+} from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { Button } from '@/components/ui/button'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
@@ -9,28 +13,30 @@ type Data = {
   rails?: number
 }
 
-const Process: ModuleProcess<Data> = (node, params, inputs) => {
-  return RailFenceCipherEncrypt(inputs.input ?? '', node.data.rails ?? 3)
-    .encrypted
-}
+const ports = {
+  in: {
+    input: {},
+  },
+  out: {
+    output: {},
+  },
+} as const satisfies Ports
 
-export const RailFenceCipherModule: Module<Data> = {
+export const RailFenceCipherModule: Module<Data, typeof ports> = {
   type: 'rail_fence_cipher',
-  node: Node,
-  process: Process,
+  node,
+  process,
   defaultData: {
     rails: 3,
   },
   name: 'Rail Fence Cipher',
   description: ``,
-  ports: {
-    in: {
-      input: {},
-    },
-    out: {
-      output: {},
-    },
-  },
+  ports,
+}
+
+function process({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
+  return RailFenceCipherEncrypt(inputs.input ?? '', node.data.rails ?? 3)
+    .encrypted
 }
 
 export function RailFenceCipherEncrypt(
@@ -44,8 +50,8 @@ export function RailFenceCipherEncrypt(
   }
 }
 
-function Node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeDataState<Data>(id, initialData)
+function node({ id, data: initialData }: NodeProps<Data>) {
+  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
 
   const shiftLeft = () => {
     setData({

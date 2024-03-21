@@ -18,19 +18,14 @@ export type Inputs<T extends string | number | symbol = string> = {
 
 export type ModuleNode = (node: NodeProps<any>) => React.JSX.Element
 
-export type ModuleProcessProps<
-  T,
-  K extends string | number | symbol = string,
-> = {
-  node: NodeWithSourceHandle<T>
-  params: ResolveBaseParams
-  inputs: Inputs<K>
+export type ModuleProcessProps<T, K extends Ports> = {
+  node: Node<T>
+  portId: keyof K['out']
+  inputs: Inputs<keyof K['in']>
 }
 
-export type ModuleProcess<T, K extends string | number | symbol = string> = (
-  node: NodeWithSourceHandle<T>,
-  params: ResolveBaseParams,
-  inputs: Inputs<K>
+type ModuleProcess<T, K extends Ports> = (
+  props: ModuleProcessProps<T, K>
 ) => string
 
 type Port = {
@@ -39,15 +34,17 @@ type Port = {
   description?: ReactNode
 }
 
-export type Module<T = any> = {
+export type Ports = {
+  in: { [portId in string]: Port }
+  out: { [portId in string]: Port }
+}
+
+export type Module<T, K extends Ports> = {
   type: string
   node: (node: NodeProps<T>) => React.JSX.Element
-  process: ModuleProcess<T>
+  process: ModuleProcess<T, K>
   defaultData: T
   name: string
   description: string
-  ports: {
-    in: { [id in string]: Port }
-    out: { [id in string]: Port }
-  }
+  ports: Ports
 }

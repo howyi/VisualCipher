@@ -6,11 +6,11 @@ import { CaesarModule } from '@/components/flow/modules/caesar'
 import { VigenereModule } from '@/components/flow/modules/vigenere'
 import { CharacterCounterModule } from '@/components/flow/modules/character-counter'
 import { WordCounterModule } from '@/components/flow/modules/word-counter'
-import { EnigmaScramblerInterfaceModule } from '@/components/flow/modules/enigma-scrambler-interface'
-import { EnigmaReflectorModule } from '@/components/flow/modules/enigma-reflector'
-import { EnigmaScramblerModule } from '@/components/flow/modules/enigma-scrambler'
-import { EnigmaPlugBoardModule } from '@/components/flow/modules/enigma-plugboard'
-import { EnigmaEntryWheelModule } from '@/components/flow/modules/enigma-entry-wheel'
+import { EnigmaScramblerInterfaceModule } from '@/components/flow/modules/enigma/enigma-scrambler-interface'
+import { EnigmaReflectorModule } from '@/components/flow/modules/enigma/enigma-reflector'
+import { EnigmaScramblerModule } from '@/components/flow/modules/enigma/enigma-scrambler'
+import { EnigmaPlugBoardModule } from '@/components/flow/modules/enigma/enigma-plugboard'
+import { EnigmaEntryWheelModule } from '@/components/flow/modules/enigma/enigma-entry-wheel'
 import { SimpleSubstitutionModule } from '@/components/flow/modules/simple-substitution'
 import { CompareOutputModule } from '@/components/flow/modules/compare-output'
 import { ToUpperCaseModule } from '@/components/flow/modules/to-upper-case'
@@ -45,5 +45,5 @@ export const RegisteredModules = [
     acc[m.type] = m
     return acc
   },
-  {} as { [type in string]: Module }
+  {} as { [type in string]: Module<any, any> }
 )

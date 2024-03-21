@@ -21,7 +21,6 @@ import { useCallback, useState } from 'react'
 import { Link } from 'gatsby'
 
 import 'reactflow/dist/base.css'
-import { useModules } from '@/components/hooks/use-modules'
 import { nanoid } from 'nanoid'
 import { useBoolean, useDebounceCallback, useLocalStorage } from 'usehooks-ts'
 import { Button } from '@/components/ui/button'
@@ -52,8 +51,9 @@ import { RegisteredGuides } from '@/components/flow/guides'
 import { ButtonWithTooltip } from '@/components/organisms/button-with-tooltip'
 import { ImportButton } from '@/components/organisms/import-button'
 import { toast } from 'sonner'
-import { Module } from '@/components/flow/modules/types'
+import { Module, ModuleNode } from '@/components/flow/modules/types'
 import { process } from '@/components/flow/resolvers/process'
+import { RegisteredModules } from '@/components/flow/modules'
 
 type Props = {
   title: string
@@ -83,7 +83,13 @@ export function Flow({
     setSaved(JSON.stringify(instance.toObject()))
   }, 1000)
 
-  const [modules, nodeTypes] = useModules()
+  const nodeTypes = React.useMemo(() => {
+    const results: { [key in string]: ModuleNode } = {}
+    for (let type in RegisteredModules) {
+      results[type] = RegisteredModules[type].node
+    }
+    return results
+  }, [])
 
   React.useEffect(() => {
     if (storageKey && saved) {
@@ -194,7 +200,7 @@ export function Flow({
         id: nanoid(),
         type,
         position,
-        data: modules[type].defaultData ?? {},
+        data: RegisteredModules[type].defaultData ?? {},
       }
 
       setNodes((nds) => nds.concat(newNode))
@@ -315,7 +321,6 @@ export function Flow({
 
 function Palette() {
   const [open, setOpen] = useState(false)
-  const [modules] = useModules()
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
     event.dataTransfer.setData('application/visualcipher', nodeType)
     event.dataTransfer.effectAllowed = 'move'
@@ -327,8 +332,8 @@ function Palette() {
         <>
           <div className="mt-24">Drag and place the module</div>
           <div className={'h-full overflow-y-scroll flex flex-col gap-2'}>
-            {Object.keys(modules).map((key) => {
-              const module = modules[key]
+            {Object.keys(RegisteredModules).map((key) => {
+              const module = RegisteredModules[key]
               return (
                 <ModuleSelector
                   key={key}
@@ -353,7 +358,7 @@ function ModuleSelector({
   module,
   onDragStart,
 }: {
-  module: Module
+  module: Module<any, any>
   onDragStart: (event: React.DragEvent, nodeType: string) => void
 }) {
   const expand = useBoolean(false)

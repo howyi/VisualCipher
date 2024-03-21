@@ -2,7 +2,11 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { NodeProps, Position } from 'reactflow'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Module, ModuleProcess } from '@/components/flow/modules/types'
+import {
+  Module,
+  ModuleProcessProps,
+  Ports,
+} from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 import { Button } from '@/components/ui/button'
@@ -17,8 +21,9 @@ import { HeightIcon, ReaderIcon } from '@radix-ui/react-icons'
 import { StringShift } from '@/components/flow/utils/string-shift'
 import { ALPHABETS } from '@/components/flow/utils/const'
 import { Highlight } from '@/components/flow/components/highlight'
+import { ScramblerTemplates } from '@/components/flow/modules/enigma/scrambler-templates'
 
-type EnigmaScramblerData = {
+type Data = {
   board?: string
   wiring?: string
   mapType?: 'TOP' | 'BOTTOM'
@@ -27,95 +32,46 @@ type EnigmaScramblerData = {
   initialPosition?: number
 }
 
-type EnigmaScramblerTemplate = {
-  name: string
-  wiring: string
-  notch: string
-  mapType: 'TOP' | 'BOTTOM'
-}
+const ports = {
+  in: {
+    rotate: {
+      className: 'ml-16',
+      description: 'from Previous Scrambler or Entry Wheel Port',
+    },
+  },
+  out: {
+    scrambler: {
+      description: 'to Scrambler Interface Port',
+    },
+    rotate: {
+      position: Position.Top,
+      className: '-ml-16',
+      description: 'to Next Scrambler Port',
+    },
+  },
+} as const satisfies Ports
 
-//  https://en.wikipedia.org/wiki/Enigma_rotor_details#Rotor_wiring_tables
-const ScramblerTemplates: EnigmaScramblerTemplate[] = [
-  {
-    name: 'Enigma I - I',
+export const EnigmaScramblerModule: Module<Data, typeof ports> = {
+  type: 'enigma_scrambler',
+  node,
+  process,
+  defaultData: {
     wiring: 'EKMFLGDQVZNTOWYHXUSPAIBRCJ',
     notch: 'Q',
     mapType: 'TOP',
   },
-  {
-    name: 'Enigma I - II',
-    wiring: 'AJDKSIRUXBLHWTMCQGZNPYFVOE',
-    notch: 'E',
-    mapType: 'TOP',
-  },
-  {
-    name: 'Enigma I - III',
-    wiring: 'BDFHJLCPRTXVZNYEIWGAKMUSQO',
-    notch: 'V',
-    mapType: 'TOP',
-  },
-  {
-    name: 'M3 Army - IV',
-    wiring: 'ESOVPZJAYQUIRHXLNFTGKDCMWB',
-    notch: 'J',
-    mapType: 'TOP',
-  },
-  {
-    name: 'M3 Army - V',
-    wiring: 'VZBRGITYUPSDNHLXAWMJQOFECK',
-    notch: 'Z',
-    mapType: 'TOP',
-  },
-  {
-    name: '	M3 & M4 Naval (FEB 1942) - VI',
-    wiring: 'JPGVOUMFYQBENHZRDKASXLICTW',
-    notch: 'ZM',
-    mapType: 'TOP',
-  },
-  {
-    name: '	M3 & M4 Naval (FEB 1942) - VII',
-    wiring: 'NZJHGRCXMYSWBOUFAIVLPEKQDT',
-    notch: 'ZM',
-    mapType: 'TOP',
-  },
-  {
-    name: '	M3 & M4 Naval (FEB 1942) - VIII',
-    wiring: 'FKQHTLXOCBJSPDZRAMEWNIUYGV',
-    notch: 'ZM',
-    mapType: 'TOP',
-  },
-  {
-    name: 'CYPHER Ⅰ',
-    wiring: 'UWYGADFPVZBECKMTHXSLRINQOJ',
-    notch: '',
-    mapType: 'BOTTOM',
-  },
-  {
-    name: 'CYPHER Ⅱ',
-    wiring: 'AJPCZWRLFBDKOTYUQGENHXMIVS',
-    notch: '',
-    mapType: 'BOTTOM',
-  },
-  {
-    name: 'CYPHER Ⅲ',
-    wiring: 'TAGBPCSDQEUFVNZHYIXJWLRKOM',
-    notch: '',
-    mapType: 'BOTTOM',
-  },
-]
-
-const EnigmaScramblerProcess: ModuleProcess<EnigmaScramblerData> = (
+  name: 'Enigma Scrambler (Rotar, Walzen)',
+  description: `Scrambler emulator for Enigma Crypto.
+Wiring settings are made, and the current scrambler state is output from {scrambler} when {rotate} is input from the Entry Wheel or the previous Scrambler.
+To actually perform conversions using the scrambler, it is necessary to use the Enigma Scrambler Interface.`,
+  ports,
+}
+function process({
+  portId,
   node,
-  params,
-  inputs
-) => {
-  if (node.sourceHandleId === 'board') {
-    return node.data.board ?? ''
-  }
-  if (node.sourceHandleId === 'notch') {
-    return node.data.notch ?? ''
-  }
-  if (node.sourceHandleId === 'scrambler') {
+  inputs,
+}: ModuleProcessProps<Data, typeof ports>): string {
+  if (portId === 'scrambler') {
     let top = StringShift(
       node.data.wiring ?? '',
       -(node.data.initialPosition ?? 0) + (node.data.ring ?? 0)
@@ -129,7 +85,7 @@ const EnigmaScramblerProcess: ModuleProcess<EnigmaScramblerData> = (
     }
     return JSON.stringify({ top, bottom, rotate: inputs.rotate })
   }
-  if (inputs.rotate && node.sourceHandleId === 'rotate') {
+  if (inputs.rotate && portId === 'rotate') {
     let currentAlphabets = StringShift(
       ALPHABETS ?? '',
       -(node.data.initialPosition ?? 0) + (node.data.ring ?? 0)
@@ -153,48 +109,12 @@ const EnigmaScramblerProcess: ModuleProcess<EnigmaScramblerData> = (
   return ''
 }
 
-export const EnigmaScramblerModule: Module<EnigmaScramblerData> = {
-  type: 'enigma_scrambler',
-  node: EnigmaScrambler,
-  process: EnigmaScramblerProcess,
-  defaultData: {
-    wiring: 'EKMFLGDQVZNTOWYHXUSPAIBRCJ',
-    notch: 'Q',
-    mapType: 'TOP',
-  },
-  name: 'Enigma Scrambler (Rotar, Walzen)',
-  description: `Scrambler emulator for Enigma Crypto.
-Wiring settings are made, and the current scrambler state is output from {scrambler} when {rotate} is input from the Entry Wheel or the previous Scrambler.
-To actually perform conversions using the scrambler, it is necessary to use the Enigma Scrambler Interface.`,
-  ports: {
-    in: {
-      rotate: {
-        className: 'ml-16',
-        description: 'from Previous Scrambler or Entry Wheel Port',
-      },
-    },
-    out: {
-      scrambler: {
-        description: 'to Scrambler Interface Port',
-      },
-      rotate: {
-        position: Position.Top,
-        className: '-ml-16',
-        description: 'to Next Scrambler Port',
-      },
-    },
-  },
-}
-
 const getWheelRotation = (rotate: string): number => {
   return (rotate?.match(/1/g) || []).length
 }
 
-function EnigmaScrambler({
-  id,
-  data: initialData,
-}: NodeProps<EnigmaScramblerData>) {
-  const [nodeData, setNodeData] = useNodeDataState<EnigmaScramblerData>(
+function node({ id, data: initialData }: NodeProps<Data>) {
+  const [nodeData, setNodeData] = useNodeDataState<Data, typeof ports>(
     id,
     initialData
   )

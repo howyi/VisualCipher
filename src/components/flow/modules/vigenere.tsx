@@ -1,7 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { NodeProps } from 'reactflow'
 import { Input } from '@/components/ui/input'
-import { Module, ModuleProcess } from '@/components/flow/modules/types'
+import {
+  Module,
+  ModuleProcessProps,
+  Ports,
+} from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -9,10 +13,19 @@ import { StringShift } from '@/components/flow/utils/string-shift'
 import { ALPHABETS, UNKNOWN_CHARACTER } from '@/components/flow/utils/const'
 import { Highlight } from '@/components/flow/components/highlight'
 
-type VigenereData = {
+type Data = {
   key?: string
   decryptMode?: boolean
 }
+
+const ports = {
+  in: {
+    input: {},
+  },
+  out: {
+    output: {},
+  },
+} as const satisfies Ports
 
 type VSquareKey = string
 type VSquarePlainText = string
@@ -38,7 +51,7 @@ const VigenereSquare = (): VSquare => {
   return vs
 }
 
-const VigenereProcess: ModuleProcess<VigenereData> = (node, params, inputs) => {
+function process({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
   return VigenereEncrypt(
     inputs.input ?? '',
     node.data.key ?? '',
@@ -46,10 +59,10 @@ const VigenereProcess: ModuleProcess<VigenereData> = (node, params, inputs) => {
   ).encrypted
 }
 
-export const VigenereModule: Module<VigenereData> = {
+export const VigenereModule: Module<Data, typeof ports> = {
   type: 'vigenere',
-  node: Vigenere,
-  process: VigenereProcess,
+  node: node,
+  process,
   defaultData: {
     key: 'LEMON',
     decryptMode: false,
@@ -69,7 +82,7 @@ export const VigenereModule: Module<VigenereData> = {
 function VigenereEncrypt(
   text: string,
   key: string,
-  decryptMode: Required<VigenereData>['decryptMode']
+  decryptMode: Required<Data>['decryptMode']
 ): {
   encrypted: string
   lastKeyCharacter: string
@@ -136,8 +149,8 @@ function VigenereEncrypt(
   }
 }
 
-export function Vigenere({ id, data: initialData }: NodeProps<VigenereData>) {
-  const [data, setData] = useNodeDataState<VigenereData>(id, initialData)
+function node({ id, data: initialData }: NodeProps<Data>) {
+  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
   const [key, setKey] = useState(initialData.key ?? '')
   const [decryptMode, setDecryptMode] = useState(
     initialData.decryptMode ?? false

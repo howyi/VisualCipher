@@ -1,7 +1,11 @@
 import React, { useMemo } from 'react'
 import { NodeProps } from 'reactflow'
 import { Label } from '@/components/ui/label'
-import { Module, ModuleProcess } from '@/components/flow/modules/types'
+import {
+  Module,
+  ModuleProcessProps,
+  Ports,
+} from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -10,13 +14,38 @@ import { StringShift } from '@/components/flow/utils/string-shift'
 import { ALPHABETS } from '@/components/flow/utils/const'
 import { Highlight } from '@/components/flow/components/highlight'
 
-type EnigmaScramblerInterfaceData = {
+type Data = {
   reverse?: boolean
 }
 
-const EnigmaScramblerInterfaceProcess: ModuleProcess<
-  EnigmaScramblerInterfaceData
-> = (node, params, inputs) => {
+const ports = {
+  in: {
+    scrambler: {
+      className: '-ml-28',
+      description: 'from Scrambler Port',
+    },
+    input: {},
+  },
+  out: {
+    output: {},
+  },
+} as const satisfies Ports
+
+export const EnigmaScramblerInterfaceModule: Module<Data, typeof ports> = {
+  type: 'enigma_scrambler_interface',
+  node,
+  process,
+  defaultData: {
+    reverse: false,
+  },
+  name: 'Enigma Scrambler Interface',
+  description: `Interface that connects from Scrambler and emulates the actual Scrambler signal
+Enigma cipher uses the same Scrambler twice in a single conversion process, once in forward and once in reverse
+Set reverse to true if you want to perform the process in reverse order.`,
+  ports,
+}
+
+function process({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
   if (!inputs.scrambler) {
     return ''
   }
@@ -38,32 +67,6 @@ const EnigmaScramblerInterfaceProcess: ModuleProcess<
   }
   return ''
 }
-
-export const EnigmaScramblerInterfaceModule: Module<EnigmaScramblerInterfaceData> =
-  {
-    type: 'enigma_scrambler_interface',
-    node: EnigmaScramblerInterface,
-    process: EnigmaScramblerInterfaceProcess,
-    defaultData: {
-      reverse: false,
-    },
-    name: 'Enigma Scrambler Interface',
-    description: `Interface that connects from Scrambler and emulates the actual Scrambler signal
-Enigma cipher uses the same Scrambler twice in a single conversion process, once in forward and once in reverse
-Set reverse to true if you want to perform the process in reverse order.`,
-    ports: {
-      in: {
-        scrambler: {
-          className: '-ml-28',
-          description: 'from Scrambler Port',
-        },
-        input: {},
-      },
-      out: {
-        output: {},
-      },
-    },
-  }
 
 function EnigmaScramblerInterfaceEncrypt(
   text: string,
@@ -137,14 +140,8 @@ function EnigmaScramblerInterfaceEncrypt(
   }
 }
 
-function EnigmaScramblerInterface({
-  id,
-  data: initialData,
-}: NodeProps<EnigmaScramblerInterfaceData>) {
-  const [data, setData] = useNodeDataState<EnigmaScramblerInterfaceData>(
-    id,
-    initialData
-  )
+function node({ id, data: initialData }: NodeProps<Data>) {
+  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
   const result = useMemo(() => {
     const { top, bottom, rotate } = JSON.parse(data.inputs?.scrambler ?? '{}')
     return EnigmaScramblerInterfaceEncrypt(
