@@ -127,6 +127,12 @@ export function Flow({
           }
         }
       },
+      updateNodeResult: (nd, newResult) => {
+        if (!newNodeStates[nd.id]) {
+          newNodeStates[nd.id] = {}
+        }
+        newNodeStates[nd.id].result = newResult
+      },
       updateNodeInputs: (nd, newInputs) => {
         if (!newNodeStates[nd.id]) {
           newNodeStates[nd.id] = {}

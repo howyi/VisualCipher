@@ -32,7 +32,21 @@ const ports = {
   },
 } as const satisfies Ports
 
-export const EnigmaScramblerInterfaceModule: Module<Data, typeof ports> = {
+type Result = {
+  encrypted: string
+  currentTopHighlightIndex?: number
+  currentTop: string
+  currentBottomHighlightIndex?: number
+  currentBottom: string
+  turn: string
+  error?: string
+}
+
+export const EnigmaScramblerInterfaceModule: Module<
+  Data,
+  typeof ports,
+  Result
+> = {
   type: 'enigma_scrambler_interface',
   node,
   calculate,
@@ -46,27 +60,29 @@ Set reverse to true if you want to perform the process in reverse order.`,
   ports,
 }
 
-function calculate({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
+function calculate({
+  node,
+  inputs,
+  setResult,
+}: ModuleProcessProps<Data, typeof ports, Result>) {
   if (!inputs.scrambler) {
     return ''
   }
   const { top, bottom, rotate } = JSON.parse(inputs.scrambler)
 
-  if (inputs.input) {
-    const result = EnigmaScramblerInterfaceEncrypt(
-      inputs.input ?? '',
-      top ?? '',
-      bottom ?? '',
-      rotate ?? '',
-      !!node.data.reverse
-    )
-    if (result.error) {
-      throw new Error(result.error)
-    }
-
-    return result.encrypted
+  const result = EnigmaScramblerInterfaceEncrypt(
+    inputs.input ?? '',
+    top ?? '',
+    bottom ?? '',
+    rotate ?? '',
+    !!node.data.reverse
+  )
+  setResult(result)
+  if (result.error) {
+    throw new Error(result.error)
   }
-  return ''
+
+  return result.encrypted
 }
 
 function EnigmaScramblerInterfaceEncrypt(
@@ -75,15 +91,7 @@ function EnigmaScramblerInterfaceEncrypt(
   bottom: string,
   rotate: string,
   reverse: boolean
-): {
-  encrypted: string
-  currentTopHighlightIndex?: number
-  currentTop: string
-  currentBottomHighlightIndex?: number
-  currentBottom: string
-  turn: string
-  error?: string
-} {
+): Result {
   if (!top || !bottom) {
     return {
       encrypted: '',
@@ -143,17 +151,7 @@ function EnigmaScramblerInterfaceEncrypt(
 
 function node({ id, data: initialData }: NodeProps<Data>) {
   const [data, setData] = useNodeData<Data>(id, initialData)
-  const { inputs } = useNodeState<typeof ports>()
-  const result = useMemo(() => {
-    const { top, bottom, rotate } = JSON.parse(inputs?.scrambler ?? '{}')
-    return EnigmaScramblerInterfaceEncrypt(
-      inputs?.input ?? '',
-      top ?? '',
-      bottom ?? '',
-      rotate ?? '',
-      !!data.reverse
-    )
-  }, [data, inputs])
+  const { inputs, result } = useNodeState<typeof ports, Result>()
 
   return (
     <ModuleNode module={EnigmaScramblerInterfaceModule}>
@@ -176,46 +174,46 @@ function node({ id, data: initialData }: NodeProps<Data>) {
         <div className={'flex flex-col m-auto gap-1 font-mono whitespace-pre'}>
           <Label className={' text-muted-foreground'}>
             <Highlight
-              index={result.currentTopHighlightIndex}
+              index={result?.currentTopHighlightIndex}
               className={'text-module-input'}
               text={ALPHABETS}
             />
           </Label>
           <Label>
             <StringConnector
-              top={result.currentTopHighlightIndex}
-              bottom={result.currentTopHighlightIndex}
+              top={result?.currentTopHighlightIndex}
+              bottom={result?.currentTopHighlightIndex}
             />
           </Label>
           <Label>
             <Highlight
-              index={result.currentTopHighlightIndex}
+              index={result?.currentTopHighlightIndex}
               className={'text-module-hint'}
-              text={result.currentTop}
+              text={result?.currentTop ?? ''}
             />
           </Label>
           <Label>
             <StringConnector
-              top={result.currentTopHighlightIndex}
-              bottom={result.currentBottomHighlightIndex}
+              top={result?.currentTopHighlightIndex}
+              bottom={result?.currentBottomHighlightIndex}
             />
           </Label>
           <Label>
             <Highlight
-              index={result.currentBottomHighlightIndex}
+              index={result?.currentBottomHighlightIndex}
               className={'text-module-hint'}
-              text={result.currentBottom}
+              text={result?.currentBottom ?? ''}
             />
           </Label>
           <Label>
             <StringConnector
-              top={result.currentBottomHighlightIndex}
-              bottom={result.currentBottomHighlightIndex}
+              top={result?.currentBottomHighlightIndex}
+              bottom={result?.currentBottomHighlightIndex}
             />
           </Label>
           <Label className={' text-muted-foreground'}>
             <Highlight
-              index={result.currentBottomHighlightIndex}
+              index={result?.currentBottomHighlightIndex}
               className={'text-module-output'}
               text={ALPHABETS}
             />

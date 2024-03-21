@@ -27,7 +27,13 @@ const ports = {
   },
 } as const satisfies Ports
 
-export const CaesarModule: Module<Data, typeof ports> = {
+type Result = {
+  encrypted: string
+  highlightIndex: number
+  shiftedAlphabetsText: string
+}
+
+export const CaesarModule: Module<Data, typeof ports, Result> = {
   type: 'caesar',
   node,
   calculate,
@@ -43,22 +49,16 @@ The user can enter any text and specify the number of letters to be shifted to e
   ports,
 }
 
-function calculate({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
-  return inputs.input
-    ? CaesarEncrypt(inputs.input, node.data.shift ?? 0).encrypted
-    : ''
-}
-
-function CaesarEncrypt(
-  text: string,
-  shift: number
-): {
-  encrypted: string
-  highlightIndex: number
-  shiftedAlphabetsText: string
-} {
-  const shifted = StringShift(ALPHABETS, shift)
-  const encrypted = text.replace(/[a-z]/gi, (letter) => {
+function calculate({
+  node,
+  inputs,
+  setResult,
+}: ModuleProcessProps<Data, typeof ports, Result>) {
+  if (!inputs.input || !node.data.shift) {
+    return ''
+  }
+  const shifted = StringShift(ALPHABETS, node.data.shift)
+  const encrypted = inputs.input.replace(/[a-z]/gi, (letter) => {
     const index = ALPHABETS.indexOf(letter)
     if (index == -1) {
       return UNKNOWN_CHARACTER
@@ -66,27 +66,21 @@ function CaesarEncrypt(
     return shifted[index] ?? UNKNOWN_CHARACTER
   })
 
-  return {
+  setResult({
     encrypted: encrypted,
-    highlightIndex: ALPHABETS.indexOf(text.slice(-1)),
+    highlightIndex: ALPHABETS.indexOf(inputs.input.slice(-1)),
     shiftedAlphabetsText: shifted,
-  }
+  })
+
+  return encrypted
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
   const [data, setData] = useNodeData<Data>(id, initialData)
-  const { inputs } = useNodeState<typeof ports>()
+  const { inputs, result } = useNodeState<typeof ports, Result>()
   const shiftedAlphabetsText = useMemo(() => {
     return StringShift(ALPHABETS, data.shift ?? 0)
   }, [data.shift])
-  const highlightIndex = useMemo(() => {
-    if (inputs?.input) {
-      const encrypted = CaesarEncrypt(inputs.input, data.shift ?? 0)
-      return encrypted.highlightIndex
-    } else {
-      return undefined
-    }
-  }, [inputs, data.shift])
 
   const shiftLeft = () => {
     setData({
@@ -129,14 +123,14 @@ function node({ id, data: initialData }: NodeProps<Data>) {
         </div>
         <Label className={'my-auto font-mono'}>
           <Highlight
-            index={highlightIndex}
+            index={result?.highlightIndex}
             className={'text-module-input'}
             text={ALPHABETS}
           />
         </Label>
         <Label className={'my-auto font-mono'}>
           <Highlight
-            index={highlightIndex}
+            index={result?.highlightIndex}
             className={'text-module-output'}
             text={shiftedAlphabetsText}
           />

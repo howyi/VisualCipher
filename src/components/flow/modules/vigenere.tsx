@@ -52,15 +52,15 @@ const VigenereSquare = (): VSquare => {
   return vs
 }
 
-function calculate({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
-  return VigenereEncrypt(
-    inputs.input ?? '',
-    node.data.key ?? '',
-    node.data.decryptMode ?? false
-  ).encrypted
+type Result = {
+  encrypted: string
+  lastKeyCharacter: string
+  lastTextCharacter: string
+  lastEncryptedCharacter: string
+  lastKeyIndex?: number
 }
 
-export const VigenereModule: Module<Data, typeof ports> = {
+export const VigenereModule: Module<Data, typeof ports, Result> = {
   type: 'vigenere',
   node: node,
   calculate,
@@ -80,17 +80,25 @@ export const VigenereModule: Module<Data, typeof ports> = {
   },
 }
 
+function calculate({
+  node,
+  inputs,
+  setResult,
+}: ModuleProcessProps<Data, typeof ports, Result>) {
+  const result = VigenereEncrypt(
+    inputs.input ?? '',
+    node.data.key ?? '',
+    node.data.decryptMode ?? false
+  )
+  setResult(result)
+  return result.encrypted
+}
+
 function VigenereEncrypt(
   text: string,
   key: string,
   decryptMode: Required<Data>['decryptMode']
-): {
-  encrypted: string
-  lastKeyCharacter: string
-  lastTextCharacter: string
-  lastEncryptedCharacter: string
-  lastKeyIndex?: number
-} {
+): Result {
   if (!text || !key) {
     return {
       encrypted: text,
@@ -152,18 +160,11 @@ function VigenereEncrypt(
 
 function node({ id, data: initialData }: NodeProps<Data>) {
   const [data, setData] = useNodeData<Data>(id, initialData)
-  const { inputs } = useNodeState<typeof ports>()
+  const { inputs, result } = useNodeState<typeof ports, Result>()
   const [key, setKey] = useState(initialData.key ?? '')
   const [decryptMode, setDecryptMode] = useState(
     initialData.decryptMode ?? false
   )
-  const result = useMemo(() => {
-    return VigenereEncrypt(
-      inputs?.input ?? '',
-      data.key ?? '',
-      data.decryptMode ?? false
-    )
-  }, [data, inputs])
 
   useEffect(() => {
     setData({ key, decryptMode })
@@ -206,7 +207,7 @@ function node({ id, data: initialData }: NodeProps<Data>) {
         <div className={'text-center text-muted-foreground'}>
           <Highlight
             text={key}
-            index={result.lastKeyIndex}
+            index={result?.lastKeyIndex}
             className={'font-bold text-module-hint'}
           />
         </div>
@@ -217,14 +218,14 @@ function node({ id, data: initialData }: NodeProps<Data>) {
         >
           {'  '}
           {ALPHABETS.split('').map((s) => {
-            if (s === result.lastTextCharacter && decryptMode) {
+            if (s === result?.lastTextCharacter && decryptMode) {
               return (
                 <span key={s} className={'text-module-output'}>
                   {s}
                 </span>
               )
             }
-            if (s === result.lastTextCharacter) {
+            if (s === result?.lastTextCharacter) {
               return (
                 <span key={s} className={'text-module-input'}>
                   {s}
@@ -239,7 +240,7 @@ function node({ id, data: initialData }: NodeProps<Data>) {
           {ALPHABETS.split('').map((s, k) => {
             return (
               <div key={k}>
-                {s === result.lastKeyCharacter ? (
+                {s === result?.lastKeyCharacter ? (
                   <span className={'text-module-hint'}>{s}</span>
                 ) : (
                   s
@@ -248,7 +249,7 @@ function node({ id, data: initialData }: NodeProps<Data>) {
                 {StringShift(ALPHABETS, -k)
                   .split('')
                   .map((e) => {
-                    if (s === result.lastKeyCharacter) {
+                    if (s === result?.lastKeyCharacter) {
                       if (
                         e === result.lastEncryptedCharacter &&
                         data.decryptMode

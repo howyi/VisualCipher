@@ -77,6 +77,9 @@ const getOutput = (
         node,
         portId: node.sourceHandleId,
         inputs,
+        setResult: (result) => {
+          params.updateNodeResult(node, result)
+        },
       })
       params.updateNodeError(node, '')
       return out

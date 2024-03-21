@@ -33,7 +33,11 @@ const ports = {
   },
 } as const satisfies Ports
 
-export const EnigmaPlugBoardModule: Module<Data, typeof ports> = {
+type Result = {
+  encrypted: string
+}
+
+export const EnigmaPlugBoardModule: Module<Data, typeof ports, Result> = {
   type: 'enigma_plug_board',
   node,
   calculate,
@@ -48,17 +52,14 @@ Passing a space-separated set of two characters to {plugs} replaces the correspo
 function calculate({
   node,
   inputs,
-}: ModuleProcessProps<Data, typeof ports>): string {
-  return EnigmaPlugBoardEncrypt(inputs.input ?? '', inputs.plugs ?? '')
-    .encrypted
+  setResult,
+}: ModuleProcessProps<Data, typeof ports, Result>): string {
+  const result = EnigmaPlugBoardEncrypt(inputs.input ?? '', inputs.plugs ?? '')
+  setResult(result)
+  return result.encrypted
 }
 
-function EnigmaPlugBoardEncrypt(
-  text: string,
-  plugs: string
-): {
-  encrypted: string
-} {
+function EnigmaPlugBoardEncrypt(text: string, plugs: string): Result {
   const source = plugs
     .split(' ')
     .map((s) => s.charAt(0) + s.charAt(1))
@@ -79,7 +80,7 @@ function EnigmaPlugBoardEncrypt(
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const { inputs } = useNodeState<typeof ports>()
+  const { inputs } = useNodeState<typeof ports, Result>()
   const source = useMemo(() => {
     return (
       inputs?.plugs

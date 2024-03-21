@@ -27,7 +27,7 @@ export function ModuleNode({
   className,
   children,
 }: {
-  module: Module<any, any>
+  module: Module<any, any, any>
   label?: ReactNode
   className?: ClassValue
 } & PropsWithChildren) {

@@ -45,5 +45,5 @@ export const RegisteredModules = [
     acc[m.type] = m
     return acc
   },
-  {} as { [type in string]: Module<any, any> }
+  {} as { [type in string]: Module<any, any, any> }
 )

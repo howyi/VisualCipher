@@ -26,7 +26,9 @@ const ports = {
   },
 } as const satisfies Ports
 
-export const RailFenceCipherModule: Module<Data, typeof ports> = {
+type Result = { output: string; linesWithSpan: string[] }
+
+export const RailFenceCipherModule: Module<Data, typeof ports, Result> = {
   type: 'rail_fence_cipher',
   node,
   calculate,
@@ -39,12 +41,18 @@ export const RailFenceCipherModule: Module<Data, typeof ports> = {
   ports,
 }
 
-function calculate({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
-  return RailFenceCipherEncrypt(
+function calculate({
+  node,
+  inputs,
+  setResult,
+}: ModuleProcessProps<Data, typeof ports, Result>) {
+  const result = RailFenceCipherEncrypt(
     inputs.input ?? '',
     node.data.rails ?? 3,
     !!node.data.decryptMode
-  ).output
+  )
+  setResult(result)
+  return result.output
 }
 
 function getSpan(rails: number, row: number, direction: 'up' | 'down'): number {
@@ -94,7 +102,7 @@ export function RailFenceCipherEncrypt(
   text: string,
   rails: number,
   decryptMode: boolean
-): { output: string; linesWithSpan: string[] } {
+): Result {
   if (rails <= 1) {
     return {
       output: text,
@@ -138,18 +146,11 @@ export function RailFenceCipherEncrypt(
 
 function node({ id, data: initialData }: NodeProps<Data>) {
   const [data, setData] = useNodeData<Data>(id, initialData)
-  const { inputs } = useNodeState<typeof ports>()
+  const { inputs, result } = useNodeState<typeof ports, Result>()
   const [decryptMode, setDecryptMode] = useState(
     initialData.decryptMode ?? false
   )
   const [rails, setRails] = useState(initialData.rails ?? 3)
-  const result = useMemo(() => {
-    return RailFenceCipherEncrypt(
-      inputs?.input ?? '',
-      data.rails ?? 3,
-      !!data.decryptMode
-    )
-  }, [data, inputs])
 
   useEffect(() => {
     setData({ rails, decryptMode })
@@ -208,7 +209,7 @@ function node({ id, data: initialData }: NodeProps<Data>) {
             .repeat(data.rails ?? 3)
             .split('')
             .map((s, k) => {
-              const line = result.linesWithSpan[k]
+              const line = result?.linesWithSpan[k]
               return (
                 <Label key={k} className={'my-auto'}>
                   {line ?? ' '}

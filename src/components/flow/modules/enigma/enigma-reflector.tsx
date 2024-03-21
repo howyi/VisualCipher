@@ -37,7 +37,14 @@ const ports = {
   },
 } as const satisfies Ports
 
-export const EnigmaReflectorModule: Module<Data, typeof ports> = {
+type Result = {
+  encrypted: string
+  currentTopHighlightIndex?: number
+  currentBottomHighlightIndex?: number
+  error?: string
+}
+
+export const EnigmaReflectorModule: Module<Data, typeof ports, Result> = {
   type: 'enigma_reflector',
   node,
   calculate,
@@ -53,9 +60,14 @@ Wiring settings are made, and when text is input, reflector processing is output
 function calculate({
   node,
   inputs,
-}: ModuleProcessProps<Data, typeof ports>): string {
-  return EnigmaReflectorEncrypt(inputs.input ?? '', node.data.wiring ?? '')
-    .encrypted
+  setResult,
+}: ModuleProcessProps<Data, typeof ports, Result>): string {
+  const result = EnigmaReflectorEncrypt(
+    inputs.input ?? '',
+    node.data.wiring ?? ''
+  )
+  setResult(result)
+  return result.encrypted
 }
 
 export function EnigmaReflectorEncrypt(
@@ -97,15 +109,12 @@ export function EnigmaReflectorEncrypt(
 
 function node({ id, data: initialData }: NodeProps<Data>) {
   const [nodeData, setNodeData] = useNodeData<Data>(id, initialData)
-  const { inputs } = useNodeState<typeof ports>()
+  const { inputs, result } = useNodeState<typeof ports, Result>()
   const [wiring, setWiring] = useState(initialData.wiring ?? '')
   const wiringLabel = useMemo(() => {
     const found = ReflectorTemplates.find((r) => r.wiring === wiring)
     return found ? found.name : 'Custom'
   }, [wiring])
-  const encryptResult = useMemo(() => {
-    return EnigmaReflectorEncrypt(inputs?.input ?? '', nodeData.wiring ?? '')
-  }, [nodeData, inputs])
 
   useEffect(() => {
     setNodeData({
@@ -155,33 +164,33 @@ function node({ id, data: initialData }: NodeProps<Data>) {
         <div className={'flex flex-col m-auto gap-1 whitespace-pre'}>
           <Label className={'my-auto'}>
             <Highlight
-              index={encryptResult.currentTopHighlightIndex}
+              index={result?.currentTopHighlightIndex}
               className={'text-module-input'}
               text={ALPHABETS}
             />
           </Label>
           <Label className={'my-auto'}>
             <StringConnector
-              top={encryptResult.currentTopHighlightIndex}
-              bottom={encryptResult.currentBottomHighlightIndex}
+              top={result?.currentTopHighlightIndex}
+              bottom={result?.currentBottomHighlightIndex}
             />
           </Label>
           <Label className={'my-auto'}>
             <Highlight
-              index={encryptResult.currentBottomHighlightIndex}
+              index={result?.currentBottomHighlightIndex}
               className={'text-module-hint'}
               text={nodeData.wiring ?? ''}
             />
           </Label>
           <Label className={'my-auto'}>
             <StringConnector
-              top={encryptResult.currentBottomHighlightIndex}
-              bottom={encryptResult.currentBottomHighlightIndex}
+              top={result?.currentBottomHighlightIndex}
+              bottom={result?.currentBottomHighlightIndex}
             />
           </Label>
           <Label className={'my-auto text-muted-foreground'}>
             <Highlight
-              index={encryptResult.currentBottomHighlightIndex}
+              index={result?.currentBottomHighlightIndex}
               className={'text-module-output'}
               text={ALPHABETS}
             />
