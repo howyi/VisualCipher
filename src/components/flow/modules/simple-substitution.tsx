@@ -3,7 +3,7 @@ import { NodeProps } from 'reactflow'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ModuleNode } from '@/components/flow/components/module-node'
-import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
+import { useNodeData } from '@/components/flow/hooks/use-node-data'
 import { Separator } from '@/components/ui/separator'
 import { StringConnector } from '@/components/flow/components/string-connector'
 import { ALPHABETS, UNKNOWN_CHARACTER } from '@/components/flow/utils/const'
@@ -70,7 +70,7 @@ function SimpleSubstitutionEncrypt(
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
+  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
   const [source, setSource] = useState(initialData.source ?? '')
   const [target, setTarget] = useState(initialData.target ?? '')
   const highLightIndex = useMemo(() => {

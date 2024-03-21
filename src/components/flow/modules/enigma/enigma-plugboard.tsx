@@ -7,7 +7,7 @@ import {
   Ports,
 } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
-import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
+import { useNodeData } from '@/components/flow/hooks/use-node-data'
 import { StringConnector } from '@/components/flow/components/string-connector'
 import { Highlight } from '@/components/flow/components/highlight'
 
@@ -78,7 +78,7 @@ function EnigmaPlugBoardEncrypt(
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
+  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
   const source = useMemo(() => {
     return (
       data.inputs?.plugs

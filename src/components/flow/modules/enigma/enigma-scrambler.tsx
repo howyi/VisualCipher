@@ -8,7 +8,7 @@ import {
   Ports,
 } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
-import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
+import { useNodeData } from '@/components/flow/hooks/use-node-data'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -114,7 +114,7 @@ const getWheelRotation = (rotate: string): number => {
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [nodeData, setNodeData] = useNodeDataState<Data, typeof ports>(
+  const [nodeData, setNodeData] = useNodeData<Data, typeof ports>(
     id,
     initialData
   )

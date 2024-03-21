@@ -8,7 +8,7 @@ import {
   Ports,
 } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
-import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
+import { useNodeData } from '@/components/flow/hooks/use-node-data'
 
 type Data = {
   suffix?: string
@@ -40,7 +40,7 @@ function calculate({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
+  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
 
   const [suffix, setSuffix] = useState(initialData.suffix)
   useEffect(() => {

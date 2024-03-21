@@ -7,7 +7,7 @@ import {
 } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { Button } from '@/components/ui/button'
-import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
+import { useNodeData } from '@/components/flow/hooks/use-node-data'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 
@@ -136,7 +136,7 @@ export function RailFenceCipherEncrypt(
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
+  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
   const [decryptMode, setDecryptMode] = useState(
     initialData.decryptMode ?? false
   )

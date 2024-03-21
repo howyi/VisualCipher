@@ -7,7 +7,7 @@ import {
   Ports,
 } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
-import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
+import { useNodeData } from '@/components/flow/hooks/use-node-data'
 import { Checkbox } from '@/components/ui/checkbox'
 import { StringConnector } from '@/components/flow/components/string-connector'
 import { StringShift } from '@/components/flow/utils/string-shift'
@@ -141,7 +141,7 @@ function EnigmaScramblerInterfaceEncrypt(
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
+  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
   const result = useMemo(() => {
     const { top, bottom, rotate } = JSON.parse(data.inputs?.scrambler ?? '{}')
     return EnigmaScramblerInterfaceEncrypt(

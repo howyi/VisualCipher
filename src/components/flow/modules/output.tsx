@@ -2,7 +2,7 @@ import React from 'react'
 import { NodeProps } from 'reactflow'
 import { Module, Ports } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
-import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
+import { useNodeData } from '@/components/flow/hooks/use-node-data'
 
 type Data = {}
 
@@ -26,7 +26,7 @@ export const OutputModule: Module<Data, typeof ports> = {
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
+  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
 
   return (
     <ModuleNode module={OutputModule} className={'border-module-output'}>

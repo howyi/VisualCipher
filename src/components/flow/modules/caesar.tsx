@@ -3,7 +3,7 @@ import { NodeProps } from 'reactflow'
 import { Label } from '@/components/ui/label'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { Button } from '@/components/ui/button'
-import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
+import { useNodeData } from '@/components/flow/hooks/use-node-data'
 import { StringShift } from '@/components/flow/utils/string-shift'
 import { ALPHABETS, UNKNOWN_CHARACTER } from '@/components/flow/utils/const'
 import { Highlight } from '@/components/flow/components/highlight'
@@ -73,7 +73,7 @@ function CaesarEncrypt(
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
+  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
   const shiftedAlphabetsText = useMemo(() => {
     return StringShift(ALPHABETS, data.shift ?? 0)
   }, [data.shift])

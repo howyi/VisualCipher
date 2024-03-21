@@ -6,7 +6,7 @@ import {
   Ports,
 } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
-import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
+import { useNodeData } from '@/components/flow/hooks/use-node-data'
 import { Textarea } from '@/components/ui/textarea'
 import { PauseIcon, PlayIcon, TrackPreviousIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
@@ -48,7 +48,7 @@ function calculate({ node }: ModuleProcessProps<Data, typeof ports>) {
 }
 
 function node({ id, data: initialData, selected }: NodeProps<Data>) {
-  const [nodeData, setNodeData] = useNodeDataState<Data, typeof ports>(
+  const [nodeData, setNodeData] = useNodeData<Data, typeof ports>(
     id,
     initialData
   )

@@ -7,7 +7,7 @@ import {
   Ports,
 } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
-import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
+import { useNodeData } from '@/components/flow/hooks/use-node-data'
 import { Checkbox } from '@/components/ui/checkbox'
 import { StringShift } from '@/components/flow/utils/string-shift'
 import { ALPHABETS, UNKNOWN_CHARACTER } from '@/components/flow/utils/const'
@@ -150,7 +150,7 @@ function VigenereEncrypt(
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
+  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
   const [key, setKey] = useState(initialData.key ?? '')
   const [decryptMode, setDecryptMode] = useState(
     initialData.decryptMode ?? false

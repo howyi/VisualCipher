@@ -8,7 +8,7 @@ import {
   Ports,
 } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
-import { useNodeDataState } from '@/components/flow/hooks/use-node-data-state'
+import { useNodeData } from '@/components/flow/hooks/use-node-data'
 import { Button } from '@/components/ui/button'
 
 type Data = {
@@ -44,7 +44,7 @@ add a new line code at the end by pressing the [\\n] button`,
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeDataState<Data, typeof ports>(id, initialData)
+  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
   const [search, setSearch] = useState(initialData.search)
   const searchLineBreak = useMemo(() => {
     return search?.slice(search?.length - 1, search?.length) === '\n'
