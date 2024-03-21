@@ -6,7 +6,7 @@ import {
 } from '@/components/flow/modules/types'
 import { RegisteredModules } from '@/components/flow/modules'
 
-export const process = (params: ResolveBaseParams): void => {
+export const calculate = (params: ResolveBaseParams): void => {
   const terminalNodes = getAllTerminalNodes(params.nodes, params.edges)
   for (let node of Object.values(terminalNodes)) {
     startNodeProcess(node, params)
@@ -14,18 +14,7 @@ export const process = (params: ResolveBaseParams): void => {
 }
 
 const startNodeProcess = (node: Node, params: ResolveBaseParams): string => {
-  if (node.type && RegisteredModules[node.type]) {
-    const inputs = getInputs(node, params)
-    params.updateNodeData(node, {
-      inputs,
-    })
-    return RegisteredModules[node.type].calculate({
-      node,
-      portId: '',
-      inputs,
-    })
-  }
-  return ''
+  return getOutput({ ...node, sourceHandleId: '' }, params)
 }
 
 const getAllTerminalNodes = (
@@ -83,22 +72,16 @@ const getOutput = (
   if (node.type && RegisteredModules[node.type]) {
     try {
       const inputs = getInputs(node, params)
-      params.updateNodeData(node, {
-        inputs,
-      })
+      params.updateNodeInputs(node, inputs)
       const out = RegisteredModules[node.type].calculate({
         node,
         portId: node.sourceHandleId,
         inputs,
       })
-      params.updateNodeData(node, {
-        error: '',
-      })
+      params.updateNodeError(node, '')
       return out
     } catch (e: any) {
-      params.updateNodeData(node, {
-        error: e.message,
-      })
+      params.updateNodeError(node, e.message)
     }
   }
   return ''

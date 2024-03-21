@@ -8,6 +8,8 @@ export type NodeWithSourceHandle<T> = Node<T> & {
 
 export type ResolveBaseParams = {
   updateNodeData: (node: Node, newData: any) => void
+  updateNodeInputs: (nodeId: Node, newInputs: Inputs) => void
+  updateNodeError: (nodeId: Node, newError?: string) => void
   nodes: Node[]
   edges: Edge[]
 }

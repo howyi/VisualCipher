@@ -40,7 +40,7 @@ function calculate({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
+  const [data, setData] = useNodeData<Data>(id, initialData)
 
   const [suffix, setSuffix] = useState(initialData.suffix)
   useEffect(() => {

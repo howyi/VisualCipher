@@ -10,6 +10,7 @@ import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeData } from '@/components/flow/hooks/use-node-data'
 import { StringConnector } from '@/components/flow/components/string-connector'
 import { Highlight } from '@/components/flow/components/highlight'
+import { useNodeState } from '@/components/flow/hooks/use-node-state'
 
 type Data = {}
 
@@ -78,40 +79,38 @@ function EnigmaPlugBoardEncrypt(
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
+  const { inputs } = useNodeState<typeof ports>()
   const source = useMemo(() => {
     return (
-      data.inputs?.plugs
+      inputs?.plugs
         ?.split(' ')
         .map((s) => s.charAt(0) + s.charAt(1))
         .join(' ')
         .toUpperCase() ?? ''
     )
-  }, [data.inputs])
+  }, [inputs])
   const target = useMemo(() => {
     return (
-      data.inputs?.plugs
+      inputs?.plugs
         ?.split(' ')
         .map((s) => s.charAt(1) + s.charAt(0))
         .join(' ')
         .toUpperCase() ?? ''
     )
-  }, [data.inputs])
+  }, [inputs])
   const currentIndex = useMemo(() => {
-    if (!source || !data.inputs) {
+    if (!source || !inputs) {
       return undefined
     }
-    if (!data.inputs.input || data.inputs.input?.charAt(-1)) {
+    if (!inputs.input || inputs.input?.charAt(-1)) {
       return undefined
     }
-    const index = source.indexOf(
-      data.inputs.input.charAt(data.inputs.input.length - 1)
-    )
+    const index = source.indexOf(inputs.input.charAt(inputs.input.length - 1))
     if (index == -1) {
       return undefined
     }
     return index
-  }, [data.inputs])
+  }, [inputs])
 
   return (
     <ModuleNode module={EnigmaPlugBoardModule}>

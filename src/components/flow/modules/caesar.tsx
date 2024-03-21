@@ -12,6 +12,7 @@ import {
   ModuleProcessProps,
   Ports,
 } from '@/components/flow/modules/types'
+import { useNodeState } from '@/components/flow/hooks/use-node-state'
 
 type Data = {
   shift?: number
@@ -73,18 +74,19 @@ function CaesarEncrypt(
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
+  const [data, setData] = useNodeData<Data>(id, initialData)
+  const { inputs } = useNodeState<typeof ports>()
   const shiftedAlphabetsText = useMemo(() => {
     return StringShift(ALPHABETS, data.shift ?? 0)
   }, [data.shift])
   const highlightIndex = useMemo(() => {
-    if (data.inputs?.input) {
-      const encrypted = CaesarEncrypt(data.inputs.input, data.shift ?? 0)
+    if (inputs?.input) {
+      const encrypted = CaesarEncrypt(inputs.input, data.shift ?? 0)
       return encrypted.highlightIndex
     } else {
       return undefined
     }
-  }, [data.inputs, data.shift])
+  }, [inputs, data.shift])
 
   const shiftLeft = () => {
     setData({

@@ -22,6 +22,7 @@ import { StringConnector } from '@/components/flow/components/string-connector'
 import { ALPHABETS } from '@/components/flow/utils/const'
 import { Highlight } from '@/components/flow/components/highlight'
 import { ReflectorTemplates } from '@/components/flow/modules/enigma/reflector-templates'
+import { useNodeState } from '@/components/flow/hooks/use-node-state'
 
 type Data = {
   wiring?: string
@@ -95,21 +96,16 @@ export function EnigmaReflectorEncrypt(
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [nodeData, setNodeData] = useNodeData<Data, typeof ports>(
-    id,
-    initialData
-  )
+  const [nodeData, setNodeData] = useNodeData<Data>(id, initialData)
+  const { inputs } = useNodeState<typeof ports>()
   const [wiring, setWiring] = useState(initialData.wiring ?? '')
   const wiringLabel = useMemo(() => {
     const found = ReflectorTemplates.find((r) => r.wiring === wiring)
     return found ? found.name : 'Custom'
   }, [wiring])
   const encryptResult = useMemo(() => {
-    return EnigmaReflectorEncrypt(
-      nodeData.inputs?.input ?? '',
-      nodeData.wiring ?? ''
-    )
-  }, [nodeData])
+    return EnigmaReflectorEncrypt(inputs?.input ?? '', nodeData.wiring ?? '')
+  }, [nodeData, inputs])
 
   useEffect(() => {
     setNodeData({

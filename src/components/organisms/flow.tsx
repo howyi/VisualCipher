@@ -52,8 +52,12 @@ import { ButtonWithTooltip } from '@/components/organisms/button-with-tooltip'
 import { ImportButton } from '@/components/organisms/import-button'
 import { toast } from 'sonner'
 import { Module, ModuleNode } from '@/components/flow/modules/types'
-import { process } from '@/components/flow/resolvers/process'
+import { calculate } from '@/components/flow/resolvers/calculate'
 import { RegisteredModules } from '@/components/flow/modules'
+import {
+  NodeStates,
+  useNodeStateStore,
+} from '@/components/flow/hooks/use-node-state'
 
 type Props = {
   title: string
@@ -75,6 +79,7 @@ export function Flow({
   const [saved, setSaved] = useLocalStorage(storageKey ?? '', '')
   const [reactFlowInstance, setReactFlowInstance] =
     React.useState<ReactFlowInstance>()
+  const setNodeStates = useNodeStateStore((state) => state.set)
 
   const debouncedSave = useDebounceCallback((instance: ReactFlowInstance) => {
     if (instance.getNodes().length == 0) {
@@ -103,7 +108,9 @@ export function Flow({
   }, [])
 
   React.useEffect(() => {
-    process({
+    const newNodeStates: NodeStates = {}
+    console.debug('calculate', nanoid())
+    calculate({
       nodes,
       edges,
       updateNodeData: (nd, newData) => {
@@ -120,7 +127,20 @@ export function Flow({
           }
         }
       },
+      updateNodeInputs: (nd, newInputs) => {
+        if (!newNodeStates[nd.id]) {
+          newNodeStates[nd.id] = {}
+        }
+        newNodeStates[nd.id].inputs = newInputs
+      },
+      updateNodeError: (nd, newError) => {
+        if (!newNodeStates[nd.id]) {
+          newNodeStates[nd.id] = {}
+        }
+        newNodeStates[nd.id].error = newError
+      },
     })
+    setNodeStates(newNodeStates)
     if (storageKey && reactFlowInstance) {
       debouncedSave(reactFlowInstance)
     }

@@ -48,10 +48,7 @@ function calculate({ node }: ModuleProcessProps<Data, typeof ports>) {
 }
 
 function node({ id, data: initialData, selected }: NodeProps<Data>) {
-  const [nodeData, setNodeData] = useNodeData<Data, typeof ports>(
-    id,
-    initialData
-  )
+  const [nodeData, setNodeData] = useNodeData<Data>(id, initialData)
   const [text, setText] = useState(initialData.value ?? '')
   const isPlaying = useBoolean(!!initialData.isPlaying)
   const [playCurrentPosition, setPlayCurrentPosition] = useState(0)

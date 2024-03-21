@@ -10,7 +10,6 @@ import {
 } from '@radix-ui/react-icons'
 import { Toaster } from '@/components/ui/sonner'
 import { RichTextEditor } from '@/components/organisms/rich-text-editor'
-import { useLocalStorage } from 'usehooks-ts'
 
 type Props = {
   title: string
@@ -27,7 +26,6 @@ export function FlowTemplate({
   storageKey,
   information,
 }: Props) {
-  const [saved, setSaved] = useLocalStorage('tmp', '')
   const [infoOpen, setInfoOpen] = useState(false)
   return (
     <main className={'flex flex-row'}>
@@ -91,7 +89,7 @@ export function FlowTemplate({
               </a>
             </Button>
           </div>
-          <pre>{JSON.stringify(JSON.parse(saved), null, 2)}</pre>
+          <RichTextEditor editable={false} content={information} />
         </div>
       )}
     </main>

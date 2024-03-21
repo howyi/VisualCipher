@@ -3,6 +3,7 @@ import { NodeProps } from 'reactflow'
 import { Module, Ports } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeData } from '@/components/flow/hooks/use-node-data'
+import { useNodeState } from '@/components/flow/hooks/use-node-state'
 
 type Data = {}
 
@@ -29,17 +30,17 @@ export const CompareOutputModule: Module<Data, typeof ports> = {
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
+  const { inputs } = useNodeState<typeof ports>()
 
   return (
     <ModuleNode module={CompareOutputModule}>
       <div className={'text-sm whitespace-pre'}>
-        {data.inputs?.input_A?.split(/\n/).map((s, k) => {
+        {inputs?.input_A?.split(/\n/).map((s, k) => {
           return (
             <div key={k} className={'py-1 leading-none'}>
               <span className={'font-bold'}>{s}</span> <br />
               <span className={'font-light text-muted-foreground'}>
-                {data.inputs?.input_B?.split(/\n/)?.[k] ?? ''}
+                {inputs?.input_B?.split(/\n/)?.[k] ?? ''}
               </span>
               <br />
             </div>

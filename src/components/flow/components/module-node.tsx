@@ -19,11 +19,7 @@ import {
 } from '@/components/ui/hover-card'
 import { InputHandle, OutputHandle } from '@/components/flow/components/handle'
 import { Inputs, Module, Ports } from '@/components/flow/modules/types'
-
-export type ModuleData<T extends Ports> = {
-  error?: string
-  inputs?: Inputs<keyof T['in']>
-}
+import { useNodeState } from '@/components/flow/hooks/use-node-state'
 
 export function ModuleNode({
   module,
@@ -39,10 +35,9 @@ export function ModuleNode({
   const reactFlow = useReactFlow()
   const nodeId = useNodeId()
   const node = useMemo(() => {
-    return nodes.find((node) => node.id === nodeId) as Node<
-      ModuleData<{ in: {}; out: {} }>
-    >
+    return nodes.find((node) => node.id === nodeId) as Node
   }, [nodes, nodeId])
+  const { error } = useNodeState()
 
   function deleteNode() {
     reactFlow.setNodes((nds) => nds.filter((node) => node.id !== nodeId))
@@ -55,7 +50,7 @@ export function ModuleNode({
           <TrashIcon />
         </Button>
       </NodeToolbar>
-      <HoverCard open={(node?.data?.error ?? '') != ''}>
+      <HoverCard open={(error ?? '') != ''}>
         <HoverCardTrigger>
           <div
             className={cn(
@@ -80,7 +75,7 @@ export function ModuleNode({
           side={'top'}
           className={'bg-destructive w-full mb-4 opacity-90'}
         >
-          {node?.data?.error}
+          {error}
         </HoverCardContent>
         {module && (
           <>

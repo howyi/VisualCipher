@@ -22,6 +22,7 @@ import { StringShift } from '@/components/flow/utils/string-shift'
 import { ALPHABETS } from '@/components/flow/utils/const'
 import { Highlight } from '@/components/flow/components/highlight'
 import { ScramblerTemplates } from '@/components/flow/modules/enigma/scrambler-templates'
+import { useNodeState } from '@/components/flow/hooks/use-node-state'
 
 type Data = {
   board?: string
@@ -114,10 +115,8 @@ const getWheelRotation = (rotate: string): number => {
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [nodeData, setNodeData] = useNodeData<Data, typeof ports>(
-    id,
-    initialData
-  )
+  const [nodeData, setNodeData] = useNodeData<Data>(id, initialData)
+  const { inputs } = useNodeState<typeof ports>()
   const [wiring, setWiring] = useState(initialData.wiring ?? '')
   const [notch, setNotch] = useState(initialData.notch ?? '')
   const [mapType, setMapType] = useState(initialData.mapType ?? 'TOP')
@@ -133,8 +132,8 @@ function node({ id, data: initialData }: NodeProps<Data>) {
   }, [wiring, notch, mapType])
   const shift = useCallback(StringShift, [])
   const wheelRotation = useMemo(() => {
-    return getWheelRotation(nodeData.inputs?.rotate ?? '')
-  }, [nodeData.inputs])
+    return getWheelRotation(inputs?.rotate ?? '')
+  }, [inputs])
   const [
     startTopRotar,
     startBottomRotar,

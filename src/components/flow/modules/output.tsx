@@ -3,6 +3,7 @@ import { NodeProps } from 'reactflow'
 import { Module, Ports } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeData } from '@/components/flow/hooks/use-node-data'
+import { useNodeState } from '@/components/flow/hooks/use-node-state'
 
 type Data = {}
 
@@ -26,13 +27,11 @@ export const OutputModule: Module<Data, typeof ports> = {
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
+  const { inputs } = useNodeState<typeof ports>()
 
   return (
     <ModuleNode module={OutputModule} className={'border-module-output'}>
-      <pre className={'nodrag select-text cursor-text'}>
-        {data.inputs?.input}
-      </pre>
+      <pre className={'nodrag select-text cursor-text'}>{inputs?.input}</pre>
     </ModuleNode>
   )
 }

@@ -13,6 +13,7 @@ import { StringConnector } from '@/components/flow/components/string-connector'
 import { StringShift } from '@/components/flow/utils/string-shift'
 import { ALPHABETS } from '@/components/flow/utils/const'
 import { Highlight } from '@/components/flow/components/highlight'
+import { useNodeState } from '@/components/flow/hooks/use-node-state'
 
 type Data = {
   reverse?: boolean
@@ -141,17 +142,18 @@ function EnigmaScramblerInterfaceEncrypt(
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
+  const [data, setData] = useNodeData<Data>(id, initialData)
+  const { inputs } = useNodeState<typeof ports>()
   const result = useMemo(() => {
-    const { top, bottom, rotate } = JSON.parse(data.inputs?.scrambler ?? '{}')
+    const { top, bottom, rotate } = JSON.parse(inputs?.scrambler ?? '{}')
     return EnigmaScramblerInterfaceEncrypt(
-      data.inputs?.input ?? '',
+      inputs?.input ?? '',
       top ?? '',
       bottom ?? '',
       rotate ?? '',
       !!data.reverse
     )
-  }, [data])
+  }, [data, inputs])
 
   return (
     <ModuleNode module={EnigmaScramblerInterfaceModule}>

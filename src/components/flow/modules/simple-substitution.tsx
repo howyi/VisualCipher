@@ -13,6 +13,7 @@ import {
   ModuleProcessProps,
   Ports,
 } from '@/components/flow/modules/types'
+import { useNodeState } from '@/components/flow/hooks/use-node-state'
 
 type Data = {
   source?: string
@@ -70,16 +71,17 @@ function SimpleSubstitutionEncrypt(
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
+  const [data, setData] = useNodeData<Data>(id, initialData)
+  const { inputs } = useNodeState<typeof ports>()
   const [source, setSource] = useState(initialData.source ?? '')
   const [target, setTarget] = useState(initialData.target ?? '')
   const highLightIndex = useMemo(() => {
-    if (!data.inputs?.input) {
+    if (!inputs?.input) {
       return undefined
     }
-    const lastChar = (data.inputs.input ?? '').slice(-1)
+    const lastChar = (inputs.input ?? '').slice(-1)
     return source.indexOf(lastChar) == -1 ? undefined : source.indexOf(lastChar)
-  }, [data.inputs])
+  }, [inputs])
 
   useEffect(() => {
     setData({

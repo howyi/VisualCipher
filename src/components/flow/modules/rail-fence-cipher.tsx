@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { useNodeData } from '@/components/flow/hooks/use-node-data'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
+import { useNodeState } from '@/components/flow/hooks/use-node-state'
 
 type Data = {
   rails?: number
@@ -136,18 +137,19 @@ export function RailFenceCipherEncrypt(
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
+  const [data, setData] = useNodeData<Data>(id, initialData)
+  const { inputs } = useNodeState<typeof ports>()
   const [decryptMode, setDecryptMode] = useState(
     initialData.decryptMode ?? false
   )
   const [rails, setRails] = useState(initialData.rails ?? 3)
   const result = useMemo(() => {
     return RailFenceCipherEncrypt(
-      data.inputs?.input ?? '',
+      inputs?.input ?? '',
       data.rails ?? 3,
       !!data.decryptMode
     )
-  }, [data])
+  }, [data, inputs])
 
   useEffect(() => {
     setData({ rails, decryptMode })
@@ -207,7 +209,11 @@ function node({ id, data: initialData }: NodeProps<Data>) {
             .split('')
             .map((s, k) => {
               const line = result.linesWithSpan[k]
-              return <Label className={'my-auto'}>{line ?? ' '}</Label>
+              return (
+                <Label key={k} className={'my-auto'}>
+                  {line ?? ' '}
+                </Label>
+              )
             })}
         </div>
       </div>

@@ -3,6 +3,7 @@ import { NodeProps } from 'reactflow'
 import { Module, Ports } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeData } from '@/components/flow/hooks/use-node-data'
+import { useNodeState } from '@/components/flow/hooks/use-node-state'
 
 type Data = {}
 
@@ -31,14 +32,14 @@ type Counts = {
 }[]
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
+  const { inputs } = useNodeState<typeof ports>()
   const counts = useMemo(() => {
-    if (!data.inputs?.input) {
+    if (!inputs?.input) {
       return []
     }
-    const allCharCount = data.inputs.input.length
+    const allCharCount = inputs.input.length
     const counts: Counts = []
-    for (let char of data.inputs.input.split(' ')) {
+    for (let char of inputs.input.split(' ')) {
       const index = counts.findIndex((c) => c.word === char)
       if (index == -1) {
         counts.push({
@@ -62,7 +63,7 @@ function node({ id, data: initialData }: NodeProps<Data>) {
       return a.count > b.count ? -1 : 1
     })
     return counts
-  }, [data])
+  }, [inputs])
 
   return (
     <ModuleNode module={WordCounterModule}>

@@ -44,7 +44,7 @@ add a new line code at the end by pressing the [\\n] button`,
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
+  const [data, setData] = useNodeData<Data>(id, initialData)
   const [search, setSearch] = useState(initialData.search)
   const searchLineBreak = useMemo(() => {
     return search?.slice(search?.length - 1, search?.length) === '\n'

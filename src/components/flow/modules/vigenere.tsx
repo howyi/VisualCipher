@@ -12,6 +12,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { StringShift } from '@/components/flow/utils/string-shift'
 import { ALPHABETS, UNKNOWN_CHARACTER } from '@/components/flow/utils/const'
 import { Highlight } from '@/components/flow/components/highlight'
+import { useNodeState } from '@/components/flow/hooks/use-node-state'
 
 type Data = {
   key?: string
@@ -150,18 +151,19 @@ function VigenereEncrypt(
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  const [data, setData] = useNodeData<Data, typeof ports>(id, initialData)
+  const [data, setData] = useNodeData<Data>(id, initialData)
+  const { inputs } = useNodeState<typeof ports>()
   const [key, setKey] = useState(initialData.key ?? '')
   const [decryptMode, setDecryptMode] = useState(
     initialData.decryptMode ?? false
   )
   const result = useMemo(() => {
     return VigenereEncrypt(
-      data.inputs?.input ?? '',
+      inputs?.input ?? '',
       data.key ?? '',
       data.decryptMode ?? false
     )
-  }, [data])
+  }, [data, inputs])
 
   useEffect(() => {
     setData({ key, decryptMode })
