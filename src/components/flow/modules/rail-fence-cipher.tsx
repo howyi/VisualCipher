@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useNodeState } from '@/components/flow/hooks/use-node-state'
 import { z } from 'zod'
+import { useBoolean } from 'usehooks-ts'
 
 type Data = {
   rails?: number
@@ -160,14 +161,12 @@ export function RailFenceCipherEncrypt(
 function node({ id, data: initialData }: NodeProps<Data>) {
   const [data, setData] = useNodeData<Data>(id, initialData)
   const { inputs, result } = useNodeState<typeof ports, Result>()
-  const [decryptMode, setDecryptMode] = useState(
-    initialData.decryptMode ?? false
-  )
+  const decryptMode = useBoolean(initialData.decryptMode ?? false)
   const [rails, setRails] = useState(initialData.rails ?? 3)
 
   useEffect(() => {
-    setData({ rails, decryptMode })
-  }, [rails, decryptMode])
+    setData({ rails, decryptMode: decryptMode.value })
+  }, [rails, decryptMode.value])
 
   const shiftLeft = () => {
     setRails(rails - 1)
@@ -183,7 +182,7 @@ function node({ id, data: initialData }: NodeProps<Data>) {
           <Checkbox
             checked={data.decryptMode}
             id="reverse"
-            onCheckedChange={(e) => setDecryptMode(!decryptMode)}
+            onCheckedChange={decryptMode.toggle}
           />
           <label
             htmlFor="reverse"

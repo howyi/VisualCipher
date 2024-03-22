@@ -17,6 +17,7 @@ import { ToUpperCaseModule } from '@/components/flow/modules/to-upper-case'
 import { ReplaceModule } from '@/components/flow/modules/replace'
 import { RailFenceCipherModule } from '@/components/flow/modules/rail-fence-cipher'
 import { Module } from '@/components/flow/modules/types'
+import { AffineCipherModule } from '@/components/flow/modules/affine-cipher'
 
 export const RegisteredModules = [
   InputModule,
@@ -27,6 +28,7 @@ export const RegisteredModules = [
   CaesarModule,
   SimpleSubstitutionModule,
   RailFenceCipherModule,
+  AffineCipherModule,
   VigenereModule,
   CharacterCounterModule,
   WordCounterModule,
