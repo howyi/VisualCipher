@@ -17,7 +17,7 @@ import {
   ReactFlowJsonObject,
 } from 'reactflow'
 import * as React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Link } from 'gatsby'
 
 import 'reactflow/dist/base.css'
@@ -28,6 +28,7 @@ import {
   DownloadIcon,
   GitHubLogoIcon,
   InfoCircledIcon,
+  MinusIcon,
   PlusIcon,
   TrashIcon,
 } from '@radix-ui/react-icons'
@@ -58,6 +59,7 @@ import {
   NodeStates,
   useNodeStateStore,
 } from '@/components/flow/hooks/use-node-state'
+import { Input } from '@/components/ui/input'
 
 type Props = {
   title: string
@@ -346,7 +348,18 @@ export function Flow({
 }
 
 function Palette() {
-  const [open, setOpen] = useState(false)
+  const open = useBoolean(false)
+  const [search, setSearch] = useState('')
+  const filteredModules = useMemo(() => {
+    return Object.keys(RegisteredModules)
+      .filter((type) => {
+        const module = RegisteredModules[type]
+        const searchString = (type + module.name).toLowerCase()
+        return searchString.includes(search.toLowerCase())
+      })
+      .map((k) => RegisteredModules[k])
+  }, [search])
+
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
     event.dataTransfer.setData('application/visualcipher', nodeType)
     event.dataTransfer.effectAllowed = 'move'
@@ -354,27 +367,46 @@ function Palette() {
 
   return (
     <div className={'flex flex-col gap-2 pb-2 w-72 max-h-screen'}>
-      {open && (
+      {open.value && (
         <>
-          <div className="mt-24">Drag and place the module</div>
-          <div className={'h-full overflow-y-scroll flex flex-col gap-2'}>
-            {Object.keys(RegisteredModules).map((key) => {
-              const module = RegisteredModules[key]
-              return (
-                <ModuleSelector
-                  key={key}
-                  module={module}
-                  onDragStart={onDragStart}
-                />
-              )
-            })}
-          </div>
+          {filteredModules.length > 0 ? (
+            <>
+              <div className="mt-24">Drag and place the module</div>
+              <div className={'h-full overflow-y-scroll flex flex-col gap-2'}>
+                {filteredModules.map((module) => {
+                  return (
+                    <ModuleSelector
+                      key={module.type}
+                      module={module}
+                      onDragStart={onDragStart}
+                    />
+                  )
+                })}
+              </div>
+            </>
+          ) : (
+            <>Module not found</>
+          )}
         </>
       )}
       <div className={'text-right'}>
-        <Button onClick={() => setOpen(!open)}>
-          <PlusIcon /> Add modules
-        </Button>
+        {open.value ? (
+          <div className={'flex flex-row gap-4'}>
+            <Button onClick={open.toggle}>
+              <MinusIcon />
+            </Button>
+            <Input
+              placeholder={'filter'}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              autoFocus={true}
+            />
+          </div>
+        ) : (
+          <Button onClick={open.toggle}>
+            <PlusIcon /> Add modules
+          </Button>
+        )}
       </div>
     </div>
   )
