@@ -11,6 +11,7 @@ import { useNodeData } from '@/components/flow/hooks/use-node-data'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useNodeState } from '@/components/flow/hooks/use-node-state'
+import { z } from 'zod'
 
 type Data = {
   rails?: number
@@ -19,12 +20,24 @@ type Data = {
 
 const ports = {
   in: {
-    input: {},
+    input: {
+      validate: (data) => {
+        const v = z.string().refine((val) => !val.includes('\n'), {
+          message: 'String must not include new lines.',
+        })
+        if (!data.decryptMode) {
+          return v.refine((val) => !val.includes(' '), {
+            message: 'String must not include whitespace.',
+          })
+        }
+        return v
+      },
+    },
   },
   out: {
     output: {},
   },
-} as const satisfies Ports
+} as const satisfies Ports<Data>
 
 type Result = { output: string; linesWithSpan: string[] }
 

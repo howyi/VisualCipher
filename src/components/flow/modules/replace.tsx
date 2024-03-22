@@ -23,7 +23,7 @@ const ports = {
   out: {
     output: {},
   },
-} as const satisfies Ports
+} as const satisfies Ports<Data>
 
 function calculate({ node, inputs }: ModuleProcessProps<Data, typeof ports>) {
   return (

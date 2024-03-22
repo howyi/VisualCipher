@@ -15,7 +15,7 @@ const ports = {
   out: {
     output: {},
   },
-} as const satisfies Ports
+} as const satisfies Ports<Data>
 
 export const PrefixModule: Module<Data, typeof ports> = {
   type: 'prefix',

@@ -12,7 +12,7 @@ const ports = {
   out: {
     output: {},
   },
-} as const satisfies Ports
+} as const satisfies Ports<Data>
 
 export const ToUpperCaseModule: Module<Data, typeof ports> = {
   type: 'to_upper_case',

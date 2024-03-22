@@ -18,7 +18,7 @@ const ports = {
       description: "A string of '1's equal to the number of input characters",
     },
   },
-} as const satisfies Ports
+} as const satisfies Ports<Data>
 
 export const EnigmaEntryWheelModule: Module<Data, typeof ports> = {
   type: 'enigma_entry_wheel',

@@ -17,7 +17,7 @@ const ports = {
     },
   },
   out: {},
-} as const satisfies Ports
+} as const satisfies Ports<Data>
 
 export const CompareOutputModule: Module<Data, typeof ports> = {
   type: 'compare_output',

@@ -35,7 +35,7 @@ const ports = {
   out: {
     output: {},
   },
-} as const satisfies Ports
+} as const satisfies Ports<Data>
 
 type Result = {
   encrypted: string

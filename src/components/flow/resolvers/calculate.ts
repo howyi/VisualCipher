@@ -71,9 +71,26 @@ const getOutput = (
 ): string => {
   if (node.type && RegisteredModules[node.type]) {
     try {
+      const module = RegisteredModules[node.type]
       const inputs = getInputs(node, params)
+      for (let key of Object.keys(module.ports.in)) {
+        const port = module.ports.in[key]
+        const input = inputs[key]
+        if (!port || !input) {
+          continue
+        }
+        if (!port.validate) {
+          continue
+        }
+        const validated = port.validate(node.data).safeParse(input)
+        if (!validated.success) {
+          throw new Error(
+            key + ': ' + validated.error.errors.map((e) => e.message).join(',')
+          )
+        }
+      }
       params.updateNodeInputs(node, inputs)
-      const out = RegisteredModules[node.type].calculate({
+      const out = module.calculate({
         node,
         portId: node.sourceHandleId,
         inputs,

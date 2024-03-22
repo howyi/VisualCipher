@@ -9,6 +9,7 @@ import {
 } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeData } from '@/components/flow/hooks/use-node-data'
+import { z } from 'zod'
 
 type Data = {
   suffix?: string
@@ -16,12 +17,14 @@ type Data = {
 
 const ports = {
   in: {
-    input: {},
+    input: {
+      validate: (data) => z.string(),
+    },
   },
   out: {
     output: {},
   },
-} as const satisfies Ports
+} as const satisfies Ports<Data>
 
 export const SuffixModule: Module<Data, typeof ports> = {
   type: 'suffix',

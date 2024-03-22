@@ -50,7 +50,7 @@ const ports = {
       description: 'to Next Scrambler Port',
     },
   },
-} as const satisfies Ports
+} as const satisfies Ports<Data>
 
 export const EnigmaScramblerModule: Module<Data, typeof ports> = {
   type: 'enigma_scrambler',

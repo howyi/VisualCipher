@@ -2,7 +2,7 @@ import { Inputs, Ports, Result } from '@/components/flow/modules/types'
 import { createWithEqualityFn } from 'zustand/traditional'
 import { useNodeId } from 'reactflow'
 
-type NodeState<T extends Ports, R extends Result> = {
+type NodeState<T extends Ports<any>, R extends Result> = {
   inputs?: Inputs<keyof T['in']>
   error?: string
   result?: R
@@ -24,7 +24,10 @@ export const useNodeStateStore = createWithEqualityFn<NodeStoreState>()(
   })
 )
 
-export function useNodeState<T extends Ports, R extends Result = undefined>() {
+export function useNodeState<
+  T extends Ports<any>,
+  R extends Result = undefined,
+>() {
   const nodeId = useNodeId()
   return useNodeStateStore(
     (state) => state.states[nodeId ?? ''] as NodeState<T, R>,

@@ -12,7 +12,7 @@ const ports = {
     input: {},
   },
   out: {},
-} as const satisfies Ports
+} as const satisfies Ports<Data>
 
 export const WordCounterModule: Module<Data, typeof ports> = {
   type: 'word_counter',
