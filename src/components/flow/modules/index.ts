@@ -18,6 +18,7 @@ import { ReplaceModule } from '@/components/flow/modules/replace'
 import { RailFenceCipherModule } from '@/components/flow/modules/rail-fence-cipher'
 import { Module } from '@/components/flow/modules/types'
 import { AffineCipherModule } from '@/components/flow/modules/affine-cipher'
+import { ReverseModule } from '@/components/flow/modules/reverse'
 
 export const RegisteredModules = [
   InputModule,
@@ -25,6 +26,7 @@ export const RegisteredModules = [
   CompareOutputModule,
   PrefixModule,
   SuffixModule,
+  ReverseModule,
   CaesarModule,
   SimpleSubstitutionModule,
   RailFenceCipherModule,
