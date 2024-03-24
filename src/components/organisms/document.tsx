@@ -31,17 +31,13 @@ export function Document({ onClose }: Props) {
         'border-l-2 py-4 px-14 flex flex-col gap-2 w-[500px] h-screen overflow-y-scroll'
       }
     >
-      <Button
-        className={'flex flex-row gap-2 py-2'}
-        variant={'ghost'}
-        size={'sm'}
-        onClick={onClose}
-      >
-        <DoubleArrowRightIcon />
-        close
-      </Button>
       <div className={'flex flex-row gap-2 pb-2'}>
-        <Button size={'sm'} className={'w-full flex flex-row gap-2'} asChild>
+        <Button
+          variant={'outline'}
+          size={'sm'}
+          className={'w-full flex flex-row gap-2'}
+          asChild
+        >
           <a
             className={'flex-1 no-underline'}
             href={'https://github.com/howyi/visual-cipher'}
@@ -50,7 +46,12 @@ export function Document({ onClose }: Props) {
             <GitHubLogoIcon /> source code
           </a>
         </Button>
-        <Button size={'sm'} className={'w-full flex flex-row gap-2'} asChild>
+        <Button
+          variant={'outline'}
+          size={'sm'}
+          className={'w-full flex flex-row gap-2'}
+          asChild
+        >
           <a
             className={'flex-1 no-underline'}
             href={'https://twitter.com/howyi_lq'}
@@ -68,7 +69,9 @@ export function Document({ onClose }: Props) {
                 <Fragment key={k}>
                   <BreadcrumbItem>
                     {k == 'top_reload' ? (
-                      <Link to={'/'}>top</Link>
+                      <Link className={'underline'} to={'/'}>
+                        top
+                      </Link>
                     ) : (
                       <DocumentLink to={k}>{k}</DocumentLink>
                     )}

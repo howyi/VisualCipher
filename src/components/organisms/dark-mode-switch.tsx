@@ -12,7 +12,7 @@ export function DarkModeSwitch() {
   )
 }
 
-export default function useDarkMode() {
+export function useDarkMode() {
   const [darkMode, setRawDarkMode] = useState(false)
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
   const enabled = useMemo(

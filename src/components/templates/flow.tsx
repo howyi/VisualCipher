@@ -43,6 +43,7 @@ export function FlowTemplate({
       >
         <ReactFlowProvider>
           <Flow
+            infoOpen={infoOpen}
             onClickInfo={() => setInfoOpen(!infoOpen)}
             title={title}
             nodes={nodes}

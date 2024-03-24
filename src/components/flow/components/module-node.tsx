@@ -59,12 +59,14 @@ export function ModuleNode({
             )}
           >
             <div className={'text-muted-foreground flex flex-row gap-2 pb-2'}>
-              <div className={'flex-1'}>
+              <div className={'flex-1 overflow-x-hidden'}>
                 <div className={'w-full'}>{label ?? module.name}</div>
               </div>
               <div className={'my-auto'}>
                 {module.description && (
-                  <InformationIcon information={module.description} />
+                  <InformationIcon
+                    information={module.name + '\n\n' + module.description}
+                  />
                 )}
               </div>
             </div>

@@ -29,6 +29,7 @@ import {
   GitHubLogoIcon,
   InfoCircledIcon,
   MinusIcon,
+  PinRightIcon,
   PlusIcon,
   TrashIcon,
 } from '@radix-ui/react-icons'
@@ -60,6 +61,7 @@ import {
   useNodeStateStore,
 } from '@/components/flow/hooks/use-node-state'
 import { Input } from '@/components/ui/input'
+import { SettingButton } from '@/components/organisms/setting-button'
 
 type Props = {
   title: string
@@ -67,6 +69,7 @@ type Props = {
   edges: Edge<any>[]
   storageKey?: string // undefined = can't save
   onClickInfo: () => void
+  infoOpen: boolean
 }
 
 export function Flow({
@@ -75,6 +78,7 @@ export function Flow({
   edges: initialEdges,
   storageKey,
   onClickInfo,
+  infoOpen,
 }: Props) {
   const [nodes, setNodes] = React.useState<Node<any>[]>([])
   const [edges, setEdges] = React.useState<Edge<any>[]>([])
@@ -274,33 +278,14 @@ export function Flow({
         position="top-right"
         className={'flex flex-row gap-2 font-mono text-muted-foreground'}
       >
-        {storageKey && (
-          <ButtonWithTooltip
-            onClick={(e) => {
-              setSaved('')
-              window.location.reload()
-            }}
-            variant={'outline'}
-            tooltip={'reset storage'}
-            size={'sm'}
-          >
-            <TrashIcon />
-          </ButtonWithTooltip>
-        )}
-        {storageKey && (
-          <ImportButton
-            onUpload={(file) => {
-              setNodes(file.nodes)
-              setEdges(file.edges)
-              toast('Import succeeded!🎉')
-            }}
-          />
-        )}
-        <ButtonWithTooltip
-          variant={'outline'}
-          tooltip={'export'}
-          size={'sm'}
-          onClick={() => {
+        <SettingButton
+          storageKey={storageKey}
+          onUpload={(file) => {
+            setNodes(file.nodes)
+            setEdges(file.edges)
+            toast('Import succeeded!🎉')
+          }}
+          onDownload={() => {
             if (!reactFlowInstance) {
               return
             }
@@ -313,17 +298,14 @@ export function Flow({
 
             link.click()
           }}
-        >
-          <DownloadIcon />
-        </ButtonWithTooltip>
+          onReset={() => {
+            setSaved('')
+            window.location.reload()
+          }}
+        />
         <Button size={'sm'} onClick={onClickInfo}>
-          <InfoCircledIcon />
+          {infoOpen ? <PinRightIcon /> : <InfoCircledIcon />}
         </Button>
-      </Panel>
-      <Panel position="bottom-left" className={'mb-36'}>
-        <div className={'flex flex-col gap-1'}>
-          <DarkModeSwitch />
-        </div>
       </Panel>
     </ReactFlow>
   )

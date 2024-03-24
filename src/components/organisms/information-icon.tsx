@@ -13,8 +13,8 @@ export function InformationIcon({ information }: { information: string }) {
       <HoverCardTrigger asChild>
         <InfoCircledIcon />
       </HoverCardTrigger>
-      <HoverCardContent className="nodrag w-80 absolute prose dark:prose-invert">
-        <RichTextEditor editable={false} content={information} />
+      <HoverCardContent className="nodrag w-80 absolute prose dark:prose-invert text-wrap">
+        {information}
       </HoverCardContent>
     </HoverCard>
   )
