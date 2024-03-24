@@ -18,22 +18,18 @@ import {
 } from 'reactflow'
 import * as React from 'react'
 import { useCallback, useMemo, useState } from 'react'
-import { Link } from 'gatsby'
 
 import 'reactflow/dist/base.css'
 import { nanoid } from 'nanoid'
 import { useBoolean, useDebounceCallback, useLocalStorage } from 'usehooks-ts'
 import { Button } from '@/components/ui/button'
 import {
-  DownloadIcon,
   GitHubLogoIcon,
   InfoCircledIcon,
   MinusIcon,
   PinRightIcon,
   PlusIcon,
-  TrashIcon,
 } from '@radix-ui/react-icons'
-import { DarkModeSwitch } from '@/components/organisms/dark-mode-switch'
 import {
   Tooltip,
   TooltipContent,
@@ -49,9 +45,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { RegisteredGuides } from '@/components/flow/guides'
-import { ButtonWithTooltip } from '@/components/organisms/button-with-tooltip'
-import { ImportButton } from '@/components/organisms/import-button'
 import { toast } from 'sonner'
 import { Module, ModuleNode } from '@/components/flow/modules/types'
 import { calculate } from '@/components/flow/resolvers/calculate'
@@ -252,6 +245,8 @@ export function Flow({
       onInit={setReactFlowInstance}
       onDrop={onDrop}
       onDragOver={onDragOver}
+      snapToGrid={true}
+      onlyRenderVisibleElements={true}
       defaultEdgeOptions={{
         type: 'step',
       }}

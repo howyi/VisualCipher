@@ -1,22 +1,16 @@
 import * as React from 'react'
+import { Fragment } from 'react'
 import { Button } from '@/components/ui/button'
-import {
-  DoubleArrowRightIcon,
-  GitHubLogoIcon,
-  TwitterLogoIcon,
-} from '@radix-ui/react-icons'
+import { GitHubLogoIcon, TwitterLogoIcon } from '@radix-ui/react-icons'
 import { useDocumentPathStore } from '@/docs/use-document-path'
 import { Pages } from '@/docs'
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { DocumentLink } from '@/docs/document-link'
-import { Fragment } from 'react'
 import { Link } from 'gatsby'
 
 type Props = {

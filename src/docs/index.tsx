@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react'
 import { Top } from '@/docs/top'
 import { About } from '@/docs/about'
-import { Guide } from '@/components/flow/guides/types'
 import { Enigma } from '@/docs/enigma'
 import { Vigenere } from '@/docs/vigenere'
 import { Caesar } from '@/docs/caesar'

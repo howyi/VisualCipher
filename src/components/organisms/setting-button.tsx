@@ -1,13 +1,11 @@
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { ButtonWithTooltip } from '@/components/organisms/button-with-tooltip'
-import { GearIcon, UploadIcon } from '@radix-ui/react-icons'
+import { GearIcon } from '@radix-ui/react-icons'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -62,9 +60,9 @@ export function SettingButton({
   return (
     <Dialog open={open.value} onOpenChange={open.setValue}>
       <DialogTrigger asChild>
-        <ButtonWithTooltip variant={'outline'} tooltip={'import'} size={'sm'}>
+        <Button variant={'outline'} size={'sm'}>
           <GearIcon />
-        </ButtonWithTooltip>
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

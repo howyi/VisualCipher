@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NodeProps } from 'reactflow'
 import {
   Module,
@@ -6,12 +6,9 @@ import {
   Ports,
 } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
-import { Button } from '@/components/ui/button'
 import { useNodeData } from '@/components/flow/hooks/use-node-data'
 import { Label } from '@/components/ui/label'
-import { Checkbox } from '@/components/ui/checkbox'
 import { useNodeState } from '@/components/flow/hooks/use-node-state'
-import { z } from 'zod'
 import { ALPHABETS, UNKNOWN_CHARACTER } from '@/components/flow/utils/const'
 import { Highlight } from '@/components/flow/components/highlight'
 import { StringConnector } from '@/components/flow/components/string-connector'

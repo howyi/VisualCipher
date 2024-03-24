@@ -2,7 +2,6 @@ import React from 'react'
 import { NodeProps } from 'reactflow'
 import { Module, Ports } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
-import { useNodeData } from '@/components/flow/hooks/use-node-data'
 import { useNodeState } from '@/components/flow/hooks/use-node-state'
 
 type Data = {}

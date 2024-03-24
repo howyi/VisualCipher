@@ -18,7 +18,7 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/hover-card'
 import { InputHandle, OutputHandle } from '@/components/flow/components/handle'
-import { Inputs, Module, Ports } from '@/components/flow/modules/types'
+import { Module } from '@/components/flow/modules/types'
 import { useNodeState } from '@/components/flow/hooks/use-node-state'
 
 export function ModuleNode({

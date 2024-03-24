@@ -5,7 +5,6 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card'
-import { RichTextEditor } from '@/components/organisms/rich-text-editor'
 
 export function InformationIcon({ information }: { information: string }) {
   return (

@@ -1,10 +1,4 @@
 import React, { PropsWithChildren } from 'react'
-import { DocumentLink } from '@/docs/document-link'
-import { Button } from '@/components/ui/button'
-import { Link } from 'gatsby'
-import { OpenOnVisualCipherButton } from '@/components/organisms/open-on-visual-cipher-button'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { Terminal } from 'lucide-react'
 
 export function GuideWrapper({
   to,

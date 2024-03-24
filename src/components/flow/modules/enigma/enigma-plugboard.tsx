@@ -7,7 +7,6 @@ import {
   Ports,
 } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
-import { useNodeData } from '@/components/flow/hooks/use-node-data'
 import { StringConnector } from '@/components/flow/components/string-connector'
 import { Highlight } from '@/components/flow/components/highlight'
 import { useNodeState } from '@/components/flow/hooks/use-node-state'

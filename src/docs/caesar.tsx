@@ -1,8 +1,4 @@
 import React from 'react'
-import { DocumentLink } from '@/docs/document-link'
-import { Button } from '@/components/ui/button'
-import { Link } from 'gatsby'
-import { OpenOnVisualCipherButton } from '@/components/organisms/open-on-visual-cipher-button'
 import { GuideWrapper } from '@/docs/guide-wrapper'
 
 export function Caesar() {
