@@ -189,7 +189,8 @@ const IndexPage: React.FC<PageProps> = () => {
       nodes={initialNodes}
       edges={initialEdges}
       storageKey={'tmp'}
-      information={INFO}
+      documentOpen={undefined}
+      documentPath={'top'}
     />
   )
 }

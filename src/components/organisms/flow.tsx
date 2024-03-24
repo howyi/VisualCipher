@@ -264,26 +264,8 @@ export function Flow({
           >
             <GitHubLogoIcon />
           </a>
-          <span className={'text-sm'}>VisualCipher/{title}</span>
+          <span className={'text-sm'}>VisualCipher</span>
         </div>
-        <div className={'text-xs'}>Links:</div>
-        <ul className={'pl-2 text-xs'}>
-          <li>
-            <Link className={'hover:text-accent-foreground underline'} to={'/'}>
-              Playground
-            </Link>
-          </li>
-          {RegisteredGuides.map((g) => (
-            <li key={g.path}>
-              <Link
-                className={'hover:text-accent-foreground underline'}
-                to={g.path}
-              >
-                {g.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
       </Panel>
       <Panel position="bottom-right">
         <Palette />

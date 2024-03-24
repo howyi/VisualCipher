@@ -3,7 +3,7 @@ import type { HeadFC, PageProps } from 'gatsby'
 import { Guide } from '@/components/templates/guide'
 
 const IndexPage: React.FC<PageProps> = () => {
-  return <Guide path={'/guides/caesar'} />
+  return <Guide path={'/guides/caesar'} documentPath={'caesar'} />
 }
 
 export default IndexPage
