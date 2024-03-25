@@ -211,7 +211,11 @@ function node({ id, data: initialData }: NodeProps<Data>) {
           <Label className={'text-muted-foreground'}>
             {'│'}
             <Highlight
-              index={undefined}
+              index={
+                result?.lastIndex !== undefined
+                  ? result?.targetIndexes[result.lastIndex] * 3
+                  : undefined
+              }
               width={2}
               className={'text-module-hint'}
               text={
