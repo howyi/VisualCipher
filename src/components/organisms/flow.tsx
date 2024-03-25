@@ -254,18 +254,6 @@ export function Flow({
     >
       <Background className="bg-background" variant={BackgroundVariant.Dots} />
       <Controls />
-      <Panel position="top-left" className={'font-mono text-muted-foreground'}>
-        <div className={'flex flex-row gap-2 pb-5'}>
-          <a
-            href={'https://github.com/howyi/visual-cipher'}
-            target="_blank"
-            className={'text-sm my-auto'}
-          >
-            <GitHubLogoIcon />
-          </a>
-          <span className={'text-sm'}>VisualCipher</span>
-        </div>
-      </Panel>
       <Panel position="bottom-right">
         <Palette />
       </Panel>

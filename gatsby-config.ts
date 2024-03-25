@@ -22,6 +22,18 @@ const config: GatsbyConfig = {
         minify: true,
       },
     },
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        icon: `static/logo.png`,
+        name: `VisualCipher`,
+        short_name: `VisualCipher`,
+        start_url: `/`,
+        background_color: `#020817FF`,
+        theme_color: `#020817FF`,
+        display: `standalone`,
+      },
+    },
   ],
 }
 
