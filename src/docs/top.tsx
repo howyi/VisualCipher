@@ -1,6 +1,7 @@
 import React from 'react'
 import { DocumentLink } from '@/docs/document-link'
 import { Link } from 'gatsby'
+import { ChromeAppInstallButton } from '@/components/organisms/chrome-app-install-button'
 
 export function Top() {
   return (
@@ -17,6 +18,7 @@ export function Top() {
         now), you can add modules at will. Data is stored in the browser's
         localstorage and can be input or output in JSON.
       </p>
+      <ChromeAppInstallButton />
       <h2>Introduction</h2>
       <ul>
         <li>
