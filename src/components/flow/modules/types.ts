@@ -12,6 +12,8 @@ export type ResolveBaseParams = {
   updateNodeInputs: (nodeId: Node, newInputs: Inputs) => void
   updateNodeError: (nodeId: Node, newError?: string) => void
   updateNodeResult: (nodeId: Node, newResult?: Result) => void
+  getNodeOutputCache: (nodeId: string, portId: string) => string | undefined
+  setNodeOutputCache: (nodeId: string, portId: string, value: string) => void
   nodes: Node[]
   edges: Edge[]
 }

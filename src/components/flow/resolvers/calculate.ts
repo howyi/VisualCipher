@@ -69,6 +69,10 @@ const getOutput = (
   node: NodeWithSourceHandle<any>,
   params: ResolveBaseParams
 ): string => {
+  const value = params.getNodeOutputCache(node.id, node.sourceHandleId)
+  if (value !== undefined) {
+    return value
+  }
   if (node.type && RegisteredModules[node.type]) {
     try {
       const module = RegisteredModules[node.type]
@@ -98,9 +102,11 @@ const getOutput = (
           params.updateNodeResult(node, result)
         },
       })
+      params.setNodeOutputCache(node.id, node.sourceHandleId, out)
       params.updateNodeError(node, '')
       return out
     } catch (e: any) {
+      params.setNodeOutputCache(node.id, node.sourceHandleId, '')
       params.updateNodeError(node, e.message)
     }
   }

@@ -109,6 +109,10 @@ export function Flow({
   React.useEffect(() => {
     const newNodeStates: NodeStates = {}
     console.debug('calculate', nanoid())
+
+    const nodeOutputCache: {
+      [nodeId in string]: { [portId in string]: string }
+    } = {}
     calculate({
       nodes,
       edges,
@@ -143,6 +147,15 @@ export function Flow({
           newNodeStates[nd.id] = {}
         }
         newNodeStates[nd.id].error = newError
+      },
+      getNodeOutputCache: (nodeId, portId) => {
+        return nodeOutputCache?.[nodeId]?.[portId]
+      },
+      setNodeOutputCache: (nodeId, portId, value) => {
+        if (!nodeOutputCache?.[nodeId]) {
+          nodeOutputCache[nodeId] = {}
+        }
+        nodeOutputCache[nodeId][portId] = value
       },
     })
     setNodeStates(newNodeStates)
