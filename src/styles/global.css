@@ -90,6 +90,10 @@ body {
   }
 }
 
+html {
+  overflow-x: hidden;
+}
+
 .react-flow__handle-connecting {
   border-color: #ff6060 !important;
 }

@@ -299,7 +299,7 @@ export function Flow({
             window.location.reload()
           }}
         />
-        <Button size={'sm'} onClick={onClickInfo}>
+        <Button className={'md:block hidden'} size={'sm'} onClick={onClickInfo}>
           {infoOpen ? <PinRightIcon /> : <InfoCircledIcon />}
         </Button>
       </Panel>

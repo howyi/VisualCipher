@@ -33,13 +33,13 @@ export function FlowTemplate({
     move(documentPath)
   }, [documentPath])
   return (
-    <main className={'flex flex-row'}>
+    <main className={'flex md:flex-row flex-col'}>
       <Toaster position={'bottom-left'} />
       <div
-        style={{
-          width: infoOpen ? 'calc(100vw - 500px)' : '100vw',
-          height: '100vh',
-        }}
+        className={
+          (infoOpen ? 'md:w-[calc(100vw - 500px)] sm:w-screen' : 'w-screen') +
+          ' md:h-screen h-[80vh]'
+        }
       >
         <ReactFlowProvider>
           <Flow

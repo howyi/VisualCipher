@@ -22,7 +22,7 @@ export function Document({ onClose }: Props) {
   return (
     <div
       className={
-        'border-l-2 py-4 px-14 flex flex-col gap-2 w-[500px] h-screen overflow-y-scroll'
+        'border-l-2 py-4 px-14 flex flex-col gap-2 md:w-[500px] w-screen md:h-screen md:overflow-y-scroll'
       }
     >
       <div className={'flex flex-row gap-2 pb-2'}>
