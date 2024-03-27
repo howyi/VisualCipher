@@ -28,6 +28,7 @@ const config: GatsbyConfig = {
         icon: `static/logo.png`,
         name: `VisualCipher`,
         short_name: `VisualCipher`,
+        description: `The application does cool things and makes your life better.`,
         start_url: `/`,
         background_color: `#020817FF`,
         theme_color: `#020817FF`,
