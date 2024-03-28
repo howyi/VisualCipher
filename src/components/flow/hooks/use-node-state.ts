@@ -1,6 +1,7 @@
 import { Inputs, Ports, Result } from '@/components/flow/modules/types'
 import { createWithEqualityFn } from 'zustand/traditional'
-import { useNodeId } from 'reactflow'
+import { useNodeId, useUpdateNodeInternals } from 'reactflow'
+import { useEffect } from 'react'
 
 type NodeState<T extends Ports<any>, R extends Result> = {
   inputs?: Inputs<keyof T['in']>
@@ -29,9 +30,18 @@ export function useNodeState<
   R extends Result = undefined,
 >() {
   const nodeId = useNodeId()
-  return useNodeStateStore(
+  const updateNodeInternals = useUpdateNodeInternals()
+  const store = useNodeStateStore(
     (state) => state.states[nodeId ?? ''] as NodeState<T, R>,
     (oldState, newState) =>
       JSON.stringify(oldState) === JSON.stringify(newState)
   )
+
+  useEffect(() => {
+    if (nodeId) {
+      updateNodeInternals(nodeId)
+    }
+  }, [store.inputs])
+
+  return store
 }
