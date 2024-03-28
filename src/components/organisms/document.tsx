@@ -26,7 +26,7 @@ export function Document({ onClose }: Props) {
   return (
     <div
       className={
-        'md:border-l-2 py-4 px-14 flex flex-col gap-2 md:w-[500px] w-screen md:h-screen md:overflow-y-scroll'
+        'md:border-l-2 md:border-t-0 border-t-2 py-4 px-14 flex flex-col gap-2 md:w-[500px] w-screen md:h-screen md:overflow-y-scroll'
       }
     >
       <div className={'md:hidden m-auto'}>
