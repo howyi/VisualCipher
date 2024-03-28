@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
-import { useNodes, useReactFlow } from 'reactflow'
+import React, { useEffect, useState } from 'react'
+import { useNodes, useReactFlow, useUpdateNodeInternals } from 'reactflow'
 
 export function useNodeData<T>(
   id: string,
   initialData: T
 ): [T, React.Dispatch<T>] {
   const [data, setRawData] = useState(initialData)
+  const updateNodeInternals = useUpdateNodeInternals()
 
   const nodes = useNodes()
   const reactFlow = useReactFlow()
@@ -23,6 +24,10 @@ export function useNodeData<T>(
       setRawData(reactFlow.getNode(id)?.data)
     }
   }, [nodes])
+
+  useEffect(() => {
+    updateNodeInternals(id)
+  }, [data])
 
   return [data, setData]
 }

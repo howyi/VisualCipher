@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { NodeProps, NodeResizer } from 'reactflow'
+import { NodeProps, NodeResizer, useUpdateNodeInternals } from 'reactflow'
 import {
   Module,
   ModuleProcessProps,
@@ -48,7 +48,7 @@ function calculate({ node }: ModuleProcessProps<Data, typeof ports>) {
 }
 
 function node({ id, data: initialData, selected }: NodeProps<Data>) {
-  const [nodeData, setNodeData] = useNodeData<Data>(id, initialData)
+  const [data, setData] = useNodeData<Data>(id, initialData)
   const [text, setText] = useState(initialData.value ?? '')
   const isPlaying = useBoolean(!!initialData.isPlaying)
   const [playCurrentPosition, setPlayCurrentPosition] = useState(0)
@@ -61,7 +61,7 @@ function node({ id, data: initialData, selected }: NodeProps<Data>) {
         newPos = 1
       }
       setPlayCurrentPosition(newPos)
-      setNodeData({
+      setData({
         currentValue: text.slice(0, newPos),
       })
     },
@@ -69,7 +69,7 @@ function node({ id, data: initialData, selected }: NodeProps<Data>) {
   )
 
   useEffect(() => {
-    setNodeData({
+    setData({
       value: text,
       isPlaying: isPlaying.value,
     })

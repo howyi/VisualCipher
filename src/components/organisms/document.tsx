@@ -1,7 +1,11 @@
 import * as React from 'react'
 import { Fragment } from 'react'
 import { Button } from '@/components/ui/button'
-import { GitHubLogoIcon, TwitterLogoIcon } from '@radix-ui/react-icons'
+import {
+  DoubleArrowDownIcon,
+  GitHubLogoIcon,
+  TwitterLogoIcon,
+} from '@radix-ui/react-icons'
 import { useDocumentPathStore } from '@/docs/use-document-path'
 import { Pages } from '@/docs'
 import {
@@ -22,10 +26,13 @@ export function Document({ onClose }: Props) {
   return (
     <div
       className={
-        'border-l-2 py-4 px-14 flex flex-col gap-2 md:w-[500px] w-screen md:h-screen md:overflow-y-scroll'
+        'md:border-l-2 py-4 px-14 flex flex-col gap-2 md:w-[500px] w-screen md:h-screen md:overflow-y-scroll'
       }
     >
-      <div className={'flex flex-row gap-2 pb-2'}>
+      <div className={'md:hidden m-auto'}>
+        <DoubleArrowDownIcon />
+      </div>
+      <div className={'hidden md:flex flex-row gap-2 pb-2'}>
         <Button
           variant={'outline'}
           size={'sm'}

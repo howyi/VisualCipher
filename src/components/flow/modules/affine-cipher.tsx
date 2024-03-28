@@ -108,7 +108,7 @@ function node({ id, data: initialData }: NodeProps<Data>) {
 
   useEffect(() => {
     setData({ a, b, decryptMode: decryptMode.value })
-  }, [a, b, decryptMode])
+  }, [a, b, decryptMode.value])
 
   return (
     <ModuleNode module={AffineCipherModule}>
