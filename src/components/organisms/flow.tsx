@@ -60,22 +60,22 @@ type Props = {
   title: string
   nodes: Node<any>[]
   edges: Edge<any>[]
-  storageKey?: string // undefined = can't save
   onClickInfo: () => void
   infoOpen: boolean
+  isPlayground: boolean
 }
 
 export function Flow({
   title,
   nodes: initialNodes,
   edges: initialEdges,
-  storageKey,
   onClickInfo,
   infoOpen,
+  isPlayground,
 }: Props) {
   const [nodes, setNodes] = React.useState<Node<any>[]>([])
   const [edges, setEdges] = React.useState<Edge<any>[]>([])
-  const [saved, setSaved] = useLocalStorage(storageKey ?? '', '')
+  const [saved, setSaved] = useLocalStorage('tmp', '')
   const [reactFlowInstance, setReactFlowInstance] =
     React.useState<ReactFlowInstance>()
   const setNodeStates = useNodeStateStore((state) => state.set)
@@ -96,7 +96,7 @@ export function Flow({
   }, [])
 
   React.useEffect(() => {
-    if (storageKey && saved) {
+    if (isPlayground) {
       const i = JSON.parse(saved) as ReactFlowJsonObject
       setNodes(i.nodes)
       setEdges(i.edges)
@@ -159,7 +159,7 @@ export function Flow({
       },
     })
     setNodeStates(newNodeStates)
-    if (storageKey && reactFlowInstance) {
+    if (isPlayground && reactFlowInstance) {
       debouncedSave(reactFlowInstance)
     }
   }, [nodes, edges])
@@ -274,8 +274,23 @@ export function Flow({
         position="top-right"
         className={'flex flex-row gap-2 font-mono text-muted-foreground'}
       >
+        {!isPlayground && (
+          <Button
+            className={'md:block hidden'}
+            size={'sm'}
+            onClick={() => {
+              if (!reactFlowInstance) {
+                return
+              }
+              setSaved(JSON.stringify(reactFlowInstance.toObject()))
+              window.location.href = window.location.origin
+            }}
+          >
+            Open in Playground
+          </Button>
+        )}
         <SettingButton
-          storageKey={storageKey}
+          isPlayground={isPlayground}
           onUpload={(file) => {
             setNodes(file.nodes)
             setEdges(file.edges)
@@ -306,11 +321,18 @@ export function Flow({
             if (!reactFlowInstance) {
               return
             }
+            const obj = reactFlowInstance.toObject()
             const url =
               window.location.origin +
               '/share/?json=' +
-              encodeURIComponent(JSON.stringify(reactFlowInstance.toObject()))
+              encodeURIComponent(
+                JSON.stringify({
+                  nodes: obj.nodes,
+                  edges: obj.edges,
+                })
+              )
             global.navigator.clipboard.writeText(url)
+            toast('URL Copied to clipboard📋')
           }}
         />
         <Button className={'md:block hidden'} size={'sm'} onClick={onClickInfo}>

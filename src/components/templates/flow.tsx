@@ -11,18 +11,18 @@ type Props = {
   title: string
   nodes: Node<any>[]
   edges: Edge<any>[]
-  storageKey?: string // undefined = can't save
   documentOpen?: boolean
   documentPath: string
+  isPlayground: boolean
 }
 
 export function FlowTemplate({
   title,
   nodes,
   edges,
-  storageKey,
   documentOpen,
   documentPath,
+  isPlayground,
 }: Props) {
   const [infoOpen, setInfoOpen] =
     documentOpen === undefined
@@ -48,7 +48,7 @@ export function FlowTemplate({
             title={title}
             nodes={nodes}
             edges={edges}
-            storageKey={storageKey}
+            isPlayground={isPlayground}
           />
         </ReactFlowProvider>
       </div>

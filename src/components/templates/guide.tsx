@@ -20,6 +20,7 @@ export function Guide({
       edges={guide.initialEdges}
       documentOpen={true}
       documentPath={documentPath}
+      isPlayground={false}
     />
   )
 }

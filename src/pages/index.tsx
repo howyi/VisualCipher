@@ -424,7 +424,7 @@ const IndexPage: React.FC<PageProps> = () => {
       title={'Playground'}
       nodes={initialNodes}
       edges={initialEdges}
-      storageKey={'tmp'}
+      isPlayground={true}
       documentOpen={undefined}
       documentPath={'top'}
     />

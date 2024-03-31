@@ -16,6 +16,7 @@ import {
 import { useNodeState } from '@/components/flow/hooks/use-node-state'
 import { Simulate } from 'react-dom/test-utils'
 import encrypted = Simulate.encrypted
+import { SelectProperty } from '@/components/flow/components/properties/select-property'
 
 type Data = {
   splitType: 'char' | 'space'
@@ -33,7 +34,7 @@ const ports = {
   },
 } as const satisfies Ports<Data>
 export const MonoalphabeticSubstitutionModule: Module<Data, typeof ports> = {
-  type: 'monoalphabetic_substitution',
+  type: 'monoalphabetic_substitution_decipher',
   node,
   calculate,
   defaultData: {
@@ -42,8 +43,8 @@ export const MonoalphabeticSubstitutionModule: Module<Data, typeof ports> = {
       A: 'B',
     },
   },
-  name: 'Monoalphabetic Substitution (incomplete)',
-  description: 'monoalphabetic string substitution',
+  name: 'Monoalphabetic Substitution Decipher',
+  description: 'monoalphabetic string substitution decipher tool',
   ports,
 }
 
@@ -62,7 +63,9 @@ function MonoalphabeticSubstitutionEncrypt(
 ): {
   encrypted: string
 } {
-  let lines = text.split('\n').map((t) => t.split(' '))
+  let lines = text
+    .split('\n')
+    .map((t) => t.split(splitType === 'char' ? '' : ' '))
   const encrypted = lines
     .map((l) => {
       return l.map((t) => map[t] ?? '-').join('')
@@ -78,11 +81,19 @@ function node({ id, data: initialData, selected }: NodeProps<Data>) {
   const { inputs } = useNodeState<typeof ports>()
   const [splitType, setSplitType] = useState(initialData.splitType)
   const [map, setMap] = useState(initialData.map)
+  const [highlight, setHighlight] = useState('')
+  const [activeKey, setActiveKey] = useState('')
   const lines = useMemo(() => {
-    let lines = inputs?.input?.split('\n').map((t) => t.split(' '))
+    let lines = inputs?.input
+      ?.split('\n')
+      .map((t) => t.split(splitType === 'char' ? '' : ' '))
+    setHighlight(
+      lines?.[lines.length - 1][lines?.[lines.length - 1].length - 1] ?? ''
+    )
+    setActiveKey('')
     if (!lines) return []
     return lines
-  }, [inputs])
+  }, [inputs, splitType])
   const statusMap = useMemo(() => {
     let newStatusMap: {
       [ct in string]: {
@@ -106,8 +117,6 @@ function node({ id, data: initialData, selected }: NodeProps<Data>) {
     }
     return newStatusMap
   }, [lines, map])
-  const [highlight, setHighlight] = useState('')
-  const [activeKey, setActiveKey] = useState('')
   const updateNodeInternals = useUpdateNodeInternals()
 
   useEffect(() => {
@@ -123,6 +132,12 @@ function node({ id, data: initialData, selected }: NodeProps<Data>) {
       className={' h-full '}
     >
       <div className={'flex flex-col gap-4 m-auto whitespace-pre'}>
+        <SelectProperty<Data['splitType']>
+          label={'splitType'}
+          value={splitType}
+          setValue={(value) => setSplitType(value)}
+          values={['char', 'space']}
+        />
         <div
           className={
             'flex flex-row flex-wrap m-auto gap-3 font-mono h-full text-wrap whitespace-pre'
@@ -157,7 +172,10 @@ function node({ id, data: initialData, selected }: NodeProps<Data>) {
                     {inputActive ? (
                       <Input
                         autoFocus={true}
-                        className={'w-4 p-0 border-0 h-full'}
+                        className={
+                          'w-2 mx-auto p-0 border-0 h-full focus-visible:ring-0 focus-visible:ring-offset-0'
+                        }
+                        placeholder={map[t]}
                         defaultValue={''}
                         onChange={(e) => {
                           setMap({ ...map, [t]: e.target.value })
@@ -165,6 +183,9 @@ function node({ id, data: initialData, selected }: NodeProps<Data>) {
                         }}
                         onBlur={() => setActiveKey('')}
                         onKeyDown={(e) => {
+                          if (e.key === 'Escape') {
+                            setActiveKey('')
+                          }
                           if (e.key === 'Delete' || e.key === 'Backspace') {
                             const newMap = map
                             delete newMap[t]
@@ -185,12 +206,12 @@ function node({ id, data: initialData, selected }: NodeProps<Data>) {
         </div>
         <Separator />
         <span className={'text-muted-foreground'}>map</span>
-        <div className={'flex flex-row flex-wrap gap-2'}>
+        <div className={'flex flex-row m-auto  flex-wrap gap-2'}>
           {Object.keys(statusMap)
             .sort()
             .map((t, tk) => {
+              const key = `map_${tk}`
               const status = statusMap[t]
-              const key = `unuse_${tk}`
               const inputActive = key === activeKey
               return (
                 <div
@@ -198,8 +219,12 @@ function node({ id, data: initialData, selected }: NodeProps<Data>) {
                   className={
                     'flex flex-col text-center ' +
                     (highlight === t ? ' text-module-hint' : '') +
-                    (status?.in_input ? '' : ' text-destructive') +
-                    (status?.pt ? '' : ' text-muted-foreground')
+                    (highlight === t || status?.in_input
+                      ? ''
+                      : ' text-destructive') +
+                    (highlight === t || status?.pt
+                      ? ''
+                      : ' text-muted-foreground')
                   }
                   onMouseEnter={() => setHighlight(t)}
                   onMouseLeave={() => {
@@ -211,7 +236,10 @@ function node({ id, data: initialData, selected }: NodeProps<Data>) {
                   {inputActive ? (
                     <Input
                       autoFocus={true}
-                      className={'w-2 p-0 border-0 h-full focus-visible:ring-0'}
+                      className={
+                        'w-2 mx-auto p-0 border-0 h-full focus-visible:ring-0 focus-visible:ring-offset-0'
+                      }
+                      placeholder={map[t]}
                       defaultValue={''}
                       onChange={(e) => {
                         setMap({ ...map, [t]: e.target.value })
@@ -219,6 +247,9 @@ function node({ id, data: initialData, selected }: NodeProps<Data>) {
                       }}
                       onBlur={() => setActiveKey('')}
                       onKeyDown={(e) => {
+                        if (e.key === 'Escape') {
+                          setActiveKey('')
+                        }
                         if (e.key === 'Delete' || e.key === 'Backspace') {
                           const newMap = map
                           delete newMap[t]

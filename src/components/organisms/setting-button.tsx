@@ -16,7 +16,7 @@ import { useBoolean } from 'usehooks-ts'
 import { useDarkMode } from '@/components/organisms/dark-mode-switch'
 
 type Props = {
-  storageKey?: string
+  isPlayground?: boolean
   onUpload: (file: ReactFlowJsonObject) => void
   onDownload: () => void
   onReset: () => void
@@ -24,7 +24,7 @@ type Props = {
   getShareUrl: () => void
 }
 export function SettingButton({
-  storageKey,
+  isPlayground,
   onUpload,
   onDownload,
   onReset,
@@ -84,7 +84,7 @@ export function SettingButton({
         <span className={'text-sm text-destructive'}>
           ※Due to URL length limits, links with many modules may not load.
         </span>
-        {storageKey && (
+        {isPlayground && (
           <>
             <div className="">
               <Label htmlFor="import" className="text-right">
