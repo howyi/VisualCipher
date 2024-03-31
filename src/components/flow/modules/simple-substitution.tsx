@@ -58,7 +58,7 @@ function SimpleSubstitutionEncrypt(
 ): {
   encrypted: string
 } {
-  const encrypted = text.replace(/[a-z]/gi, (letter) => {
+  const encrypted = text.replace(/./g, (letter) => {
     const index = source.indexOf(letter)
     if (index == -1) {
       return UNKNOWN_CHARACTER
