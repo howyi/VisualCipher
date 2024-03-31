@@ -21,6 +21,7 @@ type Props = {
   onDownload: () => void
   onReset: () => void
   onWipe: () => void
+  getShareUrl: () => void
 }
 export function SettingButton({
   storageKey,
@@ -28,6 +29,7 @@ export function SettingButton({
   onDownload,
   onReset,
   onWipe,
+  getShareUrl,
 }: Props) {
   const open = useBoolean(false)
   const { enabled, setDarkMode } = useDarkMode()
@@ -76,7 +78,12 @@ export function SettingButton({
         <Button className={'w-full'} onClick={onDownload}>
           Export json file
         </Button>
-
+        <Button className={'w-full'} onClick={getShareUrl}>
+          Copy Share URL
+        </Button>
+        <span className={'text-sm text-destructive'}>
+          ※Due to URL length limits, links with many modules may not load.
+        </span>
         {storageKey && (
           <>
             <div className="">

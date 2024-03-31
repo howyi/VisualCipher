@@ -302,6 +302,16 @@ export function Flow({
             setNodes([])
             setEdges([])
           }}
+          getShareUrl={() => {
+            if (!reactFlowInstance) {
+              return
+            }
+            const url =
+              window.location.origin +
+              '/share/?json=' +
+              encodeURIComponent(JSON.stringify(reactFlowInstance.toObject()))
+            global.navigator.clipboard.writeText(url)
+          }}
         />
         <Button className={'md:block hidden'} size={'sm'} onClick={onClickInfo}>
           {infoOpen ? <PinRightIcon /> : <InfoCircledIcon />}
