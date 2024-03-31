@@ -298,6 +298,10 @@ export function Flow({
             setSaved('')
             window.location.reload()
           }}
+          onWipe={() => {
+            setNodes([])
+            setEdges([])
+          }}
         />
         <Button className={'md:block hidden'} size={'sm'} onClick={onClickInfo}>
           {infoOpen ? <PinRightIcon /> : <InfoCircledIcon />}

@@ -20,12 +20,14 @@ type Props = {
   onUpload: (file: ReactFlowJsonObject) => void
   onDownload: () => void
   onReset: () => void
+  onWipe: () => void
 }
 export function SettingButton({
   storageKey,
   onUpload,
   onDownload,
   onReset,
+  onWipe,
 }: Props) {
   const open = useBoolean(false)
   const { enabled, setDarkMode } = useDarkMode()
@@ -88,6 +90,13 @@ export function SettingButton({
                 </Button>
               </div>
             </div>
+            <Button
+              variant={'destructive'}
+              className={'w-full'}
+              onClick={onWipe}
+            >
+              Delete all modules
+            </Button>
             <Button
               variant={'destructive'}
               className={'w-full'}
