@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { PauseIcon, PlayIcon, TrackPreviousIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import { useBoolean, useInterval } from 'usehooks-ts'
+import { Resizer } from '@/components/flow/components/resizer'
 
 type Data = {
   value?: string
@@ -111,12 +112,7 @@ function node({ id, data: initialData, selected }: NodeProps<Data>) {
       }
       className={'h-full border-module-input pb-14'}
     >
-      <NodeResizer
-        color="#555555"
-        isVisible={selected}
-        minWidth={200}
-        minHeight={100}
-      />
+      <Resizer id={id} selected={selected} />
       <Textarea
         onFocus={isPlaying.setFalse}
         id="text"

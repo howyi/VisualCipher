@@ -57,7 +57,7 @@ export function ModuleNode({
         <HoverCardTrigger>
           <div
             className={cn(
-              'notranslate font-mono whitespace-pre px-4 py-6 shadow-md rounded-md bg-background text-foreground border-2 border-muted-foreground node-card',
+              'notranslate overflow-y-scroll font-mono whitespace-pre px-4 py-6 shadow-md rounded-md bg-background text-foreground border-2 border-muted-foreground node-card',
               className
             )}
           >

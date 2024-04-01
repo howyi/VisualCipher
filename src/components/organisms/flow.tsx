@@ -287,7 +287,7 @@ export function Flow({
       onInit={setReactFlowInstance}
       onDrop={onDrop}
       onDragOver={onDragOver}
-      snapToGrid={true}
+      // snapToGrid={true}
       onlyRenderVisibleElements={true}
       defaultEdgeOptions={{
         type: 'step',

@@ -1,8 +1,9 @@
 import React from 'react'
-import { NodeProps } from 'reactflow'
+import { NodeProps, NodeResizer, useUpdateNodeInternals } from 'reactflow'
 import { Module, Ports } from '@/components/flow/modules/types'
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeState } from '@/components/flow/hooks/use-node-state'
+import { Resizer } from '@/components/flow/components/resizer'
 
 type Data = {}
 
@@ -25,12 +26,16 @@ export const OutputModule: Module<Data, typeof ports> = {
   ports,
 }
 
-function node({ id, data: initialData }: NodeProps<Data>) {
+function node({ id, data: initialData, selected }: NodeProps<Data>) {
   const { inputs } = useNodeState<typeof ports>()
+  const updateNodeInternals = useUpdateNodeInternals()
 
   return (
-    <ModuleNode module={OutputModule} className={'border-module-output'}>
-      <pre className={'nodrag select-text cursor-text'}>{inputs?.input}</pre>
+    <ModuleNode module={OutputModule} className={'h-full border-module-output'}>
+      <pre className={'nodrag select-text text-wrap cursor-text'}>
+        {inputs?.input}
+      </pre>
+      <Resizer id={id} selected={selected} />
     </ModuleNode>
   )
 }

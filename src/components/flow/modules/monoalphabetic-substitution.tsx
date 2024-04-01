@@ -17,6 +17,7 @@ import { useNodeState } from '@/components/flow/hooks/use-node-state'
 import { Simulate } from 'react-dom/test-utils'
 import encrypted = Simulate.encrypted
 import { SelectProperty } from '@/components/flow/components/properties/select-property'
+import { Resizer } from '@/components/flow/components/resizer'
 
 type Data = {
   splitType: 'char' | 'space'
@@ -68,12 +69,22 @@ function MonoalphabeticSubstitutionEncrypt(
     .map((t) => t.split(splitType === 'char' ? '' : ' '))
   const encrypted = lines
     .map((l) => {
-      return l.map((t) => map[t] ?? '-').join('')
+      return l
+        .map((t) => {
+          if (t === ' ') return ' '
+          return map[t] ?? UNKNOWN_CHARACTER
+        })
+        .join('')
     })
     .join('\n')
   return {
     encrypted: encrypted,
   }
+}
+
+type CharacterStatus = {
+  pt?: string
+  in_input: boolean
 }
 
 function node({ id, data: initialData, selected }: NodeProps<Data>) {
@@ -96,10 +107,7 @@ function node({ id, data: initialData, selected }: NodeProps<Data>) {
   }, [inputs, splitType])
   const statusMap = useMemo(() => {
     let newStatusMap: {
-      [ct in string]: {
-        pt?: string
-        in_input: boolean
-      }
+      [ct in string]: CharacterStatus
     } = {}
     for (const k of Object.keys(map)) {
       newStatusMap[k] = {
@@ -109,6 +117,7 @@ function node({ id, data: initialData, selected }: NodeProps<Data>) {
     }
     for (const l of lines) {
       for (const w of l) {
+        if (w === ' ') continue
         newStatusMap[w] = {
           pt: map[w] ? map[w] : undefined,
           in_input: true,
@@ -117,7 +126,6 @@ function node({ id, data: initialData, selected }: NodeProps<Data>) {
     }
     return newStatusMap
   }, [lines, map])
-  const updateNodeInternals = useUpdateNodeInternals()
 
   useEffect(() => {
     setData({
@@ -266,15 +274,7 @@ function node({ id, data: initialData, selected }: NodeProps<Data>) {
             })}
         </div>
       </div>
-      <NodeResizer
-        color="#555555"
-        isVisible={selected}
-        minWidth={200}
-        minHeight={100}
-        onResizeEnd={() => {
-          updateNodeInternals(id)
-        }}
-      />
+      <Resizer id={id} selected={selected} />
     </ModuleNode>
   )
 }
