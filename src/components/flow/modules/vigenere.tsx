@@ -19,6 +19,9 @@ type Data = {
   decryptMode?: boolean
 }
 
+const SKIP_SPACE = true
+const SKIP_BREAK = true
+
 const ports = {
   in: {
     input: {},
@@ -108,17 +111,27 @@ function VigenereEncrypt(
     }
   }
   let keyIndex = undefined
+  let encryptedCharacters = ''
   let encrypted = ''
   let keyCharacter = ''
   let lastTextCharacter = ''
   let encryptedCharacter = ''
   const square = VigenereSquare()
   for (const textCharacter of text.split('')) {
-    keyIndex = encrypted.length % key.length
+    if (SKIP_SPACE && textCharacter === ' ') {
+      encrypted += ' '
+      continue
+    }
+    if (SKIP_BREAK && textCharacter === '\n') {
+      encrypted += '\n'
+      continue
+    }
+    keyIndex = encryptedCharacters.length % key.length
     keyCharacter = key.split('')[keyIndex]
     if (!square[keyCharacter]) {
       encryptedCharacter = ''
       lastTextCharacter = ''
+      encryptedCharacters += UNKNOWN_CHARACTER
       encrypted += UNKNOWN_CHARACTER
       continue
     }
@@ -129,22 +142,26 @@ function VigenereEncrypt(
           found = true
           encryptedCharacter = textCharacter
           lastTextCharacter = squareElementKey
+          encryptedCharacters += squareElementKey
           encrypted += squareElementKey
         }
       }
       if (!found) {
         encryptedCharacter = ''
         lastTextCharacter = ''
+        encryptedCharacters += UNKNOWN_CHARACTER
         encrypted += UNKNOWN_CHARACTER
       }
     } else {
       if (square[keyCharacter][textCharacter]) {
         lastTextCharacter = textCharacter
         encryptedCharacter = square[keyCharacter][textCharacter]
+        encryptedCharacters += encryptedCharacter
         encrypted += encryptedCharacter
       } else {
         encryptedCharacter = ''
         lastTextCharacter = ''
+        encryptedCharacters += UNKNOWN_CHARACTER
         encrypted += UNKNOWN_CHARACTER
       }
     }
@@ -213,7 +230,7 @@ function node({ id, data: initialData }: NodeProps<Data>) {
         </div>
         <div
           className={
-            'pt-4 px-4 font-mono whitespace-pre leading-4 tracking-widest'
+            'pt-4 px-4 text-muted-foreground whitespace-pre leading-4 tracking-widest'
           }
         >
           {'  '}
