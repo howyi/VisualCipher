@@ -78,7 +78,7 @@ function node({ id, data: initialData }: NodeProps<Data>) {
             onClick={() =>
               searchLineBreak
                 ? setSearch(search?.slice(0, search?.length - 1))
-                : setSearch(search + '\n')
+                : setSearch((search ?? '') + '\n')
             }
           >
             \n
@@ -101,7 +101,7 @@ function node({ id, data: initialData }: NodeProps<Data>) {
             onClick={() =>
               replaceLineBreak
                 ? setReplace(replace?.slice(0, replace?.length - 1))
-                : setReplace(replace + '\n')
+                : setReplace((replace ?? '') + '\n')
             }
           >
             \n
