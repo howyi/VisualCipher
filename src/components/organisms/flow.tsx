@@ -24,8 +24,8 @@ import { nanoid } from 'nanoid'
 import { useBoolean, useDebounceCallback, useLocalStorage } from 'usehooks-ts'
 import { Button } from '@/components/ui/button'
 import {
-  GitHubLogoIcon,
   InfoCircledIcon,
+  Link2Icon,
   MinusIcon,
   PinRightIcon,
   PlusIcon,
@@ -101,10 +101,15 @@ export function Flow({
   }, [])
 
   React.useEffect(() => {
-    if (isPlayground) {
-      const i = JSON.parse(saved) as ReactFlowJsonObject
-      setNodes(i.nodes)
-      setEdges(i.edges)
+    if (isPlayground && saved) {
+      try {
+        const i = JSON.parse(saved) as ReactFlowJsonObject
+        setNodes(i.nodes)
+        setEdges(i.edges)
+      } catch (e) {
+        setNodes(initialNodes)
+        setEdges(initialEdges)
+      }
     } else {
       setNodes(initialNodes)
       setEdges(initialEdges)
@@ -220,6 +225,23 @@ export function Flow({
     []
   )
 
+  const getShareUrl = (): string | undefined => {
+    if (!reactFlowInstance) {
+      return
+    }
+    const obj = reactFlowInstance.toObject()
+    return (
+      window.location.origin +
+      '/share/?json=' +
+      encodeURIComponent(
+        JSON.stringify({
+          nodes: obj.nodes,
+          edges: obj.edges,
+        })
+      )
+    )
+  }
+
   const onDrop: React.DragEventHandler<HTMLDivElement> = useCallback(
     (event) => {
       event.preventDefault()
@@ -281,6 +303,27 @@ export function Flow({
         position="top-right"
         className={'flex flex-row gap-2 font-mono text-muted-foreground'}
       >
+        <Button
+          className={'md:block hidden'}
+          size={'sm'}
+          onClick={async () => {
+            const url = getShareUrl()
+            if (!url) return
+            try {
+              const tinyUrl = await fetch(
+                `https://tinyurl.com/api-create.php?url=` +
+                  encodeURIComponent(url)
+              )
+              await global.navigator.clipboard.writeText(await tinyUrl.text())
+              toast('URL Copied to clipboard📋')
+            } catch (e) {
+              console.error(e)
+              toast('URL Generate Error')
+            }
+          }}
+        >
+          <Link2Icon />
+        </Button>
         {!isPlayground && (
           <Button
             className={'md:block hidden'}
@@ -325,19 +368,8 @@ export function Flow({
             setEdges([])
           }}
           getShareUrl={() => {
-            if (!reactFlowInstance) {
-              return
-            }
-            const obj = reactFlowInstance.toObject()
-            const url =
-              window.location.origin +
-              '/share/?json=' +
-              encodeURIComponent(
-                JSON.stringify({
-                  nodes: obj.nodes,
-                  edges: obj.edges,
-                })
-              )
+            const url = getShareUrl()
+            if (!url) return
             global.navigator.clipboard.writeText(url)
             toast('URL Copied to clipboard📋')
           }}

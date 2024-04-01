@@ -18,9 +18,9 @@ const IndexPage: React.FC<PageProps> = ({ location }) => {
     return 'loading'
   }
 
-  const data = JSON.parse(
-    decodeURIComponent(encodedJson)
-  ) as ReactFlowJsonObject
+  const decoded = decodeURIComponent(encodedJson)
+  const data = JSON.parse(decoded) as ReactFlowJsonObject
+
   return (
     <FlowTemplate
       title={'Share'}
@@ -28,6 +28,7 @@ const IndexPage: React.FC<PageProps> = ({ location }) => {
       edges={data.edges}
       documentOpen={false}
       documentPath={'top'}
+      isPlayground={false}
     />
   )
 }

@@ -3,7 +3,7 @@ import {
   BaseEdge,
   EdgeLabelRenderer,
   EdgeProps,
-  getBezierPath,
+  getSmoothStepPath,
   useReactFlow,
 } from 'reactflow'
 import { Button } from '@/components/ui/button'
@@ -27,7 +27,7 @@ export default function DefaultEdge({
   selected,
 }: EdgeProps) {
   const { setEdges } = useReactFlow()
-  const [edgePath, labelX, labelY] = getBezierPath({
+  const [edgePath, labelX, labelY] = getSmoothStepPath({
     sourceX,
     sourceY,
     sourcePosition,
