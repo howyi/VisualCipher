@@ -55,6 +55,7 @@ import {
 } from '@/components/flow/hooks/use-node-state'
 import { Input } from '@/components/ui/input'
 import { SettingButton } from '@/components/organisms/setting-button'
+import DefaultEdge from '@/components/flow/components/default-edge'
 
 type Props = {
   title: string
@@ -63,6 +64,10 @@ type Props = {
   onClickInfo: () => void
   infoOpen: boolean
   isPlayground: boolean
+}
+
+const edgeTypes = {
+  step: DefaultEdge,
 }
 
 export function Flow({
@@ -248,6 +253,8 @@ export function Flow({
 
   return (
     <ReactFlow
+      deleteKeyCode={null}
+      edgeTypes={edgeTypes}
       nodes={nodes}
       edges={edges}
       onNodesChange={onNodesChange}
