@@ -20,6 +20,7 @@ import { Module } from '@/components/flow/modules/types'
 import { AffineCipherModule } from '@/components/flow/modules/affine-cipher'
 import { ReverseModule } from '@/components/flow/modules/reverse'
 import { MonoalphabeticSubstitutionModule } from '@/components/flow/modules/monoalphabetic-substitution'
+import { StraddlingCheckerboardModule } from '@/components/flow/modules/straddling-checkerboard'
 
 export const RegisteredModules = [
   InputModule,
@@ -34,6 +35,7 @@ export const RegisteredModules = [
   RailFenceCipherModule,
   AffineCipherModule,
   VigenereModule,
+  StraddlingCheckerboardModule,
   CharacterCounterModule,
   WordCounterModule,
   ToUpperCaseModule,
