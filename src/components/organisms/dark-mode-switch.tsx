@@ -13,12 +13,13 @@ export function DarkModeSwitch() {
 }
 
 export function useDarkMode() {
-  const [darkMode, setRawDarkMode] = useState(false)
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
-  const enabled = useMemo(
-    () => darkMode ?? prefersDarkMode,
-    [darkMode, prefersDarkMode]
-  )
+  const [darkMode, setRawDarkMode] = useState(true)
+  // const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
+  // const enabled = useMemo(
+  //   () => darkMode ?? prefersDarkMode,
+  //   [darkMode, prefersDarkMode]
+  // )
+  const enabled = darkMode
 
   const setDarkMode = (darkMode: boolean) => {
     window.localStorage.setItem('dark', String(darkMode))
