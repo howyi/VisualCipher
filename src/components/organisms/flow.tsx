@@ -118,7 +118,7 @@ export function Flow({
 
   React.useEffect(() => {
     const newNodeStates: NodeStates = {}
-    console.debug('calculate', nanoid())
+    console.debug('calculate', nanoid(), nodes, edges)
 
     const nodeOutputCache: {
       [nodeId in string]: { [portId in string]: string }

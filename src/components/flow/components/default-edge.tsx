@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { MouseEventHandler, useCallback } from 'react'
 import {
   BaseEdge,
   EdgeLabelRenderer,
@@ -26,7 +26,7 @@ export default function DefaultEdge({
   markerEnd,
   selected,
 }: EdgeProps) {
-  const { setEdges } = useReactFlow()
+  const reactFlow = useReactFlow()
   const [edgePath, labelX, labelY] = getSmoothStepPath({
     sourceX,
     sourceY,
@@ -36,9 +36,13 @@ export default function DefaultEdge({
     targetPosition,
   })
 
-  const onEdgeClick = () => {
-    setEdges((edges) => edges.filter((edge) => edge.id !== id))
-  }
+  const onEdgeClick = useCallback<MouseEventHandler<HTMLButtonElement>>(
+    (evt) => {
+      evt.stopPropagation()
+      reactFlow.setEdges((edges) => edges.filter((edge) => edge.id !== id))
+    },
+    [reactFlow]
+  )
 
   return (
     <>

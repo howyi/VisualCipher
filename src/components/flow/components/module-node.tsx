@@ -40,6 +40,9 @@ export function ModuleNode({
   const { error } = useNodeState()
 
   function deleteNode() {
+    reactFlow.setEdges((egs) =>
+      egs.filter((edge) => edge.target !== nodeId && edge.source !== nodeId)
+    )
     reactFlow.setNodes((nds) => nds.filter((node) => node.id !== nodeId))
   }
 
