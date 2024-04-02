@@ -19,7 +19,7 @@ import { RailFenceCipherModule } from '@/components/flow/modules/rail-fence-ciph
 import { Module } from '@/components/flow/modules/types'
 import { AffineCipherModule } from '@/components/flow/modules/affine-cipher'
 import { ReverseModule } from '@/components/flow/modules/reverse'
-import { MonoalphabeticSubstitutionModule } from '@/components/flow/modules/monoalphabetic-substitution'
+import { AlphabeticSubstitutionModule } from '@/components/flow/modules/alphabetic-substitution'
 import { StraddlingCheckerboardModule } from '@/components/flow/modules/straddling-checkerboard'
 
 export const RegisteredModules = [
@@ -31,7 +31,7 @@ export const RegisteredModules = [
   ReverseModule,
   CaesarModule,
   SimpleSubstitutionModule,
-  MonoalphabeticSubstitutionModule,
+  AlphabeticSubstitutionModule,
   RailFenceCipherModule,
   AffineCipherModule,
   VigenereModule,
