@@ -18,7 +18,10 @@
     "clean": "gatsby clean",
     "typecheck": "tsc --noEmit",
     "prettier-fix": "prettier --write .",
-    "prettier-check": "prettier --check ."
+    "prettier-check": "prettier --check .",
+    "wget-dictionary:twl06": "wget -P ./static/dict https://www.wordgamedictionary.com/twl06/download/twl06.txt",
+    "wget-dictionary:sowpods": "wget -P ./static/dict https://www.wordgamedictionary.com/sowpods/download/sowpods.txt",
+    "wget-dictionary:english": "wget -P ./static/dict https://www.wordgamedictionary.com/english-word-list/download/english.txt"
   },
   "dependencies": {
     "@khmyznikov/pwa-install": "^0.3.6",
