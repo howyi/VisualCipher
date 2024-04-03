@@ -22,6 +22,7 @@ import { ReverseModule } from '@/components/flow/modules/reverse'
 import { AlphabeticSubstitutionModule } from '@/components/flow/modules/alphabetic-substitution'
 import { StraddlingCheckerboardModule } from '@/components/flow/modules/straddling-checkerboard'
 import { WordFinderModule } from '@/components/flow/modules/word-finder'
+import { SliceModule } from '@/components/flow/modules/slice'
 
 export const RegisteredModules = [
   InputModule,
@@ -40,6 +41,7 @@ export const RegisteredModules = [
   CharacterCounterModule,
   WordCounterModule,
   WordFinderModule,
+  SliceModule,
   ToUpperCaseModule,
   ReplaceModule,
   EnigmaPlugBoardModule,

@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo } from 'react'
+import React, { CSSProperties, ReactNode, useMemo } from 'react'
 import {
   getConnectedEdges,
   Handle,
@@ -119,11 +119,13 @@ export function OutputHandle({
   className,
   position,
   description,
+  style,
 }: {
   id?: string
   className?: ClassValue
   position: Position
   description?: ReactNode
+  style?: CSSProperties
 }) {
   return (
     <TooltipProvider>
@@ -133,6 +135,7 @@ export function OutputHandle({
             type="source"
             id={id ?? 'output'}
             position={position}
+            style={style}
             className={cn(
               PositionToMargin(position),
               'border-2 border-muted-foreground rounded-md py-1 px-2 bg-muted-foreground',
