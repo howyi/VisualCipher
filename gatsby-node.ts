@@ -7,6 +7,7 @@ export const onCreateWebpackConfig = ({ actions }: any) => {
         '@/react-pwa-install': path.resolve(__dirname, 'src/react-pwa-install'),
         '@/docs': path.resolve(__dirname, 'src/docs'),
         '@/components': path.resolve(__dirname, 'src/components'),
+        '@/hooks': path.resolve(__dirname, 'src/hooks'),
         '@/lib': path.resolve(__dirname, 'src/lib'),
       },
     },

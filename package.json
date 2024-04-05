@@ -4,7 +4,7 @@
   "private": true,
   "description": "visual-cipher",
   "author": "t-hayashi",
-  "main": "main.js",
+  "main": "electron-main.js",
   "keywords": [
     "gatsby"
   ],
@@ -51,6 +51,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cmdk": "^0.2.1",
+    "electron-serve": "^1.3.0",
     "gatsby": "^5.13.3",
     "gatsby-plugin-google-gtag": "^5.13.1",
     "gatsby-plugin-manifest": "^5.13.1",
@@ -65,17 +66,16 @@
     "react-dom": "^18.2.0",
     "reactflow": "^11.10.4",
     "sonner": "^1.4.3",
+    "steamworks.js": "^0.3.1",
     "tailwind-merge": "^2.2.1",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",
     "tiptap-markdown": "^0.8.9",
     "usehooks-ts": "^3.0.1",
     "zod": "^3.22.4",
-    "zustand": "^4.5.1",
-    "electron-serve": "^1.3.0"
+    "zustand": "^4.5.1"
   },
   "devDependencies": {
-    "electron-builder": "^24.13.3",
     "@tailwindcss/typography": "^0.5.10",
     "@types/node": "^20.11.19",
     "@types/react": "^18.2.55",
@@ -84,6 +84,7 @@
     "@typescript-eslint/parser": "^7.3.1",
     "concurrently": "^8.2.2",
     "electron": "^29.2.0",
+    "electron-builder": "^24.13.3",
     "eslint": "^8.57.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
@@ -93,5 +94,9 @@
   },
   "volta": {
     "node": "20.11.1"
+  },
+  "build": {
+    "appId": "studio.sbox.visual-cipher",
+    "productName": "visual-cipher"
   }
 }

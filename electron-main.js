@@ -1,8 +1,19 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, dialog } = require('electron')
+const { app, BrowserWindow, dialog, ipcMain } = require('electron')
 const path = require('path')
 const serve = require('electron-serve')
+const steamworks = require('steamworks.js')
 const loadURL = serve({ directory: 'public' })
+
+// 480: https://partner.steamgames.com/doc/sdk/api/example?l=japanese
+const STEAM_APP_ID = 480
+
+let steamClient
+try {
+  steamClient = steamworks.init(STEAM_APP_ID)
+} catch (e) {
+  console.warn(e.message)
+}
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -18,7 +29,8 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true,
+      preload: path.join(__dirname, 'electron-preload.js'),
+      nodeIntegration: false,
     },
     // Use this in development mode.
     icon: isDev()
@@ -78,3 +90,15 @@ app.on('activate', function () {
 })
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+ipcMain.handle('is-steam', (_event, name) => {
+  return steamClient !== undefined
+})
+
+ipcMain.handle('activate-steam-achievement', (_event, name) => {
+  console.log(steamClient.achievement.activate(name))
+})
+
+ipcMain.handle('get-steam-name', (_event) => {
+  return steamClient.localplayer.getName()
+})

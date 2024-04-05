@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   DoubleArrowDownIcon,
@@ -16,12 +16,14 @@ import {
 } from '@/components/ui/breadcrumb'
 import { DocumentLink } from '@/docs/document-link'
 import { Link } from 'gatsby'
+import { useSteam } from '@/hooks/use-steam'
 
 type Props = {
   onClose: () => void
 }
 
 export function Document({ onClose }: Props) {
+  const steam = useSteam()
   const path = useDocumentPathStore((state) => state.path)
   return (
     <div
@@ -62,6 +64,20 @@ export function Document({ onClose }: Props) {
           </a>
         </Button>
       </div>
+      {steam && (
+        <div>
+          <Button
+            variant={'outline'}
+            size={'sm'}
+            className={'w-full flex flex-row gap-2'}
+            onClick={async () => {
+              steam?.activateAchievement('ACH_WIN_ONE_GAME')
+            }}
+          >
+            achieve: {steam?.name ?? ''}
+          </Button>
+        </div>
+      )}
       {Pages[path] && (
         <>
           <Breadcrumb>
