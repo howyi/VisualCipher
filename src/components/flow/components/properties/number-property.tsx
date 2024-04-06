@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import React from 'react'
+import { ModuleItemContainer } from '@/components/flow/components/module-item-container'
 
 type Props = {
   label: string
@@ -24,7 +25,7 @@ export function NumberProperty({
     setValue(value - unit)
   }
   return (
-    <div className={'flex flex-row gap-2'}>
+    <ModuleItemContainer className={'flex flex-row gap-2'}>
       <Button
         size={'xs'}
         disabled={min != undefined ? min > value - unit : false}
@@ -48,6 +49,6 @@ export function NumberProperty({
       >
         →
       </Button>
-    </div>
+    </ModuleItemContainer>
   )
 }

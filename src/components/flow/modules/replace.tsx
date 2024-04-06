@@ -10,6 +10,7 @@ import {
 import { ModuleNode } from '@/components/flow/components/module-node'
 import { useNodeData } from '@/components/flow/hooks/use-node-data'
 import { Button } from '@/components/ui/button'
+import { ModuleItemContainer } from '@/components/flow/components/module-item-container'
 
 type Data = {
   search?: string
@@ -60,7 +61,7 @@ function node({ id, data: initialData }: NodeProps<Data>) {
 
   return (
     <ModuleNode module={ReplaceModule}>
-      <div className={'flex flex-col gap-2'}>
+      <ModuleItemContainer className={'flex flex-col gap-2'}>
         <div className={'flex flex-row gap-2'}>
           <Label htmlFor="text" className={'flex-0 my-auto'}>
             search:
@@ -107,7 +108,7 @@ function node({ id, data: initialData }: NodeProps<Data>) {
             \n
           </Button>
         </div>
-      </div>
+      </ModuleItemContainer>
     </ModuleNode>
   )
 }

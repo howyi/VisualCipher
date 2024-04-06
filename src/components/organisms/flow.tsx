@@ -294,7 +294,7 @@ export function Flow({
       }}
       fitView
     >
-      <Background className="bg-background" variant={BackgroundVariant.Dots} />
+      {/*<Background className="bg-background" variant={BackgroundVariant.Dots} />*/}
       <Controls />
       <Panel position="bottom-right">
         <Palette />
@@ -463,7 +463,7 @@ function ModuleSelector({
           <div
             onClick={expand.toggle}
             key={module.type}
-            className="cursor-grab break-all flex flex-col gap-2 w-full border-2 rounded-md p-2 bg-background"
+            className="cursor-grab break-all flex flex-col gap-2 w-full border-2 p-2 bg-background"
             onDragStart={(event) => onDragStart(event, module.type)}
             draggable
           >

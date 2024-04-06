@@ -4,6 +4,7 @@ import {
   EdgeLabelRenderer,
   EdgeProps,
   getSmoothStepPath,
+  getStraightPath,
   useReactFlow,
 } from 'reactflow'
 import { Button } from '@/components/ui/button'

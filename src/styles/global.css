@@ -46,14 +46,14 @@ body {
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 215 20.2% 65.1%;
+    --background: 40, 21%, 8%;
+    --foreground: 0, 0%, 100%;
 
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 40, 21%, 8%;
+    --popover-foreground: 48, 6%, 85%;
 
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
@@ -61,22 +61,22 @@ body {
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 214, 18%, 38%;
+    --muted: 40, 21%, 8%;
+    --muted-foreground: 48, 6%, 85%;
 
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 41, 33%, 17%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
+    --border: 48, 6%, 85%;
+    --input: 48, 6%, 85%;
     --ring: 212.7 26.8% 83.9%;
 
-    --module-input: hsl(223, 83%, 53%);
+    --module-input: hsl(228, 55%, 53%);
     --module-hint: hsl(107, 71%, 52%);
-    --module-output: hsl(0, 100%, 50%);
+    --module-output: hsl(0, 51%, 56%);
   }
 }
 
@@ -87,6 +87,17 @@ body {
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .hidden-scrollbar {
+    -ms-overflow-style: none; /* IE, Edge 対応 */
+    scrollbar-width: none; /* Firefox 対応 */
+  }
+  .hidden-scrollbar::-webkit-scrollbar {
+    /* Chrome, Safari 対応 */
+    display: none;
   }
 }
 
@@ -107,16 +118,12 @@ html {
   border: 0 solid #555 !important;
 }
 
-.selected > * > .node-card {
-  border-color: var(--foreground) !important;
-}
-
 .react-flow__edge > path {
   stroke: hsl(var(--foreground)) !important;
 }
 
 .selected.react-flow__edge > path {
-  stroke-width: 3px;
+  stroke-width: 4px;
 }
 
 ::-webkit-scrollbar {

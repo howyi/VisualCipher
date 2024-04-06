@@ -2,6 +2,7 @@ import React from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { useBoolean } from 'usehooks-ts'
+import { ModuleItemContainer } from '@/components/flow/components/module-item-container'
 
 type Props = {
   label: string
@@ -9,7 +10,7 @@ type Props = {
 }
 export function CheckProperty({ label, value }: Props) {
   return (
-    <div className="flex items-center mx-auto space-x-2">
+    <ModuleItemContainer className="flex items-center mx-auto space-x-2">
       <Checkbox
         checked={value.value}
         id="reverse"
@@ -21,6 +22,6 @@ export function CheckProperty({ label, value }: Props) {
       >
         {label}
       </Label>
-    </div>
+    </ModuleItemContainer>
   )
 }

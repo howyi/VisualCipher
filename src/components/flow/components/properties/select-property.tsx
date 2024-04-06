@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { ModuleItemContainer } from '@/components/flow/components/module-item-container'
 
 type Props<T> = {
   label: string
@@ -23,7 +24,7 @@ export function SelectProperty<T extends string>({
   values,
 }: Props<T>) {
   return (
-    <div className={'flex flex-row gap-2'}>
+    <ModuleItemContainer className={'flex flex-row gap-2'}>
       <div
         className={'flex-0 text-center text-muted-foreground text-xs m-auto'}
       >
@@ -41,6 +42,6 @@ export function SelectProperty<T extends string>({
           ))}
         </SelectContent>
       </Select>
-    </div>
+    </ModuleItemContainer>
   )
 }

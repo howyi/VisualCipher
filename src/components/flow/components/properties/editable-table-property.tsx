@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/table'
 import { Input } from '@/components/ui/input'
 import { onlyUnique } from '@/lib/only-unique'
+import { ModuleItemContainer } from '@/components/flow/components/module-item-container'
 
 export type TableValue = {
   row: string
@@ -54,7 +55,7 @@ export function EditableTableProperty({
 }: Props) {
   const [activeKey, setActiveKey] = useState('')
   return (
-    <div className={'flex flex-col gap-2'}>
+    <ModuleItemContainer className={'flex flex-col gap-2'}>
       <StringProperty label={'rows'} value={rows} setValue={setRows} />
       <StringProperty label={'columns'} value={columns} setValue={setColumns} />
       <Table>
@@ -161,6 +162,6 @@ export function EditableTableProperty({
             ))}
         </TableBody>
       </Table>
-    </div>
+    </ModuleItemContainer>
   )
 }

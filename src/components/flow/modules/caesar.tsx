@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { NodeProps } from 'reactflow'
 import { Label } from '@/components/ui/label'
 import { ModuleNode } from '@/components/flow/components/module-node'
@@ -13,6 +13,8 @@ import {
   Ports,
 } from '@/components/flow/modules/types'
 import { useNodeState } from '@/components/flow/hooks/use-node-state'
+import { NumberProperty } from '@/components/flow/components/properties/number-property'
+import { ModuleItemContainer } from '@/components/flow/components/module-item-container'
 
 type Data = {
   shift?: number
@@ -54,7 +56,7 @@ function calculate({
   inputs,
   setResult,
 }: ModuleProcessProps<Data, typeof ports, Result>) {
-  if (!inputs.input || !node.data.shift) {
+  if (!inputs.input || node.data.shift === undefined) {
     return ''
   }
   const shifted = StringShift(ALPHABETS, node.data.shift)
@@ -66,9 +68,11 @@ function calculate({
     return shifted[index] ?? UNKNOWN_CHARACTER
   })
 
+  const highlightIndex = ALPHABETS.indexOf(inputs.input.slice(-1))
+
   setResult({
     encrypted: encrypted,
-    highlightIndex: ALPHABETS.indexOf(inputs.input.slice(-1)),
+    highlightIndex,
     shiftedAlphabetsText: shifted,
   })
 
@@ -78,63 +82,35 @@ function calculate({
 function node({ id, data: initialData }: NodeProps<Data>) {
   const [data, setData] = useNodeData<Data>(id, initialData)
   const { inputs, result } = useNodeState<typeof ports, Result>()
+  const [shift, setShift] = useState(initialData.shift ?? 3)
   const shiftedAlphabetsText = useMemo(() => {
-    return StringShift(ALPHABETS, data.shift ?? 0)
-  }, [data.shift])
+    return StringShift(ALPHABETS, shift)
+  }, [shift])
 
-  const shiftLeft = () => {
-    setData({
-      shift: (data.shift ?? 0) - 1,
-    })
-  }
-  const shiftRight = () => {
-    setData({
-      shift: (data.shift ?? 0) + 1,
-    })
-  }
+  useEffect(() => {
+    setData({ shift })
+  }, [shift])
 
   return (
     <ModuleNode module={CaesarModule}>
       <div className={'flex flex-col m-auto gap-2'}>
-        <div className={'flex flex-row gap-2'}>
-          <Button
-            size={'xs'}
-            onClick={shiftLeft}
-            className={'flex-0 w-12'}
-            variant="outline"
-          >
-            ←
-          </Button>
-          <div
-            className={
-              'flex-1 text-center text-muted-foreground text-xs m-auto'
-            }
-          >
-            ROTATE: {data.shift}
-          </div>
-          <Button
-            size={'xs'}
-            onClick={shiftRight}
-            className={'flex-0 w-12'}
-            variant="outline"
-          >
-            →
-          </Button>
-        </div>
-        <Label className={'my-auto font-mono'}>
-          <Highlight
-            index={result?.highlightIndex}
-            className={'text-module-input'}
-            text={ALPHABETS}
-          />
-        </Label>
-        <Label className={'my-auto font-mono'}>
-          <Highlight
-            index={result?.highlightIndex}
-            className={'text-module-output'}
-            text={shiftedAlphabetsText}
-          />
-        </Label>
+        <NumberProperty label={'ROTATE'} value={shift} setValue={setShift} />
+        <ModuleItemContainer className={'flex flex-col gap-2'}>
+          <Label className={'my-auto font-mono'}>
+            <Highlight
+              index={result?.highlightIndex}
+              className={'text-module-input'}
+              text={ALPHABETS}
+            />
+          </Label>
+          <Label className={'my-auto font-mono'}>
+            <Highlight
+              index={result?.highlightIndex}
+              className={'text-module-output'}
+              text={shiftedAlphabetsText}
+            />
+          </Label>
+        </ModuleItemContainer>
       </div>
     </ModuleNode>
   )

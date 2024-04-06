@@ -12,6 +12,7 @@ import { PauseIcon, PlayIcon, TrackPreviousIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import { useBoolean, useInterval } from 'usehooks-ts'
 import { Resizer } from '@/components/flow/components/resizer'
+import { TextAreaProperty } from '@/components/flow/components/properties/text-area-property'
 
 type Data = {
   value?: string
@@ -81,8 +82,8 @@ function node({ id, data: initialData, selected }: NodeProps<Data>) {
       module={InputModule}
       label={
         <>
-          <div className={'flex flex-row gap-2'}>
-            <div className={'flex-1'}>Input</div>
+          <div className={'flex flex-row gap-2 py-2 pr-2'}>
+            <div className={'flex-1 text-left'}>Input</div>
             {isPlaying.value && (
               <div className={'flex-0'}>
                 {playCurrentPosition}/{text.length}
@@ -110,16 +111,14 @@ function node({ id, data: initialData, selected }: NodeProps<Data>) {
           </div>
         </>
       }
-      className={'h-full border-module-input pb-14'}
+      className={'flex-1 flex flex-col h-full border-module-input'}
     >
       <Resizer id={id} selected={selected} />
-      <Textarea
+      <TextAreaProperty
         onFocus={isPlaying.setFalse}
-        id="text"
-        name="text"
         value={text}
-        onChange={(e) => setText(e.target.value)}
-        className={'nodrag' + (isPlaying.value ? ' text-muted-foreground' : '')}
+        setValue={setText}
+        className={'nowheel' + (isPlaying.value ? ' opacity-30' : '')}
       />
     </ModuleNode>
   )

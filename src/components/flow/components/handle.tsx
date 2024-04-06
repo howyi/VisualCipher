@@ -61,7 +61,7 @@ export function InputHandle({
             position={position}
             className={cn(
               PositionToMargin(position),
-              'border-2 border-muted-foreground rounded-md py-1 px-2 bg-background',
+              'border-2 border-muted-foreground py-1 px-2 bg-background',
               className
             )}
           >
@@ -138,7 +138,7 @@ export function OutputHandle({
             style={style}
             className={cn(
               PositionToMargin(position),
-              'border-2 border-muted-foreground rounded-md py-1 px-2 bg-muted-foreground',
+              'border-2 border-muted-foreground py-1 px-2 bg-muted-foreground',
               className
             )}
           >

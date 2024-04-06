@@ -25,9 +25,5 @@ export const ReverseModule: Module<Data, typeof ports> = {
 }
 
 function node({ id, data: initialData }: NodeProps<Data>) {
-  return (
-    <ModuleNode module={ReverseModule}>
-      <div className={'w-40'}></div>
-    </ModuleNode>
-  )
+  return <ModuleNode module={ReverseModule}></ModuleNode>
 }

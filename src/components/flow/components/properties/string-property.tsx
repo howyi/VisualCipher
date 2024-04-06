@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
+import { ModuleItemContainer } from '@/components/flow/components/module-item-container'
 
 type Props = {
   label: string
@@ -18,7 +19,7 @@ type Props = {
 }
 export function StringProperty({ label, value, setValue }: Props) {
   return (
-    <div className={'flex flex-row gap-2'}>
+    <ModuleItemContainer className={'flex flex-row gap-2'}>
       <div
         className={'flex-0 text-center text-muted-foreground text-xs m-auto'}
       >
@@ -31,6 +32,6 @@ export function StringProperty({ label, value, setValue }: Props) {
         value={value}
         onChange={(e) => setValue(e.target.value)}
       />
-    </div>
+    </ModuleItemContainer>
   )
 }

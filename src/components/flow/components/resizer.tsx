@@ -8,8 +8,8 @@ export function Resizer({ id, selected }: { id: string; selected: boolean }) {
     <NodeResizer
       color="#555555"
       isVisible={selected}
-      minWidth={200}
-      minHeight={100}
+      minWidth={100}
+      minHeight={60}
       onResize={() => {
         updateNodeInternals(id)
       }}

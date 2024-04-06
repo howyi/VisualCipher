@@ -10,7 +10,7 @@ import {
 import type { ClassValue } from 'clsx'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { TrashIcon } from '@radix-ui/react-icons'
+import { Cross1Icon, TrashIcon } from '@radix-ui/react-icons'
 import { InformationIcon } from '@/components/organisms/information-icon'
 import {
   HoverCard,
@@ -20,6 +20,7 @@ import {
 import { InputHandle, OutputHandle } from '@/components/flow/components/handle'
 import { Module } from '@/components/flow/modules/types'
 import { useNodeState } from '@/components/flow/hooks/use-node-state'
+import { ModuleItemContainer } from '@/components/flow/components/module-item-container'
 
 export function ModuleNode({
   module,
@@ -48,32 +49,57 @@ export function ModuleNode({
 
   return (
     <>
-      <NodeToolbar position={Position.Left}>
-        <Button size={'sm'} variant={'destructive'} onClick={deleteNode}>
-          <TrashIcon />
-        </Button>
-      </NodeToolbar>
       <HoverCard open={(error ?? '') != ''}>
         <HoverCardTrigger>
           <div
             className={cn(
-              'notranslate overflow-y-scroll font-mono whitespace-pre px-4 py-6 shadow-md rounded-md bg-background text-foreground border-2 border-muted-foreground node-card',
-              className
+              'notranslate h-full hidden-scrollbar overflow-clip flex flex-col gap-2 font-mono whitespace-pre bg-background text-foreground border-2 border-l-8 border-muted-foreground',
+              className,
+              node.selected
+                ? 'outline outline-offset-2'
+                : 'hover:outline-dashed hover:outline-offset-2'
             )}
           >
-            <div className={'text-muted-foreground flex flex-row gap-2 pb-2'}>
-              <div className={'flex-1 overflow-x-hidden'}>
+            <div
+              className={
+                'flex-0 flex flex-row px-2 pt-2 ' +
+                (node.selected ? 'block' : 'invisible')
+              }
+            >
+              <div className={'flex-1'}></div>
+              <Button
+                className={'flex-0'}
+                size={'xs'}
+                variant={'ghost'}
+                onClick={deleteNode}
+              >
+                <Cross1Icon />
+              </Button>
+            </div>
+            <ModuleItemContainer
+              className={
+                'flex-0 text-muted-foreground flex flex-row gap-2 pb-2'
+              }
+            >
+              <div className={'flex-1 overflow-x-hidden text-center'}>
                 <div className={'w-full'}>{label ?? module.name}</div>
               </div>
-              <div className={'my-auto'}>
-                {module.description && (
-                  <InformationIcon
-                    information={module.name + '\n\n' + module.description}
-                  />
-                )}
-              </div>
+              {/*<div className={'my-auto'}>*/}
+              {/*  {module.description && (*/}
+              {/*    <InformationIcon*/}
+              {/*      information={module.name + '\n\n' + module.description}*/}
+              {/*    />*/}
+              {/*  )}*/}
+              {/*</div>*/}
+            </ModuleItemContainer>
+            <div
+              className={cn(
+                'flex-1 flex flex-col',
+                Object.keys(module.ports.out).length == 0 ? '' : 'pb-8'
+              )}
+            >
+              {children}
             </div>
-            {children}
           </div>
         </HoverCardTrigger>
         <HoverCardContent
